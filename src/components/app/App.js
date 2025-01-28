@@ -1,6 +1,7 @@
 import SignUpForm from '../forms/signUpForm';
 import LoginForm from '../forms/loginForm';
 import TelegramButton from '../butons/telegramButton';
+import LogoutButton from '../butons/logoutButton';
 
 // MUI
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
@@ -26,6 +27,7 @@ const App = () => {
   const handleLoginClose = () => setIsLoginOpen(false);
   const handleRegisterOpen = () => setIsRegisterOpen(true);
   const handleRegisterClose = () => setIsRegisterOpen(false);
+  const handleLogout = () =>  setIsLoggedIn(false);
   
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
@@ -48,6 +50,7 @@ const App = () => {
               <Button color="inherit">
                 Update User
               </Button>
+              <LogoutButton onLogout={handleLogout} />
             </>
           ) : (
             <>
