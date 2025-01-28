@@ -1,107 +1,100 @@
-// import React, { useState, useEffect } from 'react';
 import React, { useState } from 'react';
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
 import useRegistrationService from '../../services/registrationServise';
+import Spinner from '../spinner/Spinner';
+import ErrorMessage from '../errorMessage/ErrorMessage';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  Button,
+} from '@mui/material';
 
-
-const SignUpForm = () => {
-  const { registrationRequest, loading, error, clearError } = useRegistrationService();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+const SignUpForm = ({ open, onClose }) => {
+  const { registrationRequest, loading, error } = useRegistrationService();
+  const [form, setForm] = useState({ email: '', password: '', phoneNumber: '' });
   const [message, setMessage] = useState('');
+  const localStorageService = new LocalStorageService();
 
-  // remove it
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-
-  //   if (token) {
-  //     // window.location.href = '/';
-  //   } else {
-  //     localStorage.removeItem('phoneNumber');
-  //     localStorage.removeItem('phoneCodeHash');
-  //     localStorage.removeItem('step');
-  //     localStorage.removeItem('authorized');
-  //   }
-  // }, []);
-
-  const handleSubmit = async (e) => {
-    const localStorageService = new LocalStorageService();
-
-    const registrationUser = () => {
-      registrationRequest(email, password, phoneNumber).then((response) => {
-          if (response.ok) {
-            localStorageService.setItem(JWT_TOKEN, response.token);
-            setMessage(response.message);
-          } else {
-            localStorageService.removeItem(JWT_TOKEN);
-            setMessage(response.error);
-            throw new Error(response.error);
-          }
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-    }
-console.log('error:', error);
-console.log('clearError:', clearError );
-console.log('loading:', loading );
-    // try {
-    //   const response = await fetch('http://localhost:3001/api/auth/register', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ email, password, phoneNumber }),
-    //   });
-
-    //   const data = await response.json();
-
-    //   if (response.ok) {
-    //     // localStorage.setItem('userId', data.userId);
-    //     localStorage.setItem('token', data.token);
-    //     setMessage(data.message);
-    //   } else {
-    //     localStorage.removeItem('token', data.token);
-    //     setMessage(data.error);
-    //     throw new Error(data.error);
-    //   }
-    // } catch (error) {
-    //   alert(error.message);
-    // }
-    registrationUser();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await registrationRequest(form.email, form.password, form.phoneNumber);
+
+      localStorageService.setItem(JWT_TOKEN, response.token);
+      setMessage(response.message);
+      onClose();
+    }catch (error) {
+      localStorageService.clear();
+      console.error('Login error:', error.message);
+      alert(error.message);
+      setMessage('Login failed: ' + error.message);
+    }
+  };
+
+  const content =  <>
+                  <DialogTitle>Register</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      Please fill out the form below to create a new account.
+                    </DialogContentText>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      label="Email"
+                      type="email"
+                      fullWidth
+                      name="email"
+                      value={form.email}
+                      onChange={handleChange}
+                    />
+                    <TextField
+                      margin="dense"
+                      label="Password"
+                      type="password"
+                      fullWidth
+                      name="password"
+                      value={form.password}
+                      onChange={handleChange}
+                    />
+                    <TextField
+                      margin="dense"
+                      label="Phone Number"
+                      type="tel"
+                      fullWidth
+                      name="phoneNumber"
+                      value={form.phoneNumber}
+                      onChange={handleChange}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={onClose}>Cancel</Button>
+                    <Button onClick={handleSubmit}>Submit</Button>
+                  </DialogActions>
+                  {message && (
+                    <DialogContentText style={{ color: message.includes('failed') ? 'red' : 'green', marginTop: '10px' }}>
+                      {message}
+                    </DialogContentText>
+                  )}
+                </>;  
+
+  const errorMessage = error ? <ErrorMessage /> : null;
+  const spinner = loading ? <Spinner /> : null;
+
   return (
-    <div>
-      <h1>Sign Up</h1>
-      <p id="message">{message}</p>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          id="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="phoneNumber"
-          id="phoneNumber"
-          placeholder="Enter your phone number"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          id="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">SUBMIT</button>
-      </form>
-    </div>
+    <Dialog open={open} onClose={onClose}>
+      {errorMessage}
+      {spinner}
+      {content}
+    </Dialog>
   );
 };
 

@@ -1,0 +1,131 @@
+import SignUpForm from '../forms/signUpForm';
+import LoginForm from '../forms/loginForm';
+// import SendCode from './components/sendCode/sendCode';
+// import CodeForm from './components/forms/codeForm';
+
+// MUI
+import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
+import React, { useState, useEffect } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Container,
+  Box,
+} from '@mui/material';
+import { Brightness4, Brightness7, Warning, Home } from '@mui/icons-material';
+import DeviceList from '../deviceList/DeviceList';
+
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isTelegramIn, setIsTelegramIn] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+
+  const handleLoginOpen = () => setIsLoginOpen(true);
+  const handleLoginClose = () => setIsLoginOpen(false);
+  const handleRegisterOpen = () => setIsRegisterOpen(true);
+  const handleRegisterClose = () => setIsRegisterOpen(false);
+
+  const localStorageService = new LocalStorageService();
+  const token = localStorageService.getItem(JWT_TOKEN);
+
+  // const handleLogin = () => setIsLoggedIn(token ? true : false);
+
+  const telegramUp = () => setIsTelegramIn(true);
+
+  useEffect(() => {
+    // handleLogin();
+    setIsLoggedIn(token ? true : false);
+    telegramUp();
+  }, [token]);
+
+  return (
+    <>
+      {/* Header */}
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Smart Home Dashboard
+          </Typography>
+          {isTelegramIn ? (
+            <Button color="inherit">
+              Telegram Worcks
+            </Button>
+          ) : (
+            <>
+              <Button color="inherit">Start Telegram</Button>
+            </>
+          )}
+          {isLoggedIn ? (
+            <Button color="inherit">
+              Update User
+            </Button>
+          ) : (
+            <>
+              <Button color="inherit" onClick={handleLoginOpen}>Login</Button>
+              <Button color="inherit" onClick={handleRegisterOpen}>Register</Button>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
+
+      {/* Main Content */}
+      <Container sx={{ mt: 4, minHeight: 'calc(100vh - 200px)' }}>
+
+        {/* Info Section */}
+        <Box mt={4} display="flex" justifyContent="space-around">
+          <Typography variant="body1" display="flex" alignItems="center">
+            <Home sx={{ mr: 1 }} /> Electricity: {Math.random() > 0.5 ? 'Available' : 'Not Available'}
+          </Typography>
+          <Typography variant="body1" display="flex" alignItems="center">
+            <Warning sx={{ mr: 1, color: 'red' }} /> Alarm: {Math.random() > 0.5 ? 'Active' : 'Inactive'}
+          </Typography>
+          <Typography variant="body1" display="flex" alignItems="center">
+            {new Date().getHours() >= 6 && new Date().getHours() <= 18 ? (
+              <Brightness7 sx={{ mr: 1 }} />
+            ) : (
+              <Brightness4 sx={{ mr: 1 }} />
+            )}
+            {new Date().getHours() >= 6 && new Date().getHours() <= 18
+              ? 'Daytime'
+              : 'Nighttime'}
+          </Typography>
+        </Box>
+
+        <DeviceList />
+
+      </Container>
+
+      {/* Footer */}
+      <Box mt={4} py={2} bgcolor="grey.200" position="relative" bottom="0" width="100%">
+        <Container>
+          <Typography variant="body2" align="center">
+            &copy; 2025 Smart Home. All rights reserved.
+          </Typography>
+          <Box mt={2} display="flex" justifyContent="center">
+            <IconButton href="#" color="primary">
+              <i className="fab fa-facebook"></i>
+            </IconButton>
+            <IconButton href="#" color="primary">
+              <i className="fab fa-twitter"></i>
+            </IconButton>
+            <IconButton href="#" color="primary">
+              <i className="fab fa-instagram"></i>
+            </IconButton>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Login Dialog */}
+      <LoginForm open={isLoginOpen} onClose={handleLoginClose} />
+
+      {/* Реєстрація */}
+      <SignUpForm open={isRegisterOpen} onClose={handleRegisterClose} />
+    </>
+  );
+};
+
+export default App;

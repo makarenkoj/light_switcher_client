@@ -16,7 +16,7 @@ const useTelegramService = () => {
 															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` },
 														);
 
-    return res.data.results;
+    return res;
   };
 
   return {

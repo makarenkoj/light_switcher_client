@@ -11,7 +11,7 @@ const useRegistrationService = () => {
                               { 'Content-Type': 'application/json' }
                               );
 
-    return res.data.results;
+    return res;
   };
 
   const loginRequest = async (email, password) => {
