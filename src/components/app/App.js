@@ -1,7 +1,6 @@
 import SignUpForm from '../forms/signUpForm';
 import LoginForm from '../forms/loginForm';
-// import SendCode from './components/sendCode/sendCode';
-// import CodeForm from './components/forms/codeForm';
+import TelegramButton from '../butons/telegramButton';
 
 // MUI
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
@@ -20,7 +19,6 @@ import DeviceList from '../deviceList/DeviceList';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isTelegramIn, setIsTelegramIn] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
@@ -28,18 +26,12 @@ const App = () => {
   const handleLoginClose = () => setIsLoginOpen(false);
   const handleRegisterOpen = () => setIsRegisterOpen(true);
   const handleRegisterClose = () => setIsRegisterOpen(false);
-
+  
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
 
-  // const handleLogin = () => setIsLoggedIn(token ? true : false);
-
-  const telegramUp = () => setIsTelegramIn(true);
-
   useEffect(() => {
-    // handleLogin();
     setIsLoggedIn(token ? true : false);
-    telegramUp();
   }, [token]);
 
   return (
@@ -50,19 +42,13 @@ const App = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Smart Home Dashboard
           </Typography>
-          {isTelegramIn ? (
-            <Button color="inherit">
-              Telegram Worcks
-            </Button>
-          ) : (
-            <>
-              <Button color="inherit">Start Telegram</Button>
-            </>
-          )}
           {isLoggedIn ? (
-            <Button color="inherit">
-              Update User
-            </Button>
+            <>
+              <TelegramButton />
+              <Button color="inherit">
+                Update User
+              </Button>
+            </>
           ) : (
             <>
               <Button color="inherit" onClick={handleLoginOpen}>Login</Button>
