@@ -2,6 +2,7 @@ import SignUpForm from '../forms/signUpForm';
 import LoginForm from '../forms/loginForm';
 import TelegramButton from '../butons/telegramButton';
 import LogoutButton from '../butons/logoutButton';
+import UserInfo from '../user/user';
 
 // MUI
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
@@ -63,6 +64,8 @@ const App = () => {
 
       {/* Main Content */}
       <Container sx={{ mt: 4, minHeight: 'calc(100vh - 200px)' }}>
+        {/* User information section */}
+        {isLoggedIn ? <UserInfo /> : null}
 
         {/* Info Section */}
         <Box mt={4} display="flex" justifyContent="space-around">

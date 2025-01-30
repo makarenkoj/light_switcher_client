@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
+import LocalStorageService, {JWT_TOKEN, USER_ID} from '../../services/LocalStorageService';
 import useRegistrationService from '../../services/registrationServise';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -31,6 +31,7 @@ const LoginForm = ({ open, onClose}) => {
       const response = await loginRequest(loginForm.email, loginForm.password);
   
       localStorageService.setItem(JWT_TOKEN, response.token);
+      localStorageService.setItem(USER_ID, response.userId);
       setMessage(response.message);
       onClose();
     } catch (error) {
