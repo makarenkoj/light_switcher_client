@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import useTelegramService from '../../services/telegramService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+import LocalStorageService from '../../services/LocalStorageService';
+
 
 import {
   Dialog,
@@ -17,6 +19,7 @@ const TelegramForm = ({ open, onClose }) => {
   const [telegramForm, setTelegramForm] = useState({ code: '' });
   const [message, setMessage] = useState('');
   const { sendCodeRequest, loading, error } = useTelegramService();
+  const localStorageService = new LocalStorageService();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,14 +30,14 @@ const TelegramForm = ({ open, onClose }) => {
     e.preventDefault();
 
     try {
-      const phoneNumber = localStorage.getItem('phoneNumber');
-      const phoneCodeHash = localStorage.getItem('phoneCodeHash');
-      const token = localStorage.getItem('token');
+      const phoneNumber = localStorageService.getItem('phoneNumber');
+      const phoneCodeHash = localStorageService.getItem('phoneCodeHash');
+      const token = localStorageService.getItem('token');
       const response = await sendCodeRequest(token, telegramForm.code, phoneNumber, phoneCodeHash);
 
-      localStorage.removeItem('phoneNumber');
-      localStorage.removeItem('phoneCodeHash');
-      localStorage.setItem('authorized', response.authorized);
+      localStorageService.clear();
+
+      localStorageService.setItem('authorized', response.authorized);
       setMessage(response.message);
       onClose();
     } catch (error) {

@@ -24,17 +24,16 @@ const TelegramButton = ({ onPasswordRequest }) => {
       console.log('Response:', response);
 
       if (response.authorized) {
-        localStorage.setItem('authorized', response.authorized);
+        localStorageService.setItem('authorized', response.authorized);
         setStatus(true);
         return;
       }
 
-      localStorage.setItem('phoneNumber', response.phoneNumber);
-      localStorage.setItem('phoneCodeHash',response.phoneCodeHash);
+      localStorageService.setItem('phoneNumber', response.phoneNumber);
+      localStorageService.setItem('phoneCodeHash',response.phoneCodeHash);
       setIsTelegramFormOpen(true);
     } catch (error) {
-      localStorage.removeItem('phoneNumber');
-      localStorage.removeItem('phoneCodeHash');
+      localStorageService.clear();
       console.log('Error:', error.message);
       console.log('Error:', error);
     }
