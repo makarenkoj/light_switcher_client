@@ -33,7 +33,7 @@ const TelegramButton = ({ onPasswordRequest }) => {
       localStorageService.setItem('phoneCodeHash',response.phoneCodeHash);
       setIsTelegramFormOpen(true);
     } catch (error) {
-      localStorageService.clear();
+      // localStorageService.clear();
       console.log('Error:', error.message);
       console.log('Error:', error);
     }
@@ -53,7 +53,6 @@ useEffect(() => {
 
    // eslint-disable-next-line
 }, []);
-
 
   return (
     <>

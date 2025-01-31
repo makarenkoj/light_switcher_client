@@ -37,5 +37,6 @@ class LocalStorageService {
 
 export const JWT_TOKEN = 'token'
 export const USER = 'user'
+export const USER_ID = 'userId'
 
 export default LocalStorageService
