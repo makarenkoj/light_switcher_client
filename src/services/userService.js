@@ -22,12 +22,22 @@ const useUserService = () => {
     return res;
   };
 
+  const deleteUserRequest = async (id, token) => {
+    const res = await request(`${_baseUrl}/api/users/${id}`,
+                              "DELETE",
+                              null,
+                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+
+    return res;
+  };
+
   return {
 		loading,
 		error,
 		clearError,
 		getUserRequest,
-    updateUserRequest
+    updateUserRequest,
+    deleteUserRequest
 	};
 }
 

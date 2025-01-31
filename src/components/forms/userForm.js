@@ -20,13 +20,30 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const UserForm = ({ open, onClose }) => {
   const [form, setForm] = useState({ email: '', password: '', phoneNumber: '' });
   const [message, setMessage] = useState('');
-  const { updateUserRequest, loading, error } = useUserService();
+  const { updateUserRequest, deleteUserRequest, loading, error } = useUserService();
   const localStorageService = new LocalStorageService();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const token = localStorageService.getItem(JWT_TOKEN);
+      const id = localStorageService.getItem(USER_ID);
+      const response = await deleteUserRequest(id, token);
+
+      setMessage(response.message);
+      localStorageService.clear();
+      onClose();
+    } catch (error) {
+      console.log('Error:', error.message);
+      setMessage(error.message);
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,9 +99,9 @@ const UserForm = ({ open, onClose }) => {
                   <DialogActions>
 
                   {/* Delete user button */}
-                  <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-start' }}>
+                  <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-start' }}  title={error || 'Delete Your Account'}>
                     <IconButton aria-label="delete" size="large">
-                      <DeleteIcon fontSize="inherit" />
+                      <DeleteIcon fontSize="inherit" onClick={handleDelete}/>
                     </IconButton>
                   </Stack>
 
