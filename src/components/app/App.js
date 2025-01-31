@@ -65,30 +65,33 @@ const App = () => {
       {/* Main Content */}
       <Container sx={{ mt: 4, minHeight: 'calc(100vh - 200px)' }}>
         {/* User information section */}
-        {isLoggedIn ? <UserInfo /> : null}
+        {isLoggedIn ? (
+          <>
+          {/* Info Section */}
+          <Box mt={4} display="flex" justifyContent="space-around">
+            <Typography variant="body1" display="flex" alignItems="center">
+              <Home sx={{ mr: 1 }} /> Electricity: {Math.random() > 0.5 ? 'Available' : 'Not Available'}
+            </Typography>
+            <Typography variant="body1" display="flex" alignItems="center">
+              <Warning sx={{ mr: 1, color: 'red' }} /> Alarm: {Math.random() > 0.5 ? 'Active' : 'Inactive'}
+            </Typography>
+            <Typography variant="body1" display="flex" alignItems="center">
+              {new Date().getHours() >= 6 && new Date().getHours() <= 18 ? (
+                <Brightness7 sx={{ mr: 1 }} />
+              ) : (
+                <Brightness4 sx={{ mr: 1 }} />
+              )}
+              {new Date().getHours() >= 6 && new Date().getHours() <= 18
+                ? 'Daytime'
+                : 'Nighttime'}
+            </Typography>
+          </Box>
 
-        {/* Info Section */}
-        <Box mt={4} display="flex" justifyContent="space-around">
-          <Typography variant="body1" display="flex" alignItems="center">
-            <Home sx={{ mr: 1 }} /> Electricity: {Math.random() > 0.5 ? 'Available' : 'Not Available'}
-          </Typography>
-          <Typography variant="body1" display="flex" alignItems="center">
-            <Warning sx={{ mr: 1, color: 'red' }} /> Alarm: {Math.random() > 0.5 ? 'Active' : 'Inactive'}
-          </Typography>
-          <Typography variant="body1" display="flex" alignItems="center">
-            {new Date().getHours() >= 6 && new Date().getHours() <= 18 ? (
-              <Brightness7 sx={{ mr: 1 }} />
-            ) : (
-              <Brightness4 sx={{ mr: 1 }} />
-            )}
-            {new Date().getHours() >= 6 && new Date().getHours() <= 18
-              ? 'Daytime'
-              : 'Nighttime'}
-          </Typography>
-        </Box>
+          <UserInfo />
 
-        <DeviceList />
-
+          {/* device list */}
+          <DeviceList />
+          </>) : null}
       </Container>
 
       {/* Footer */}

@@ -23,11 +23,10 @@ const UserInfo = () => {
         setTelegramSession(response.telegramSession);
       } catch (error) {
         console.error('Error fetching Telegram status:Error fetching user:', error.message);
-    }
-  };
+      }
+    };
 
-  handleUser();
-  
+    handleUser();
      // eslint-disable-next-line
   }, []);
 
