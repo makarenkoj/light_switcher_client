@@ -3,6 +3,7 @@ import LoginForm from '../forms/loginForm';
 import TelegramButton from '../butons/telegramButton';
 import LogoutButton from '../butons/logoutButton';
 import UserInfo from '../user/user';
+import UpdateUserButton from '../butons/updateUserButton';
 
 // MUI
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
@@ -48,9 +49,7 @@ const App = () => {
           {isLoggedIn ? (
             <>
               <TelegramButton />
-              <Button color="inherit">
-                Update User
-              </Button>
+              <UpdateUserButton />
               <LogoutButton onLogout={handleLogout} />
             </>
           ) : (

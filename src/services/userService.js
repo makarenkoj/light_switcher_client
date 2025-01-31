@@ -13,12 +13,11 @@ const useUserService = () => {
     return res;
   };
 
-  const loginRequest = async (email, password) => {
-    const res = await request(`${_baseUrl}api/auth/login`,
-                              "POST",
-                              { email, password },
-                              { "Content-Type": "application/json" }
-                              );  
+  const updateUserRequest = async (id, token, email, password, phoneNumber) => {
+    const res = await request(`${_baseUrl}/api/users/${id}`,
+                              "PUT",
+                              { email, password, phoneNumber },
+                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -28,7 +27,7 @@ const useUserService = () => {
 		error,
 		clearError,
 		getUserRequest,
-    loginRequest
+    updateUserRequest
 	};
 }
 

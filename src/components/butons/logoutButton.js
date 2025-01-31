@@ -10,8 +10,8 @@ const LogoutButton = ({ onLogout }) => {
 
   return (
     <Button
-      variant="outlined"
-      color="secondary"
+      // variant="outlined"
+      color="inherit"
       onClick={handleLogout}
     >
       Logout

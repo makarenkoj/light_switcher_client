@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useTelegramService from '../../services/telegramService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -34,8 +34,6 @@ const TelegramForm = ({ open, onClose }) => {
       const phoneCodeHash = localStorageService.getItem('phoneCodeHash');
       const token = localStorageService.getItem('token');
       const response = await sendCodeRequest(token, telegramForm.code, phoneNumber, phoneCodeHash);
-
-      localStorageService.clear();
 
       localStorageService.setItem('authorized', response.authorized);
       setMessage(response.message);
