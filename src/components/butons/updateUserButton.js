@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@mui/material';
 import UserForm from '../forms/userForm';
 
-const UpdateUserButton = () => {
+const UpdateUserButton = ({handleUserDeleted}) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const handleClick = async () => setIsFormOpen(true);
@@ -19,6 +19,7 @@ const UpdateUserButton = () => {
       <UserForm
         open={isFormOpen}
         onClose={() => setIsFormOpen(false)}
+        onUserDeleted={handleUserDeleted}
         // onSubmit={console.log('Submit')}
       />
     </>

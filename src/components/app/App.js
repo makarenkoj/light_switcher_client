@@ -30,6 +30,7 @@ const App = () => {
   const handleRegisterOpen = () => setIsRegisterOpen(true);
   const handleRegisterClose = () => setIsRegisterOpen(false);
   const handleLogout = () =>  setIsLoggedIn(false);
+  const handleUserDeleted = () => setIsLoggedIn(false);
   
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
@@ -49,7 +50,7 @@ const App = () => {
           {isLoggedIn ? (
             <>
               <TelegramButton />
-              <UpdateUserButton />
+              <UpdateUserButton  handleUserDeleted={handleUserDeleted}/>
               <LogoutButton onLogout={handleLogout} />
             </>
           ) : (

@@ -17,7 +17,7 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const UserForm = ({ open, onClose }) => {
+const UserForm = ({ open, onClose, onUserDeleted }) => {
   const [form, setForm] = useState({ email: '', password: '', phoneNumber: '' });
   const [message, setMessage] = useState('');
   const { updateUserRequest, deleteUserRequest, loading, error } = useUserService();
@@ -38,6 +38,7 @@ const UserForm = ({ open, onClose }) => {
 
       setMessage(response.message);
       localStorageService.clear();
+      onUserDeleted();
       onClose();
     } catch (error) {
       console.log('Error:', error.message);
