@@ -31,8 +31,8 @@ const useDeviceService = () => {
     return res;
   };
 
-  const showDevicesRequest = async (token) => {
-    const res = await request(`${_baseUrl}/api/devices`,
+  const showDevicesRequest = async (token, page = 1, limit = 9) => {
+    const res = await request(`${_baseUrl}/api/devices?page=${page}&limit=${limit}`,
                               "GET",
                               null,
                               { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
