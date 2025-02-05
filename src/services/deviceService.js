@@ -41,9 +41,9 @@ const useDeviceService = () => {
   };
 
   const createDeviceRequest = async (id, token, name, deviceId, accessId, secretKey) => {
-    const res = await request(`${_baseUrl}/api/devices/${id}`,
+    const res = await request(`${_baseUrl}/api/devices/`,
                               "POST",
-                              {name, deviceId, accessId, secretKey},
+                              {id, name, deviceId, accessId, secretKey},
                               { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;

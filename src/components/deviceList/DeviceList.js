@@ -18,7 +18,7 @@ const DeviceList = () => {
   const [devices, setDevices] = useState([]);
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
-  const { showDevicesRequest, getStatusRequest, changeStatusReques, error, loading } = useDeviceService();
+  const { showDevicesRequest, error, loading } = useDeviceService();
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
