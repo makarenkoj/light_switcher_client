@@ -5,7 +5,6 @@ import LogoutButton from '../butons/logoutButton';
 import UserInfo from '../user/user';
 import UpdateUserButton from '../butons/updateUserButton';
 import DeviceList from '../deviceList/DeviceList';
-import AddDevice from '../butons/addDevice';
 import CreateDeviceForm from '../forms/createDeviceForm';
 
 // MUI
@@ -95,8 +94,6 @@ const App = () => {
             </Box>
 
             <UserInfo />
-
-            <AddDevice />
 
             {/* device list */}
             <DeviceList />

@@ -3,6 +3,7 @@ import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useDeviceService from '../../services/deviceService';
+import AddDevice from '../butons/addDevice';
 import {
   Typography,
   Button,
@@ -23,18 +24,18 @@ const DeviceList = () => {
   const token = localStorageService.getItem(JWT_TOKEN);
   const { showDevicesRequest, error, loading } = useDeviceService();
 
-  useEffect(() => {
-    const fetchDevices = async () => {
-      try {
-        const response = await showDevicesRequest(token, currentPage, itemsPerPage);
-        setDevices(response.devices);
-        setTotalPages(response.totalPages);
-      } catch (error) {
-        console.error('Device list error:', error.message);
-        alert(error.message);
-      }
-    };
+  const fetchDevices = async () => {
+    try {
+      const response = await showDevicesRequest(token, currentPage, itemsPerPage);
+      setDevices(response.devices);
+      setTotalPages(response.totalPages);
+    } catch (error) {
+      console.error('Device list error:', error.message);
+      alert(error.message);
+    }
+  };
 
+  useEffect(() => {
     fetchDevices();
     // eslint-disable-next-line
   }, [currentPage]);
@@ -58,6 +59,7 @@ const DeviceList = () => {
     <>
     {errorMessage}
     {spinner}
+    <AddDevice onDeviceAdded={fetchDevices} />
     {devices.length > 0 && (
         <>
           <Grid container spacing={4} mt={2}>

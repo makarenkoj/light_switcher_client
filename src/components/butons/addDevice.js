@@ -7,8 +7,7 @@ import { Stack } from '@mui/system';
 
 const defaultContrastThresholdTheme = createTheme({});
 
-
-export default function AddDevice() {
+export default function AddDevice({ onDeviceAdded }) {
   const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
 
   const handleClick = async () => {
@@ -35,7 +34,8 @@ export default function AddDevice() {
 
       <CreateDeviceForm
         open={isCreateFormOpen}
-        onClose={handleCloseCreateForm}/>
+        onClose={handleCloseCreateForm}
+        onDeviceAdded={onDeviceAdded} />
     </>
   );
 }

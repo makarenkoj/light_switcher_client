@@ -62,7 +62,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-const CreateDeviceForm = ({ open, onClose }) => {
+const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
   const { createDeviceRequest, error, loading } = useDeviceService();
   const [message, setMessage] = useState('');
   const [nameError, setNameError] = useState(false);
@@ -104,6 +104,7 @@ const CreateDeviceForm = ({ open, onClose }) => {
       const response = await createDeviceRequest(id, token, form.name, form.deviceId, form.accessId, form.secretKey);
 
       setMessage(response.message);
+      onDeviceAdded();
       onClose();
     } catch (error) {
       console.log('Error:', error.message);
