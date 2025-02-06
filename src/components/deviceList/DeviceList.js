@@ -7,6 +7,7 @@ import AddDevice from '../buttons/addDevice';
 import UpdateDeviceButton from '../buttons/updateDeviceButton';
 import DeleteDeviceButton from '../buttons/deleteDeviceButton';
 import ChangeStatusButton from '../buttons/changeStatusButton';
+import Device from '../device/device';
 import {
   Typography,
   Card,
@@ -14,6 +15,9 @@ import {
   CardActions,
   Pagination,
   Box,
+  Tooltip,
+  Button,
+  Stack
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
@@ -21,6 +25,8 @@ const DeviceList = () => {
   const [devices, setDevices] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [IsDeviceOpen, setIsDeviceOpen] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState(null);
   const itemsPerPage = 9;
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
@@ -46,6 +52,10 @@ const DeviceList = () => {
     setCurrentPage(value);
   };
 
+  const handleDeviceDeleted = (deletedDeviceId) => {
+    setDevices((prevDevices) => prevDevices.filter((device) => device._id !== deletedDeviceId));
+  };
+
   const errorMessage = error ? <ErrorMessage /> : null;
   const spinner = loading ? <Spinner /> : null;
 
@@ -61,7 +71,19 @@ const DeviceList = () => {
               <Grid item xs={12} sm={6} md={4} size={4} key={device._id}>
                 <Card>
                   <CardContent>
-                    <Typography variant="h6">{device.name}</Typography>
+                    <Typography >
+                      <Tooltip title='Open Device' >
+                        <Stack sx={{ gap: 1, alignItems: 'center' }}>
+                          <Button size="small" variant="contained" color="inherit" 
+                                  onClick={() => {
+                                    setSelectedDevice(device._id);
+                                    setIsDeviceOpen(true)}
+                                    }>
+                            {device.name}
+                          </Button>
+                        </Stack>
+                      </Tooltip>
+                    </Typography>
                   </CardContent>
                   <CardActions>
                     <ChangeStatusButton deviceId={device._id} status={device.status} oneUpdateStatus={fetchDevices} />
@@ -82,6 +104,8 @@ const DeviceList = () => {
           </Box>
         </>
       )}
+
+      <Device open={IsDeviceOpen} onClose={() => setIsDeviceOpen(false)} deviceId={selectedDevice} onDeviceUpdated={fetchDevices} onDeviceDeleted={handleDeviceDeleted} />
     </>
   )
 };
