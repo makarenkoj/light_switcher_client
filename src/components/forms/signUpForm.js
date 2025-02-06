@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
-import useRegistrationService from '../../services/registrationServise';
+import useRegistrationService from '../../services/registrationService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import {

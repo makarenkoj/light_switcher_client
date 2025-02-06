@@ -71,11 +71,11 @@ useEffect(() => {
     </Tooltip>
 
     {/* Telegram Password Form */}
-          <TelegramForm
-            open={isTelegramFormOpen}
-            onClose={() => setIsTelegramFormOpen(false)}
-            // onSubmit={console.log('Submit')}
-          />
+    <TelegramForm
+      open={isTelegramFormOpen}
+      onClose={() => setIsTelegramFormOpen(false)}
+      // onSubmit={console.log('Submit')}
+    />
     </>
   );
 };
