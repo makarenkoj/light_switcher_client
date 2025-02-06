@@ -5,6 +5,7 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 import useDeviceService from '../../services/deviceService';
 import AddDevice from '../buttons/addDevice';
 import UpdateDeviceButton from '../buttons/updateDeviceButton';
+import DeleteDeviceButton from '../buttons/deleteDeviceButton';
 import {
   Typography,
   Button,
@@ -75,6 +76,9 @@ const DeviceList = () => {
                   </CardContent>
                   <CardActions>
                     <UpdateDeviceButton device={device} onDeviceUpdated={fetchDevices}/>
+                  </CardActions>
+                  <CardActions>
+                    <DeleteDeviceButton device={device} onDeviceDeleted={fetchDevices}/>
                   </CardActions>
                   <CardActions>
                     <Button size="small" onClick={() => handleDeviceToggle(device._id)}>
