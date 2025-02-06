@@ -6,9 +6,9 @@ import useDeviceService from '../../services/deviceService';
 import AddDevice from '../buttons/addDevice';
 import UpdateDeviceButton from '../buttons/updateDeviceButton';
 import DeleteDeviceButton from '../buttons/deleteDeviceButton';
+import ChangeStatusButton from '../buttons/changeStatusButton';
 import {
   Typography,
-  Button,
   Card,
   CardContent,
   CardActions,
@@ -42,14 +42,6 @@ const DeviceList = () => {
     // eslint-disable-next-line
   }, [currentPage]);
 
-    const handleDeviceToggle = (id) => {
-      setDevices((prevDevices) =>
-        prevDevices.map((device) =>
-          device.id === id ? { ...device, status: !device.status } : device
-        )
-      );
-    };
-
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
@@ -70,20 +62,15 @@ const DeviceList = () => {
                 <Card>
                   <CardContent>
                     <Typography variant="h6">{device.name}</Typography>
-                    <Typography color="text.secondary">
-                      Status: {device.status ? 'On' : 'Off'}
-                    </Typography>
                   </CardContent>
+                  <CardActions>
+                    <ChangeStatusButton deviceId={device._id} status={device.status} oneUpdateStatus={fetchDevices} />
+                  </CardActions>
                   <CardActions>
                     <UpdateDeviceButton device={device} onDeviceUpdated={fetchDevices}/>
                   </CardActions>
                   <CardActions>
                     <DeleteDeviceButton device={device} onDeviceDeleted={fetchDevices}/>
-                  </CardActions>
-                  <CardActions>
-                    <Button size="small" onClick={() => handleDeviceToggle(device._id)}>
-                      Toggle
-                    </Button>
                   </CardActions>
                 </Card>
               </Grid>

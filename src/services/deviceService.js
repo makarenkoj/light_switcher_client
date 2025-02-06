@@ -4,7 +4,7 @@ const useDeviceService = () => {
   const { loading, request, error, clearError } = useHttp();
 	const _baseUrl = 'http://localhost:3001';
 
-  const changeStatusReques = async (id, token, status) => {
+  const changeStatusRequest = async (id, token, status) => {
     const res = await request(`${_baseUrl}/api/devices/status/${id}`,
                               'PUT',
                               {status},
@@ -71,7 +71,7 @@ const useDeviceService = () => {
 		loading,
 		error,
 		clearError,
-    changeStatusReques,
+    changeStatusRequest,
     getStatusRequest,
     showDeviceRequest,
     showDevicesRequest,

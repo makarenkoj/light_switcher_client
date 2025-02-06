@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Stack, Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { Stack, Button, Dialog, DialogActions, DialogTitle, Tooltip } from '@mui/material';
 import useDeviceService from '../../services/deviceService';
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
-
-const defaultTheme = createTheme();
 
 export default function DeleteDeviceButton({ device, onDeviceDeleted }) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -33,16 +30,13 @@ export default function DeleteDeviceButton({ device, onDeviceDeleted }) {
 
   return (
     <>
-      <Stack direction="row" sx={{ gap: 4 }} mt={2}>
-        <ThemeProvider theme={defaultTheme}>
-          <Stack sx={{ gap: 1, alignItems: 'center' }}>
-            <Button variant="contained" color="error" onClick={handleOpenConfirm}>
-              Delete Device
-            </Button>
-          </Stack>
-        </ThemeProvider>
-      </Stack>
-
+      <Tooltip title='Delete Device' >
+        <Stack sx={{ gap: 1, alignItems: 'center' }}>
+          <Button size="small" variant="contained" color="inherit" onClick={handleOpenConfirm}>
+            Delete Device
+          </Button>
+        </Stack>
+      </Tooltip>
       <Dialog open={isConfirmOpen} onClose={handleCloseConfirm}>
         <DialogTitle>Are you sure you want to delete this device?</DialogTitle>
         <DialogActions>

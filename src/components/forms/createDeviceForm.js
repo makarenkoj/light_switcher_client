@@ -19,7 +19,6 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 import useDeviceService from '../../services/deviceService';
 import LocalStorageService, {JWT_TOKEN, USER_ID} from '../../services/LocalStorageService';
 
-
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
