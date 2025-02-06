@@ -3,7 +3,8 @@ import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useDeviceService from '../../services/deviceService';
-import AddDevice from '../butons/addDevice';
+import AddDevice from '../buttons/addDevice';
+import UpdateDeviceButton from '../buttons/updateDeviceButton';
 import {
   Typography,
   Button,
@@ -72,6 +73,9 @@ const DeviceList = () => {
                       Status: {device.status ? 'On' : 'Off'}
                     </Typography>
                   </CardContent>
+                  <CardActions>
+                    <UpdateDeviceButton device={device} onDeviceUpdated={fetchDevices}/>
+                  </CardActions>
                   <CardActions>
                     <Button size="small" onClick={() => handleDeviceToggle(device._id)}>
                       Toggle

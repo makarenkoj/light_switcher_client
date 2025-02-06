@@ -1,9 +1,9 @@
 import SignUpForm from '../forms/signUpForm';
 import LoginForm from '../forms/loginForm';
-import TelegramButton from '../butons/telegramButton';
-import LogoutButton from '../butons/logoutButton';
+import TelegramButton from '../buttons/telegramButton';
+import LogoutButton from '../buttons/logoutButton';
 import UserInfo from '../user/user';
-import UpdateUserButton from '../butons/updateUserButton';
+import UpdateUserButton from '../buttons/updateUserButton';
 import DeviceList from '../deviceList/DeviceList';
 import CreateDeviceForm from '../forms/createDeviceForm';
 
