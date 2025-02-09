@@ -18,7 +18,7 @@ const useTriggerService = () => {
                               "GET",
                               null,
                               { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
-console.log('Triggers request:', res);
+
     return res;
   };
 
@@ -34,7 +34,7 @@ console.log('Triggers request:', res);
   const updateTriggerRequest = async (id, token, status, name, triggerOn, triggerOff, chanelName) => {
     const res = await request(`${_baseUrl}/api/triggers/${id}`,
                               "PUT",
-                              {status, name, triggerOn, triggerOff, chanelName, status},
+                              {status, name, triggerOn, triggerOff, chanelName},
                               { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
