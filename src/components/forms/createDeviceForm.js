@@ -90,15 +90,6 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
       return;
     };
 
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      deviceId: data.get('deviceId'),
-      accessId: data.get('accessId'),
-      secretKey: data.get('secretKey'),
-      id: id,
-    });
-
     try{
       const response = await createDeviceRequest(id, token, form.name, form.deviceId, form.accessId, form.secretKey);
 
@@ -183,7 +174,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
                           <FormControl>
                             <FormLabel htmlFor="name">Device Name</FormLabel>
                             <TextField
-                              error={setNameError}
+                              error={nameError}
                               helperText={nameErrorMessage}
                               id="name"
                               type="name"

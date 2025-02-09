@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import MuiCard from '@mui/material/Card';
+import { styled } from '@mui/material/styles';
 import {
   Dialog,
   DialogContentText,
@@ -10,15 +11,15 @@ import {
   FormLabel,
   FormControl,
   Typography,
+  Select,
+  MenuItem,
   Stack,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { SitemarkIcon } from '../customIcons/customIcons';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
-import useDeviceService from '../../services/deviceService';
-import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
-
+import useTriggerService from '../../services/triggerService';
+import LocalStorageService, {JWT_TOKEN, USER_ID} from '../../services/LocalStorageService';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -62,44 +63,42 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
-  const { updateDeviceRequest, error, loading } = useDeviceService();
+const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
+  const { createTriggerRequest, error, loading } = useTriggerService();
   const [message, setMessage] = useState('');
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
-  const [deviceIdError, setDeviceIdError] = useState(false);
-  const [deviceIdErrorMessage, setDeviceIdErrorMessage] = useState('');
-  const [accessIdError, setAccessIdError] = useState(false);
-  const [accessIdErrorMessage, setAccessIdErrorMessage] = useState('');
-  const [secretKeyError, setSecretKeyError] = useState(false);
-  const [secretKeyErrorMessage, setSecretKeyErrorMessage] = useState('');
-  const [form, setForm] = useState({ name: '', deviceId: '', accessId: '', accessSecret: '' });
+  const [triggerOnError, setTriggerOnError] = useState(false);
+  const [triggerOnErrorMessage, setTriggerOnErrorMessage] = useState('');
+  const [triggerOffError, setTriggerOffError] = useState(false);
+  const [triggerOffErrorMessage, setTriggerOffErrorMessage] = useState('');
+  const [chanelNameError, setChanelNameError] = useState(false);
+  const [chanelNameErrorMessage, setChanelNameErrorMessage] = useState('');
+  const [form, setForm] = useState({ name: '', triggerOn: '', triggerOff: '', chanelName: '', status: false });
 
   const localStorageService = new LocalStorageService();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    const data = new FormData(event.currentTarget);
+    console.log('Data:', data);
     const token = localStorageService.getItem(JWT_TOKEN);
+    const id = localStorageService.getItem(USER_ID);
 
-    if (nameError || deviceIdError || accessIdError || secretKeyError) {
+    if (nameError || triggerOnError || triggerOffError || chanelNameError) {
       event.preventDefault();
       return;
     };
 
-    const formName = form.name ? form.name : '';
-    const formDeviceId = form.deviceId ? form.deviceId : '';
-    const formAccessId = form.accessId ? form.accessId : '';
-    const formSecretKey = form.secretKey ? form.secretKey : '';
-
     try{
-      const response = await updateDeviceRequest(device._id, token, formName, formDeviceId, formAccessId, formSecretKey);
+      const response = await createTriggerRequest(id, token, form.name, form.triggerOn, form.triggerOff, form.chanelName, form.status);
 
       setMessage(response.message);
-      onDeviceUpdated();
+      onTriggerAdded();
       onClose();
     } catch (error) {
       console.log('Error:', error.message);
@@ -109,13 +108,13 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
 
   const validateInputs = () => {
     const name = document.getElementById('name');
-    const deviceId = document.getElementById('deviceId');
-    const accessId = document.getElementById('accessId');
-    const secretKey = document.getElementById('secretKey');
+    const triggerOn = document.getElementById('triggerOn');
+    const triggerOff = document.getElementById('triggerOff');
+    const chanelName = document.getElementById('chanelName');
 
     let isValid = true;
 
-    if (name.value.length && name.value.length < 2) {
+    if (!name.value || name.value.length < 2) {
       setNameError(true);
       setNameErrorMessage('Please enter a valid name.');
       isValid = false;
@@ -124,31 +123,31 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
       setNameErrorMessage('');
     }
 
-    if (deviceId.value.length && deviceId.value.length < 6) {
-      setDeviceIdError(true);
-      setDeviceIdErrorMessage('DeviceId must be at least 6 characters long.');
+    if (!triggerOn.value || triggerOn.value.length > 16) {
+      setTriggerOnError(true);
+      setTriggerOnErrorMessage('TriggerOn must be at least 6 characters long.');
       isValid = false;
     } else {
-      setDeviceIdError(false);
-      setDeviceIdErrorMessage('');
+      setTriggerOnError(false);
+      setTriggerOnErrorMessage('');
     }
 
-    if (accessId.value.length && accessId.value.length < 6) {
-      setAccessIdError(true);
-      setAccessIdErrorMessage('AccessId must be at least 6 characters long.');
+    if (!triggerOff.value || triggerOff.value.length > 16) {
+      setTriggerOffError(true);
+      setTriggerOffErrorMessage('TriggerOff must be at least 6 characters long.');
       isValid = false;
     } else {
-      setAccessIdError(false);
-      setAccessIdErrorMessage('');
+      setTriggerOffError(false);
+      setTriggerOffErrorMessage('');
     }
 
-    if (secretKey.value.length && secretKey.value.length < 6) {
-      setSecretKeyError(true);
-      setSecretKeyErrorMessage('SecretKey must be at least 6 characters long.');
+    if (!chanelName.value || chanelName.value.length < 2) {
+      setChanelNameError(true);
+      setChanelNameErrorMessage('ChanelName must be at least 6 characters long.');
       isValid = false;
     } else {
-      setSecretKeyError(false);
-      setSecretKeyErrorMessage('');
+      setChanelNameError(false);
+      setChanelNameErrorMessage('');
     }
 
     return isValid;
@@ -163,7 +162,7 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
                           variant="h4"
                           sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
                         >
-                          Update Device
+                          New Trigger
                         </Typography>
                         <Box
                           component="form"
@@ -177,14 +176,14 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
                           }}
                         >
                           <FormControl>
-                            <FormLabel htmlFor="name">Device Name</FormLabel>
+                            <FormLabel htmlFor="name">Triger Name</FormLabel>
                             <TextField
-                              error={setNameError}
+                              error={nameError}
                               helperText={nameErrorMessage}
                               id="name"
                               type="name"
                               name="name"
-                              placeholder={device.name}
+                              placeholder="Start Light"
                               autoComplete="name"
                               autoFocus
                               required
@@ -195,57 +194,71 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="deviceId">Device Id</FormLabel>
+                            <FormLabel htmlFor="chanelName">Chanel Name</FormLabel>
                             <TextField
-                              error={deviceIdError}
-                              helperText={deviceIdErrorMessage}
-                              name="deviceId"
-                              placeholder={device.deviceId}
-                              type="deviceId"
-                              id="deviceId"
+                              error={chanelNameError}
+                              helperText={chanelNameErrorMessage}
+                              name="chanelName"
+                              placeholder="My Chanel"
+                              type="chanelName"
+                              id="chanelName"
+                              autoComplete="current-chanelName"
                               autoFocus
                               required
                               fullWidth
                               variant="outlined"
                               onChange={handleChange}
-                              color={deviceIdError ? 'error' : 'primary'}
+                              color={chanelNameError ? 'error' : 'primary'}
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="accessId">Access Id</FormLabel>
+                            <FormLabel htmlFor="triggerOn">On</FormLabel>
                             <TextField
-                              error={accessIdError}
-                              helperText={accessIdErrorMessage}
-                              name="accessId"
-                              placeholder={device.accessId}
-                              type="accessId"
-                              id="accessId"
-                              autoComplete="current-accessId"
+                              error={triggerOnError}
+                              helperText={triggerOnErrorMessage}
+                              name="triggerOn"
+                              placeholder="start"
+                              type="triggerOn"
+                              id="triggerOn"
                               autoFocus
                               required
                               fullWidth
                               variant="outlined"
                               onChange={handleChange}
-                              color={accessIdError ? 'error' : 'primary'}
+                              color={triggerOnError ? 'error' : 'primary'}
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="secretKey">SecretKey Id</FormLabel>
+                            <FormLabel htmlFor="triggerOff">Off</FormLabel>
                             <TextField
-                              error={secretKeyError}
-                              helperText={secretKeyErrorMessage}
-                              name="secretKey"
-                              placeholder={device.secretKey}
-                              type="secretKey"
-                              id="secretKey"
-                              autoComplete="current-secretKey"
+                              error={triggerOffError}
+                              helperText={triggerOffErrorMessage}
+                              name="triggerOff"
+                              placeholder="stop"
+                              type="triggerOff"
+                              id="triggerOff"
+                              autoComplete="current-triggerOff"
                               autoFocus
                               required
                               fullWidth
                               variant="outlined"
                               onChange={handleChange}
-                              color={secretKeyError ? 'error' : 'primary'}
+                              color={triggerOffError ? 'error' : 'primary'}
                             />
+                          </FormControl>
+                          <FormControl>
+                            <FormLabel htmlFor="chanelName">Status</FormLabel>
+                            <Select
+                              name="status"
+                              placeholder="true"
+                              type="status"
+                              id="status"
+                              value={form.status}
+                              onChange={handleChange}
+                            >
+                              <MenuItem value="false">Off</MenuItem>
+                              <MenuItem value="true">On</MenuItem>
+                            </Select>
                           </FormControl>
                           <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
                             {message}
@@ -256,12 +269,13 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
                             variant="contained"
                             onClick={validateInputs}
                           >
-                            Update Device
+                            Add Device
                           </Button>
                         </Box>
                       </Card>
                     </SignInContainer>
                   </>
+
 
   const errorMessage = error ? <ErrorMessage /> : null;
   const spinner = loading ? <Spinner /> : null;
@@ -276,4 +290,4 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
   );
 }
 
-export default UpdateDeviceForm
+export default CreateTriggerForm

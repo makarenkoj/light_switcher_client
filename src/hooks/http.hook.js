@@ -20,7 +20,6 @@ const useHttp = () => {
             }
 
             const data = await response.json();
-            console.log('response:', data);
 
             setLoading(false);
             return data;

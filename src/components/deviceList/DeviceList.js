@@ -48,7 +48,7 @@ const DeviceList = () => {
     // eslint-disable-next-line
   }, [currentPage]);
 
-  const handlePageChange = (event, value) => {
+  const handlePageChange = (_event, value) => {
     setCurrentPage(value);
   };
 

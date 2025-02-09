@@ -2,7 +2,7 @@ import useHttp from "../hooks/http.hook";
 
 const useDeviceService = () => {
   const { loading, request, error, clearError } = useHttp();
-	const _baseUrl = 'http://localhost:3001';
+  const _baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
   const changeStatusRequest = async (id, token, status) => {
     const res = await request(`${_baseUrl}/api/devices/status/${id}`,

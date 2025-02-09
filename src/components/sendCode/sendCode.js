@@ -14,7 +14,6 @@ const SendCode = () => {
       });
 
       const data = await response.json();
-      console.log('Response:', data);
 
       if (response.ok) {
         localStorage.setItem('phoneNumber', data.phoneNumber);

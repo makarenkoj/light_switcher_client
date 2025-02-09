@@ -21,7 +21,6 @@ const TelegramButton = ({ onPasswordRequest }) => {
 
     try {
       const response = await codeRequest(token);
-      console.log('Response:', response);
 
       if (response.authorized) {
         localStorageService.setItem('authorized', response.authorized);
@@ -74,7 +73,6 @@ useEffect(() => {
     <TelegramForm
       open={isTelegramFormOpen}
       onClose={() => setIsTelegramFormOpen(false)}
-      // onSubmit={console.log('Submit')}
     />
     </>
   );

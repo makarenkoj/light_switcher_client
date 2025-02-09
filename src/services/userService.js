@@ -2,7 +2,7 @@ import useHttp from "../hooks/http.hook";
 
 const useUserService = () => {
   const { loading, request, error, clearError } = useHttp();
-	const _baseUrl = 'http://localhost:3001';
+  const _baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
   const getUserRequest = async (token, id) => {
     const res = await request(`${_baseUrl}/api/users/${id}`,
