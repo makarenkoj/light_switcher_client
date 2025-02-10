@@ -35,7 +35,7 @@ const SignUpForm = ({ open, onClose }) => {
     }catch (error) {
       localStorageService.clear();
       console.error('Login error:', error.message);
-      alert(error.message);
+      // alert(error.message);
       setMessage('Login failed: ' + error.message);
     }
   };

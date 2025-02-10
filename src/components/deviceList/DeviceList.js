@@ -39,7 +39,7 @@ const DeviceList = () => {
       setTotalPages(response.totalPages);
     } catch (error) {
       console.error('Device list error:', error.message);
-      alert(error.message);
+      // alert(error.message);
     }
   };
 

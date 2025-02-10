@@ -40,10 +40,9 @@ const Triggers = ({open, onClose}) => {
       const response = await showTriggersRequest(token, currentPage, itemsPerPage);
       setTriggers(response.triggers);
       setTotalPages(response.triggers);
-      console.log('Triggers:', response);
     } catch (error) {
       console.error('Trigger list error:', error.message);
-      alert(error.message);
+      // alert(error.message);
     };
   };
 
@@ -71,17 +70,9 @@ const Triggers = ({open, onClose}) => {
                                     <Card >
                                       <CardContent >
                                         <Typography  variant="subtitle1" component="div"> 
-                                          {/* <Tooltip title='Open Device' > */}
                                             <Stack sx={{ gap: 1, alignItems: 'center' }}>
-                                              {/* <Button size="small" variant="contained" color="inherit" 
-                                                      onClick={() => {
-                                                        setSelectedDevice(device._id);
-                                                        setIsDeviceOpen(true)}
-                                                        }> */}
                                                 {trigger.name}
-                                              {/* </Button> */}
                                             </Stack>
-                                          {/* </Tooltip> */}
                                         </Typography>
                                         <Typography>
                                           {trigger.triggerOn}
@@ -92,11 +83,9 @@ const Triggers = ({open, onClose}) => {
                                         <Typography>
                                           {trigger.channelName}
                                         </Typography>
-                                        {/* {trigger.status ? <Typography backgroundColor="green" color="white">Active</Typography> : <Typography backgroundColor="yellow" color="">Inactive</Typography>} */}
                                         <Typography variant="subtitle1" component="div">
                                           <ChangeTriggerStatusButton triggerId={trigger._id} status={trigger.status} oneUpdateStatus={handleTriggerUpdate}/>
                                         </Typography>
-                                        {console.log('id',trigger._id)}
                                       </CardContent>
                                       <CardActions>
                                         <UpdateTriggerButton trigger={trigger} onTriggerUpdated={fetchTriggers}/>

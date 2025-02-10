@@ -84,8 +84,6 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log('Data:', data);
     const token = localStorageService.getItem(JWT_TOKEN);
     const id = localStorageService.getItem(USER_ID);
 

@@ -14,7 +14,7 @@ const ChangeStatusButton = ({deviceId, status, oneUpdateStatus}) => {
       oneUpdateStatus();
     } catch (error) {
       console.error('Status change error:', error.message);
-      alert(error.message);
+      // alert(error.message);
     }
   };
 

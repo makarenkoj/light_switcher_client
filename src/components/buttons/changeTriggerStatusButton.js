@@ -9,13 +9,12 @@ const ChangeTriggerStatusButton = ({triggerId, status, oneUpdateStatus}) => {
   const { updateTriggerRequest, error, loading } = useTriggerService();
 
   const handleStatusToggle = async (triggerId, status) => {
-    console.log('Handleid',triggerId)
     try {
       await updateTriggerRequest(triggerId, token, status);
       oneUpdateStatus();
     } catch (error) {
       console.error('Status change error:', error.message);
-      alert(error.message);
+      // alert(error.message);
     }
   };
 
