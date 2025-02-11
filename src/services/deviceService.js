@@ -67,6 +67,24 @@ const useDeviceService = () => {
     return res;
   };
 
+  const getDeviceTriggersRequest = async (id, token, page = 1, limit = 9) => {
+    const res = await request(`${_baseUrl}/api/devices/${id}/triggers?page=${page}&limit=${limit}`,
+                              "GET",
+                              null,
+                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+
+    return res;
+  };
+
+  const createDeviceTriggersRequest = async (id, token, triggerId) => {
+    const res = await request(`${_baseUrl}/api/devices/${id}/triggers`,
+                              "POST",
+                              {triggerId},
+                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+
+    return res;
+  };
+
   return {
 		loading,
 		error,
@@ -77,7 +95,9 @@ const useDeviceService = () => {
     showDevicesRequest,
     updateDeviceRequest,
     createDeviceRequest,
-    deleteDeviceRequest
+    deleteDeviceRequest,
+    getDeviceTriggersRequest,
+    createDeviceTriggersRequest
 	};
 }
 
