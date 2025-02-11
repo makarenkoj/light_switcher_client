@@ -18,12 +18,13 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import LocalStorageService, { JWT_TOKEN } from '../../services/LocalStorageService';
 import useTriggerService from '../../services/triggerService';
+import useDeviceService from '../../services/deviceService';
 import  AddTriggerButton from '../buttons/addTriggerButton';
 import DeleteTriggerButton from '../buttons/deleteTriggerButton';
 import ChangeTriggerStatusButton from '../buttons/changeTriggerStatusButton';
 import UpdateTriggerButton from '../buttons/updateTriggerButton';
 
-const Triggers = ({open, onClose}) => {
+const Triggers = ({open, onClose, deviceId}) => {
   // const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [triggers, setTriggers] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -34,12 +35,21 @@ const Triggers = ({open, onClose}) => {
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
   const { showTriggersRequest, error, loading } = useTriggerService();
+  const { getDeviceTriggersRequest  } = useDeviceService();
 
   const fetchTriggers = async () => {
     try {
-      const response = await showTriggersRequest(token, currentPage, itemsPerPage);
-      setTriggers(response.triggers);
-      setTotalPages(response.triggers);
+      if (deviceId) {
+      console.log('Device id:', deviceId)
+
+        const response = await getDeviceTriggersRequest (deviceId, token, currentPage, itemsPerPage);
+        setTriggers(response.triggers);
+        setTotalPages(response.totalPages);
+      } else {
+        const response = await showTriggersRequest(token, currentPage, itemsPerPage, deviceId);
+        setTriggers(response.triggers);
+        setTotalPages(response.triggers);
+    }
     } catch (error) {
       console.error('Trigger list error:', error.message);
       // alert(error.message);
@@ -49,7 +59,7 @@ const Triggers = ({open, onClose}) => {
   useEffect(() => {
     fetchTriggers();
     // eslint-disable-next-line
-  }, [currentPage]);
+  }, [open, currentPage]);
 
   const handlePageChange = (_event, value) => {
     setCurrentPage(value);

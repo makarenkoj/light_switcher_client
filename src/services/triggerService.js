@@ -49,6 +49,15 @@ const useTriggerService = () => {
     return res;
   };
 
+  const showTriggersFilterRequest = async (deviceId, token, page = 1, limit = 9) => {
+    const res = await request(`${_baseUrl}/api/triggers/filtered?deviceId=${deviceId}&page=${page}&limit=${limit}`,
+                              "GET",
+                              null,
+                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+console.log('Trigger response:', res)
+    return res;
+  };
+
   return {
 		loading,
 		error,
@@ -57,7 +66,8 @@ const useTriggerService = () => {
     showTriggersRequest,
     updateTriggerRequest,
     createTriggerRequest,
-    deleteTriggerRequest
+    deleteTriggerRequest,
+    showTriggersFilterRequest
 	};
 }
 
