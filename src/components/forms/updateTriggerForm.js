@@ -76,7 +76,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
       setNameErrorMessage('');
     }
 
-    if (triggerOn.value.length && triggerOn.value.length > 16) {
+    if (triggerOn.value.length && triggerOn.value.length > 33) {
       setTriggerOnError(true);
       setTriggerOnErrorMessage('TriggerOn must be at least 6 characters long.');
       isValid = false;
@@ -85,7 +85,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
       setTriggerOnErrorMessage('');
     }
 
-    if (triggerOff.value.length && triggerOff.value.length > 16) {
+    if (triggerOff.value.length && triggerOff.value.length > 33) {
       setTriggerOffError(true);
       setTriggerOffErrorMessage('TriggerOff must be at least 6 characters long.');
       isValid = false;

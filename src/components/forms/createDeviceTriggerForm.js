@@ -49,7 +49,7 @@ const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) =>
 
   const handleSubmit = async () => {
     if (!selectedTrigger) return;
-console.log('Selected trigger:', selectedTrigger)
+
     try {
       await createDeviceTriggersRequest(deviceId, token, selectedTrigger);
       onTriggerAdded();

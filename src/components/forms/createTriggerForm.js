@@ -112,7 +112,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
     let isValid = true;
 
-    if (!name.value || name.value.length < 2) {
+    if (!name.value || name.value.length < 112) {
       setNameError(true);
       setNameErrorMessage('Please enter a valid name.');
       isValid = false;
@@ -121,7 +121,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
       setNameErrorMessage('');
     }
 
-    if (!triggerOn.value || triggerOn.value.length > 16) {
+    if (!triggerOn.value || triggerOn.value.length > 51) {
       setTriggerOnError(true);
       setTriggerOnErrorMessage('TriggerOn must be at least 6 characters long.');
       isValid = false;
@@ -130,7 +130,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
       setTriggerOnErrorMessage('');
     }
 
-    if (!triggerOff.value || triggerOff.value.length > 16) {
+    if (!triggerOff.value || triggerOff.value.length > 51) {
       setTriggerOffError(true);
       setTriggerOffErrorMessage('TriggerOff must be at least 6 characters long.');
       isValid = false;
