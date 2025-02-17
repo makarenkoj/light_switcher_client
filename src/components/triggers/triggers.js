@@ -68,7 +68,6 @@ const Triggers = ({ open, onClose, deviceId }) => {
     }
   };
 
-  // Функція для оновлення конкретного тригера
   const handleTriggerUpdate = async (updatedTrigger) => {
     setTriggers((prevTriggers) =>
       prevTriggers.map((trigger) =>
@@ -77,7 +76,6 @@ const Triggers = ({ open, onClose, deviceId }) => {
     );
   };
 
-  // Спостерігач для infinite scroll
   const lastTriggerRef = useCallback(
     (node) => {
       if (loading) return;
@@ -115,7 +113,7 @@ const Triggers = ({ open, onClose, deviceId }) => {
                 </Typography>
                 <Typography color="text.secondary">On: {trigger.triggerOn}</Typography>
                 <Typography color="text.secondary">Off: {trigger.triggerOff}</Typography>
-                <Typography color="text.secondary">Channel: {trigger.channelName}</Typography>
+                <Typography color="text.secondary">Channel: {trigger.chanelName}</Typography>
                 <Box mt={2} display="flex" justifyContent="center">
                   <ChangeTriggerStatusButton
                     triggerId={trigger._id}

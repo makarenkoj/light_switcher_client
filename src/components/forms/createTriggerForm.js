@@ -112,7 +112,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
     let isValid = true;
 
-    if (!name.value || name.value.length < 112) {
+    if (!name.value || name.value.length < 2) {
       setNameError(true);
       setNameErrorMessage('Please enter a valid name.');
       isValid = false;
