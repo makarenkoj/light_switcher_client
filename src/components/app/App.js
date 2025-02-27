@@ -6,6 +6,7 @@ import UserInfo from '../user/user';
 import UpdateUserButton from '../buttons/updateUserButton';
 import DeviceList from '../deviceList/DeviceList';
 import CreateDeviceForm from '../forms/createDeviceForm';
+import TriggersButton from '../buttons/triggersButton';
 
 // MUI
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
@@ -94,6 +95,7 @@ const App = () => {
             </Box>
 
             <UserInfo />
+            <TriggersButton/>
 
             {/* device list */}
             <DeviceList />

@@ -20,7 +20,6 @@ const UpdateUserButton = ({handleUserDeleted}) => {
         open={isFormOpen}
         onClose={() => setIsFormOpen(false)}
         onUserDeleted={handleUserDeleted}
-        // onSubmit={console.log('Submit')}
       />
     </>
   );

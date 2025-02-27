@@ -14,20 +14,19 @@ const SendCode = () => {
       });
 
       const data = await response.json();
-      console.log('Response:', data);
 
       if (response.ok) {
         localStorage.setItem('phoneNumber', data.phoneNumber);
         localStorage.setItem('phoneCodeHash', data.phoneCodeHash);
-        alert('Request successful!');
+        // alert('Request successful!');
       } else {
         localStorage.removeItem('phoneNumber');
         localStorage.removeItem('phoneCodeHash');
-        alert('Request failed: ' + data.error);
+        // alert('Request failed: ' + data.error);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred: ' + error.message);
+      // alert('An error occurred: ' + error.message);
     }
   };
 

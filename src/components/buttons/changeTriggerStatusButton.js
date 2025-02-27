@@ -1,16 +1,16 @@
 import { Button, CircularProgress, Tooltip } from '@mui/material';
 import { CheckCircle, Cancel } from '@mui/icons-material';
-import useDeviceService from '../../services/deviceService';
+import useTriggerService from '../../services/triggerService';
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
 
-const ChangeStatusButton = ({deviceId, status, oneUpdateStatus}) => {
+const ChangeTriggerStatusButton = ({triggerId, status, oneUpdateStatus}) => {
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
-  const { changeStatusRequest, error, loading } = useDeviceService();
+  const { updateTriggerRequest, error, loading } = useTriggerService();
 
-  const handleStatusToggle = async (deviceId, status) => {
+  const handleStatusToggle = async (triggerId, status) => {
     try {
-      await changeStatusRequest(deviceId, token, status);
+      await updateTriggerRequest(triggerId, token, status);
       oneUpdateStatus();
     } catch (error) {
       console.error('Status change error:', error.message);
@@ -25,7 +25,7 @@ const ChangeStatusButton = ({deviceId, status, oneUpdateStatus}) => {
                 color={status ? 'success' : 'error'}
                 size="smal"
                 disabled={loading}
-                onClick={() => handleStatusToggle(deviceId, !status)}
+                onClick={() => handleStatusToggle(triggerId, !status)}
                 startIcon={loading ? <CircularProgress size={16} /> : status ? <CheckCircle /> : <Cancel />}
                 >
           Status {status ? 'On' : 'Off'}
@@ -35,4 +35,4 @@ const ChangeStatusButton = ({deviceId, status, oneUpdateStatus}) => {
   )
 };
 
-export default ChangeStatusButton
+export default ChangeTriggerStatusButton

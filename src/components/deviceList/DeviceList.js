@@ -39,7 +39,7 @@ const DeviceList = () => {
       setTotalPages(response.totalPages);
     } catch (error) {
       console.error('Device list error:', error.message);
-      alert(error.message);
+      // alert(error.message);
     }
   };
 
@@ -48,7 +48,7 @@ const DeviceList = () => {
     // eslint-disable-next-line
   }, [currentPage]);
 
-  const handlePageChange = (event, value) => {
+  const handlePageChange = (_event, value) => {
     setCurrentPage(value);
   };
 
