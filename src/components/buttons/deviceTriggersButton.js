@@ -187,7 +187,6 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
         </Box>
       </Dialog>
 
-      {/* Меню для кнопок дій */}
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
         {selectedTrigger && [
           <>
@@ -199,11 +198,12 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
             }}>            
               <DisconnectTriggerButton trigger={selectedTrigger} deviceId={deviceId} onTriggerDisconnected={handleTriggerDisconnected} />
             </MenuItem>
-            <MenuItem onClick={() => { handleMenuClose(); }}>
-              <UpdateTriggerButton trigger={selectedTrigger} onTriggerUpdated={() => fetchTriggers(0, rowsPerPage, true)} />
+            <MenuItem >
+              <UpdateTriggerButton trigger={selectedTrigger} onTriggerUpdated={() => {fetchTriggers(0, rowsPerPage, true); handleMenuClose();}} />
+                {console.log('Update Trigger:', selectedTrigger)}
             </MenuItem>
-            <MenuItem onClick={() => { handleMenuClose(); }}>
-              <DeleteTriggerButton trigger={selectedTrigger} onTriggerDeleted={() => fetchTriggers(0, rowsPerPage, true)} />
+            <MenuItem >
+              <DeleteTriggerButton trigger={selectedTrigger} onTriggerDeleted={() => {fetchTriggers(0, rowsPerPage, true); handleMenuClose();}} />
             </MenuItem>
           </>
         ]}
