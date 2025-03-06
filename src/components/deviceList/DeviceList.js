@@ -3,9 +3,9 @@ import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useDeviceService from '../../services/deviceService';
-import AddDevice from '../buttons/addDevice';
-import UpdateDeviceButton from '../buttons/updateDeviceButton';
-import DeleteDeviceButton from '../buttons/deleteDeviceButton';
+// import AddDevice from '../buttons/addDevice';
+// import UpdateDeviceButton from '../buttons/updateDeviceButton';
+// import DeleteDeviceButton from '../buttons/deleteDeviceButton';
 import ChangeStatusButton from '../buttons/changeStatusButton';
 import Device from '../device/device';
 import {
@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
-const DeviceList = () => {
+const DeviceList = ({onDeviceAdded}) => {
   const [devices, setDevices] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,14 +39,13 @@ const DeviceList = () => {
       setTotalPages(response.totalPages);
     } catch (error) {
       console.error('Device list error:', error.message);
-      // alert(error.message);
     }
   };
 
   useEffect(() => {
     fetchDevices();
     // eslint-disable-next-line
-  }, [currentPage]);
+  }, [currentPage, onDeviceAdded]);
 
   const handlePageChange = (_event, value) => {
     setCurrentPage(value);
@@ -56,6 +55,14 @@ const DeviceList = () => {
     setDevices((prevDevices) => prevDevices.filter((device) => device._id !== deletedDeviceId));
   };
 
+  const handleDeviceStatusUpdate = (deviceId, newStatus) => {
+    setDevices((prevDevices) =>
+      prevDevices.map((device) =>
+        device._id === deviceId ? { ...device, status: newStatus } : device
+      )
+    );
+  };
+
   const errorMessage = error ? <ErrorMessage /> : null;
   const spinner = loading ? <Spinner /> : null;
 
@@ -63,7 +70,11 @@ const DeviceList = () => {
     <>
     {errorMessage}
     {spinner}
-    <AddDevice onDeviceAdded={fetchDevices} />
+
+    {/* <Box width="100%" display="flex" justifyContent="center">
+      <AddDevice onDeviceAdded={fetchDevices} />
+    </Box> */}
+
     {devices.length > 0 && (
         <>
           <Grid container spacing={4} mt={2}>
@@ -86,14 +97,16 @@ const DeviceList = () => {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <ChangeStatusButton deviceId={device._id} status={device.status} oneUpdateStatus={fetchDevices} />
+                    <Box width="100%" display="flex" justifyContent="center">
+                      <ChangeStatusButton deviceId={device._id} status={device.status} oneUpdateStatus={(newStatus) => handleDeviceStatusUpdate(device._id, newStatus)} />
+                    </Box>
                   </CardActions>
-                  <CardActions>
+                  {/* <CardActions>
                     <UpdateDeviceButton device={device} onDeviceUpdated={fetchDevices}/>
                   </CardActions>
                   <CardActions>
                     <DeleteDeviceButton device={device} onDeviceDeleted={fetchDevices}/>
-                  </CardActions>
+                  </CardActions> */}
                 </Card>
               </Grid>
             ))}

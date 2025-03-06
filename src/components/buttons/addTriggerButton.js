@@ -20,7 +20,7 @@ export default function AddTriggerButton({ onTriggerAdded }) {
 
   return (
     <>
-      <Stack direction="row" sx={{ gap: 4 }} mt={2}>
+      {/* <Stack direction="row" sx={{ gap: 4 }} mt={2}> */}
         <ThemeProvider theme={defaultContrastThresholdTheme}>
           <Stack sx={{ gap: 1, alignItems: 'center' }}>
             <Tooltip title='Add Trigger'>
@@ -32,7 +32,7 @@ export default function AddTriggerButton({ onTriggerAdded }) {
             </Tooltip>
           </Stack>
         </ThemeProvider>
-      </Stack>
+      {/* </Stack> */}
 
       <CreateTriggerForm
         open={isCreateFormOpen}

@@ -6,7 +6,10 @@ import UserInfo from '../user/user';
 import UpdateUserButton from '../buttons/updateUserButton';
 import DeviceList from '../deviceList/DeviceList';
 import CreateDeviceForm from '../forms/createDeviceForm';
-import TriggersButton from '../buttons/triggersButton';
+// import TriggersButton from '../buttons/triggersButton';
+import Triggers from '../triggers/triggers';
+import AddDevice from '../buttons/addDevice';
+import AddTriggerButton from '../buttons/addTriggerButton';
 
 // MUI
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
@@ -29,6 +32,10 @@ const App = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const theme = useTheme();
+
+  const onDeviceAdded = () => {
+    onDeviceAdded();
+  };
 
   const handleLoginOpen = () => setIsLoginOpen(true);
   const handleLoginClose = () => setIsLoginOpen(false);
@@ -56,14 +63,20 @@ const App = () => {
             </Typography>
             {isLoggedIn ? (
               <>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <AddTriggerButton />
+                <AddDevice onDeviceAdded={onDeviceAdded} />
                 <TelegramButton />
                 <UpdateUserButton  handleUserDeleted={handleUserDeleted}/>
                 <LogoutButton onLogout={handleLogout} />
+              </Box>
               </>
             ) : (
               <>
-                <Button color="inherit" onClick={handleLoginOpen}>Login</Button>
-                <Button color="inherit" onClick={handleRegisterOpen}>Register</Button>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <Button variant="contained" color="primary" onClick={handleLoginOpen}>Login</Button>
+                <Button variant="contained" color="secondary" onClick={handleRegisterOpen}>Register</Button>
+              </Box>
               </>
             )}
           </Toolbar>
@@ -95,10 +108,10 @@ const App = () => {
             </Box>
 
             <UserInfo />
-            <TriggersButton/>
+            <Triggers />
 
             {/* device list */}
-            <DeviceList />
+            <DeviceList onDeviceAdded={onDeviceAdded}/>
             </>) : null}
 
             <CreateDeviceForm/>

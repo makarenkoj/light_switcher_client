@@ -85,6 +85,15 @@ const useDeviceService = () => {
     return res;
   };
 
+  const disconnectTriggerRequest = async (id, token, triggerId) => {
+    const res = await request(`${_baseUrl}/api/devices/${id}/triggers`,
+                              "DELETE",
+                              {triggerId},
+                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+
+    return res;
+  };
+
   return {
 		loading,
 		error,
@@ -97,7 +106,8 @@ const useDeviceService = () => {
     createDeviceRequest,
     deleteDeviceRequest,
     getDeviceTriggersRequest,
-    createDeviceTriggersRequest
+    createDeviceTriggersRequest,
+    disconnectTriggerRequest
 	};
 }
 

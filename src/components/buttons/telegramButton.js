@@ -38,20 +38,20 @@ const TelegramButton = ({ onPasswordRequest }) => {
     }
   };
 
-useEffect(() => {
-  const handleStatus = async () => {
-    try {
-      const response = await getTelegramStatus(token);
-      setStatus(response.authorized);
-    } catch (error) {
-      console.error('Error fetching Telegram status:', error.message);
-    }
-  };
+  useEffect(() => {
+    const handleStatus = async () => {
+      try {
+        const response = await getTelegramStatus(token);
+        setStatus(response.authorized);
+      } catch (error) {
+        console.error('Error fetching Telegram status:', error.message);
+      }
+    };
 
-  handleStatus();
+    handleStatus();
 
-   // eslint-disable-next-line
-}, []);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>

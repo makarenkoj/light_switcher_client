@@ -11,10 +11,9 @@ const ChangeTriggerStatusButton = ({triggerId, status, oneUpdateStatus}) => {
   const handleStatusToggle = async (triggerId, status) => {
     try {
       await updateTriggerRequest(triggerId, token, status);
-      oneUpdateStatus();
+      oneUpdateStatus(status);
     } catch (error) {
       console.error('Status change error:', error.message);
-      // alert(error.message);
     }
   };
 
@@ -28,7 +27,7 @@ const ChangeTriggerStatusButton = ({triggerId, status, oneUpdateStatus}) => {
                 onClick={() => handleStatusToggle(triggerId, !status)}
                 startIcon={loading ? <CircularProgress size={16} /> : status ? <CheckCircle /> : <Cancel />}
                 >
-          Status {status ? 'On' : 'Off'}
+          {status ? 'On' : 'Off'}
         </Button>
       </span>
     </Tooltip>

@@ -11,10 +11,9 @@ const ChangeStatusButton = ({deviceId, status, oneUpdateStatus}) => {
   const handleStatusToggle = async (deviceId, status) => {
     try {
       await changeStatusRequest(deviceId, token, status);
-      oneUpdateStatus();
+      oneUpdateStatus(status);
     } catch (error) {
       console.error('Status change error:', error.message);
-      // alert(error.message);
     }
   };
 
