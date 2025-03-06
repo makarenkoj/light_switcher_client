@@ -8,7 +8,7 @@ const AddDeviceTriggerButton = ({ deviceId, onTriggerAdded }) => {
   return (
     <>
       <Button variant="contained" color="secondary" onClick={() => setIsOpen(true)}>
-        Додати тригер
+        Add to the device
       </Button>
       <CreateDeviceTriggerForm
         open={isOpen}

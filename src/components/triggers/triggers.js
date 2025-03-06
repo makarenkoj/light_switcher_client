@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Box, Typography, Card, CardContent, CircularProgress } from '@mui/material';
-import AddTriggerButton from '../buttons/addTriggerButton';
+// import AddTriggerButton from '../buttons/addTriggerButton';
 import DeleteTriggerButton from '../buttons/deleteTriggerButton';
 import ChangeTriggerStatusButton from '../buttons/changeTriggerStatusButton';
 import UpdateTriggerButton from '../buttons/updateTriggerButton';
@@ -117,9 +117,9 @@ const Triggers = () => {
         </Typography>
       )}
 
-      <Box mt={3} display="flex" justifyContent="center">
+      {/* <Box mt={3} display="flex" justifyContent="center">
         <AddTriggerButton onTriggerAdded={fetchTriggers} />
-      </Box>
+      </Box> */}
     </Box>
   );
 };

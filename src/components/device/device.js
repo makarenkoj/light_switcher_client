@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Dialog,
-        DialogTitle,
+        // DialogTitle,
         DialogContent,
         DialogActions,
-        Button,
+        // Button,
         Typography,
         Card,
         CardContent,
@@ -11,7 +11,9 @@ import { Dialog,
         Stack,
         Tooltip,
         Paper,
+        IconButton
         } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import useDeviceService from '../../services/deviceService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -41,10 +43,8 @@ const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) =
   const fetchDevice = async () => {
     try {
       const response = await showDeviceRequest(deviceId, token);
-      console.log('Device response:', response);
       setDevice(response.device);
       setDevicesTriggers(response.devicesTriggers);
-      console.log(response)
     } catch (error) {
       console.error('Error fetching device:', error);
     }
@@ -62,14 +62,22 @@ const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) =
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
       {error && <ErrorMessage />}
       {loading && <Spinner />}
       {device ? (
         <Paper elevation={4} sx={{ padding: 3, borderRadius: 2 }}>
-          <DialogTitle align="center" sx={{ fontSize: 20, fontWeight: 'bold' }}>
-            Device Information
-          </DialogTitle>
-          <Divider sx={{ my: 2 }} />
           <DialogContent>
             <Card variant="outlined" sx={{ padding: 2, backgroundColor: '#f9f9f9' }}>
               <CardContent>
@@ -93,21 +101,19 @@ const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) =
 
             <Stack direction="row" spacing={2} mt={3} justifyContent="center">
               <Tooltip title="Manage Triggers">
-                <DeviceTriggersButton deviceId={deviceId} triggersCount={devicesTriggers.length} />
+                {devicesTriggers.length <= 0 ? (
+                  <AddDeviceTriggersButton deviceId={deviceId} onTriggerAdded={handleDeviceUpdate} />
+                ) : (
+                  <DeviceTriggersButton deviceId={deviceId} triggersCount={devicesTriggers.length} deviceName={device.name} />
+                )}
               </Tooltip>
               <Tooltip title="Change Status">
                 <ChangeStatusButton deviceId={deviceId} status={device.status} oneUpdateStatus={handleDeviceUpdate} />
-              </Tooltip>
-              <Tooltip title="Add Trigger">
-                <AddDeviceTriggersButton deviceId={deviceId} onTriggerAdded={handleDeviceUpdate} />
               </Tooltip>
             </Stack>
           </DialogContent>
 
           <DialogActions sx={{ justifyContent: 'center', mt: 2 }}>
-            <Button onClick={onClose} color="secondary" variant="outlined">
-              Close
-            </Button>
             <UpdateDeviceButton device={device} onDeviceUpdated={handleDeviceUpdate} />
             <DeleteDeviceButton device={device} onDeviceDeleted={handleDeviceDelete} />
           </DialogActions>
