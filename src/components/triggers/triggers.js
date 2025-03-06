@@ -1,177 +1,126 @@
-import {
-  Dialog,
-  CssBaseline,
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
-  Box,
-  Button,
-  CircularProgress
-} from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { useState, useEffect, useRef, useCallback } from 'react';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
-import LocalStorageService, { JWT_TOKEN } from '../../services/LocalStorageService';
-import useTriggerService from '../../services/triggerService';
-import useDeviceService from '../../services/deviceService';
+import { useState, useEffect, useMemo } from 'react';
+import { Box, Typography, Card, CardContent, CircularProgress } from '@mui/material';
 import AddTriggerButton from '../buttons/addTriggerButton';
 import DeleteTriggerButton from '../buttons/deleteTriggerButton';
 import ChangeTriggerStatusButton from '../buttons/changeTriggerStatusButton';
 import UpdateTriggerButton from '../buttons/updateTriggerButton';
+import useTriggerService from '../../services/triggerService';
+import LocalStorageService, { JWT_TOKEN } from '../../services/LocalStorageService';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
-const Triggers = ({ open, onClose, deviceId }) => {
+const TRUNCATION_LENGTH = 7;
+
+const Triggers = () => {
   const [triggers, setTriggers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const observer = useRef(null);
-  const localStorageService = new LocalStorageService();
-  const token = localStorageService.getItem(JWT_TOKEN);
-  const { showTriggersRequest, error, loading } = useTriggerService();
-  const { getDeviceTriggersRequest } = useDeviceService();
-  const itemsPerPage = 9;
+  const [limit, setLimit] = useState(10);
+  const localStorageService = useMemo(() => new LocalStorageService(), []);
+  const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
+  const { showTriggersRequest } = useTriggerService();
 
   useEffect(() => {
-    if (open) {
-      resetTriggers();
-    }
-
-    // eslint-disable-next-line
-  }, [open]);
-
-  const resetTriggers = () => {
-    setTriggers([]);
-    setPage(1);
-    setHasMore(true);
-    fetchTriggers(1, true);
-  };
-
-  const fetchTriggers = async (currentPage, reset = false) => {
-    try {
-      let response;
-      if (deviceId) {
-        response = await getDeviceTriggersRequest(deviceId, token, currentPage, itemsPerPage);
-      } else {
-        response = await showTriggersRequest(token, currentPage, itemsPerPage, deviceId);
-      }
-
-      if (reset) {
-        setTriggers(response.triggers);
-      } else {
-        setTriggers((prev) => [...new Set([...prev, ...response.triggers])]);
-      }
-
-      setHasMore(response.triggers.length === itemsPerPage);
-    } catch (error) {
-      console.error('Trigger list error:', error.message);
-    }
-  };
-
-  const handleTriggerUpdate = async (updatedTrigger) => {
-    setTriggers((prevTriggers) =>
-      prevTriggers.map((trigger) =>
-        trigger._id === updatedTrigger._id ? updatedTrigger : trigger
-      )
-    );
-  };
-
-  const lastTriggerRef = useCallback(
-    (node) => {
-      if (loading) return;
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [loading, hasMore]
-  );
-
-  useEffect(() => {
-    if (page > 1) {
-      fetchTriggers(page);
-    }
-
+    setLimit(10);
+    fetchTriggers(page, true);
     // eslint-disable-next-line
   }, [page]);
 
-  const triggersContent = (
-    <>
-      <Box mt={2} display="flex" justifyContent="center">
-        <AddTriggerButton onTriggerAdded={resetTriggers} />
-      </Box>
-      <Grid container spacing={3} mt={2} justifyContent="center">
-        {triggers.map((trigger, index) => (
-          <Grid item xs={12} sm={6} md={4} key={trigger._id} ref={index === triggers.length - 1 ? lastTriggerRef : null}>
-            <Card sx={{ borderRadius: 2, boxShadow: 3, transition: '0.3s', '&:hover': { boxShadow: 6 } }}>
-              <CardContent>
-                <Typography variant="h6" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                  {trigger.name}
-                </Typography>
-                <Typography color="text.secondary">On: {trigger.triggerOn}</Typography>
-                <Typography color="text.secondary">Off: {trigger.triggerOff}</Typography>
-                <Typography color="text.secondary">Channel: {trigger.chanelName}</Typography>
-                <Box mt={2} display="flex" justifyContent="center">
-                  <ChangeTriggerStatusButton
-                    triggerId={trigger._id}
-                    status={trigger.status}
-                    oneUpdateStatus={() => handleTriggerUpdate({ ...trigger, status: !trigger.status })}
-                  />
-                </Box>
-              </CardContent>
-              <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <UpdateTriggerButton trigger={trigger} onTriggerUpdated={resetTriggers} />
-                <DeleteTriggerButton trigger={trigger} onTriggerDeleted={resetTriggers} />
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      {loading && (
-        <Box mt={2} display="flex" justifyContent="center">
-          <CircularProgress />
-        </Box>
-      )}
-      <Box mt={4} display="flex" justifyContent="center">
-        <Button onClick={onClose} variant="contained" color="secondary">
-          Закрити
-        </Button>
-      </Box>
-    </>
-  );
-
-  const notContent = (
-    <>
-      <Grid container spacing={3} mt={2} justifyContent="center">
-        <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
-            <CardContent>
-              <Typography textAlign="center">Тригери не знайдено</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-      <Box mt={2} display="flex" justifyContent="center">
-        <AddTriggerButton onTriggerAdded={resetTriggers} />
-      </Box>
-      <Box mt={4} display="flex" justifyContent="center">
-        <Button onClick={onClose} variant="contained" color="secondary">
-          Закрити
-        </Button>
-      </Box>
-    </>
-  );
+  const fetchTriggers = async (page, reset = false) => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const response = await showTriggersRequest(token, page, limit);
+      setTotalPages(response.totalPages);
+      setTriggers((prev) => {
+        const newTriggers = response.triggers.filter(
+          (t) => !prev.some((prevT) => prevT._id === t._id)
+        );
+        return reset ? response.triggers : [...prev, ...newTriggers];
+      });
+    } catch (error) {
+      console.error('Error fetching device triggers:', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <CssBaseline enableColorScheme />
-      {error && <ErrorMessage />}
-      {loading && <Spinner />}
-      {triggers.length > 0 ? triggersContent : notContent}
-    </Dialog>
+    <Box sx={{ mt: 4 }}>
+      <Typography variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
+        Your triggers.
+      </Typography>
+
+      {loading ? (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      ) : triggers.length > 0 ? (
+        <Swiper
+          modules={[Navigation, Pagination, Autoplay]}
+          spaceBetween={15}
+          slidesPerView={1}
+          breakpoints={{
+            600: { slidesPerView: 2 },
+            960: { slidesPerView: 3 },
+          }}
+          navigation
+          pagination={{ clickable: true }}
+          autoplay={{ delay: 5000 }}
+          onSlideChange={(swiper) => {
+            if (swiper.isEnd && page < totalPages) {
+              fetchTriggers(page + 1);
+              setPage((prev) => (prev < totalPages ? prev + 1 : prev));
+            }
+          }}
+          style={{ paddingBottom: '40px' }}
+        >
+          {triggers.map((trigger) => (
+            <SwiperSlide key={trigger._id}>
+              <Card sx={{ boxShadow: 3, borderRadius: 2, p: 1, maxWidth: '350px' }}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    {trigger.name}
+                  </Typography>
+                  <Typography color="text.secondary">On: {trigger.triggerOn.length > TRUNCATION_LENGTH ? trigger.triggerOn.slice(0, TRUNCATION_LENGTH) + '...' : trigger.triggerOn}</Typography>
+                  <Typography color="text.secondary">Off: {trigger.triggerOff.length > TRUNCATION_LENGTH ? trigger.triggerOff.slice(0, TRUNCATION_LENGTH) + '...' : trigger.triggerOff}</Typography>
+                  <Typography color="text.secondary">Channel: {trigger.chanelName.length > TRUNCATION_LENGTH ? trigger.chanelName.slice(0, TRUNCATION_LENGTH) + '...' : trigger.chanelName}</Typography>
+                  <Box mt={2} display="flex" justifyContent="center">
+                    <ChangeTriggerStatusButton
+                      triggerId={trigger._id}
+                      status={trigger.status}
+                      oneUpdateStatus={() =>
+                        setTriggers((prev) =>
+                          prev.map((t) =>
+                            t._id === trigger._id ? { ...t, status: !t.status } : t
+                          )
+                        )
+                      }
+                    />
+                  </Box>
+                </CardContent>
+                <Box display="flex" justifyContent="space-between" p={1}>
+                  <UpdateTriggerButton trigger={trigger} onTriggerUpdated={fetchTriggers} />
+                  <DeleteTriggerButton trigger={trigger} onTriggerDeleted={fetchTriggers} />
+                </Box>
+              </Card>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        <Typography textAlign="center" sx={{ color: 'gray', mt: 2 }}>
+          You don't have any triggers yet.
+        </Typography>
+      )}
+
+      <Box mt={3} display="flex" justifyContent="center">
+        <AddTriggerButton onTriggerAdded={fetchTriggers} />
+      </Box>
+    </Box>
   );
 };
 
