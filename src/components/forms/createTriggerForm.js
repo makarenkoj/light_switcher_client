@@ -14,7 +14,9 @@ import {
   Select,
   MenuItem,
   Stack,
+  IconButton,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { SitemarkIcon } from '../customIcons/customIcons';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -280,6 +282,18 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <IconButton
+          aria-label="close"
+          onClick={() => onClose(onClose)}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+        <CloseIcon />
+      </IconButton>
       <CssBaseline enableColorScheme />
       {errorMessage}
       {spinner}

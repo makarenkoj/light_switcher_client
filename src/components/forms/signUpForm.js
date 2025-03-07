@@ -11,7 +11,9 @@ import {
   DialogTitle,
   TextField,
   Button,
+  IconButton,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const SignUpForm = ({ open, onClose }) => {
   const { registrationRequest, loading, error } = useRegistrationService();
@@ -76,7 +78,6 @@ const SignUpForm = ({ open, onClose }) => {
                     />
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={onClose}>Cancel</Button>
                     <Button onClick={handleSubmit}>Submit</Button>
                   </DialogActions>
                   {message && (
@@ -91,6 +92,18 @@ const SignUpForm = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
+      <IconButton
+        aria-label="close"
+        onClick={() => onClose(onClose)}
+        sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+        >
+        <CloseIcon />
+      </IconButton>
       {errorMessage}
       {spinner}
       {content}

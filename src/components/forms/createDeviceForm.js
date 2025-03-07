@@ -11,7 +11,9 @@ import {
   FormControl,
   Typography,
   Stack,
+  IconButton,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import { SitemarkIcon } from '../customIcons/customIcons';
 import Spinner from '../spinner/Spinner';
@@ -263,6 +265,18 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <IconButton
+          aria-label="close"
+          onClick={() => onClose(onClose)}
+            sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+        <CloseIcon />
+      </IconButton>
       <CssBaseline enableColorScheme />
       {errorMessage}
       {spinner}
