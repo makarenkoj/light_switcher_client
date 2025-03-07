@@ -3,12 +3,16 @@ import useHttp from "../hooks/http.hook";
 const useRegistrationService = () => {
   const { loading, request, error, clearError } = useHttp();
   const _baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+  const _cors_client = process.env.CLIENT || '*';
+
+  console.log('useRegistrationService: baseUrl:', _baseUrl);
+  console.log('useRegistrationService: cors_client:', _cors_client);
 
   const registrationRequest = async (email, password, phoneNumber ) => {
     const res = await request(`${_baseUrl}/api/auth/register`,
                               'POST',
                               { email, password, phoneNumber },
-                              { 'Content-Type': 'application/json' }
+                              { 'Content-Type': 'application/json', "Access-Control-Allow-Credentials": _cors_client }
                               );
 
     return res;

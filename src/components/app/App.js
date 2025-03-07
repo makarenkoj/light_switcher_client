@@ -33,8 +33,8 @@ const App = () => {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const theme = useTheme();
 
-  const onDeviceAdded = () => {
-    onDeviceAdded();
+  const handleOnDeviceAdded = () => {
+    // onDeviceAdded(); /////////
   };
 
   const handleLoginOpen = () => setIsLoginOpen(true);
@@ -65,7 +65,7 @@ const App = () => {
               <>
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <AddTriggerButton />
-                <AddDevice onDeviceAdded={onDeviceAdded} />
+                <AddDevice onDeviceAdded={handleOnDeviceAdded} />
                 <TelegramButton />
                 <UpdateUserButton  handleUserDeleted={handleUserDeleted}/>
                 <LogoutButton onLogout={handleLogout} />
@@ -111,7 +111,7 @@ const App = () => {
             <Triggers />
 
             {/* device list */}
-            <DeviceList onDeviceAdded={onDeviceAdded}/>
+            <DeviceList onDeviceAdded={handleOnDeviceAdded}/>
             </>) : null}
 
             <CreateDeviceForm/>
