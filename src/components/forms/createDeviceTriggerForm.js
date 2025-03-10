@@ -33,14 +33,19 @@ const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) =>
 
   useEffect(() => {
     if (open) {
-      setTriggers([]); // Очищуємо список при відкритті
-      setPage(1);
-      setHasMore(true);
+      resetForm();
       loadTriggers(1);
     }
 
     // eslint-disable-next-line
   }, [open]);
+
+  const resetForm = () => {
+    setTriggers([]);
+    setSelectedTrigger('');
+    setPage(1);
+    setHasMore(true);
+  };
 
   const loadTriggers = async (currentPage) => {
     setLoadingMore(true);
@@ -87,6 +92,7 @@ const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) =>
     try {
       await createDeviceTriggersRequest(deviceId, token, selectedTrigger);
       onTriggerAdded();
+      resetForm();
       loadTriggers(1);
     } catch (error) {
       console.error('Error adding trigger:', error);
@@ -100,7 +106,7 @@ const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) =>
         {loading && <Spinner />}
         {error && <ErrorMessage />}
         <FormControl fullWidth sx={{ mt: 2 }}>
-          <InputLabel>Оберіть тригер</InputLabel>
+          <InputLabel shrink sx={{ transform: 'translateY(-20px)' }}>Оберіть тригер</InputLabel>
           <Select
             value={selectedTrigger}
             onChange={(e) => setSelectedTrigger(e.target.value)}
