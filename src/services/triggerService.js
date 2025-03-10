@@ -54,7 +54,7 @@ const useTriggerService = () => {
                               "GET",
                               null,
                               { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
-console.log('Trigger response:', res)
+
     return res;
   };
 
