@@ -4,6 +4,7 @@ import useUserService from '../../services/userService';
 import LocalStorageService, {JWT_TOKEN, USER_ID} from '../../services/LocalStorageService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+import OpenTelegramFormButton from '../buttons/openTelegramFormButton';
 
 const UserInfo = () => {
   const [user, setUser] = useState({});
@@ -30,12 +31,20 @@ const UserInfo = () => {
      // eslint-disable-next-line
   }, []);
 
+  const handleSubmit = (data) => {
+    console.log('Форма відправлена:', data);
+    // Тут можна викликати відoбрaження data
+  };
+
   const content = <Box mt={4} p={2} bgcolor="grey.100" borderRadius={2} textAlign="center">
                     <Typography variant="h6">User Information</Typography>
                     <Typography>Email: {user.email}</Typography>
                     <Typography>Phone: {user.phoneNumber}</Typography>
                     <Typography>Total Devices: {devicesCount}</Typography>
                     <Typography>Telegram session save: {telegramSession.toString()}</Typography>
+                    <div style={{ padding: 20 }}>
+                      <OpenTelegramFormButton onSubmit={handleSubmit} />
+                    </div>
                   </Box>;
 
   const errorMessage = error ? <ErrorMessage /> : null;
