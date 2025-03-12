@@ -4,8 +4,8 @@ const useTelegramService = () => {
 	const { loading, request, error, clearError } = useHttp();
 	const _baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
-	const showTelegramData = async (id, token) => {
-		const res = await request(`${_baseUrl}/api/telegram/${id}`,
+	const getTelegramData = async (token) => {
+		const res = await request(`${_baseUrl}/api/telegram`,
 															'GET',
 															null,
 															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
@@ -24,8 +24,8 @@ const useTelegramService = () => {
 		return res;
 	};
 
-	const updateTelegramData = async (id, token, apiId, apiHash, channel) => {
-		const res = await request(`${_baseUrl}/api/telegram/${id}`,
+	const updateTelegramData = async (token, apiId, apiHash, channel) => {
+		const res = await request(`${_baseUrl}/api/telegram`,
 															'PUT',
 															{ apiId, apiHash, channel },
 															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
@@ -33,8 +33,8 @@ const useTelegramService = () => {
 		return res;
 	};
 
-	const deleteTelegramData = async (id, token) => {
-		const res = await request(`${_baseUrl}/api/telegram/${id}`,
+	const deleteTelegramData = async (token) => {
+		const res = await request(`${_baseUrl}/api/telegram`,
 															'DELETE',
 															null,
 															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
@@ -75,7 +75,7 @@ const useTelegramService = () => {
 		getTelegramStatus,
 		codeRequest,
 		sendCodeRequest,
-		showTelegramData,
+		getTelegramData,
 		createTelegramData,
 		updateTelegramData,
 		deleteTelegramData,
