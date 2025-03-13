@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Box, Typography, Card, CardContent, CircularProgress } from '@mui/material';
-// import AddTriggerButton from '../buttons/addTriggerButton';
+import AddTriggerButton from '../buttons/addTriggerButton';
 import DeleteTriggerButton from '../buttons/deleteTriggerButton';
 import ChangeTriggerStatusButton from '../buttons/changeTriggerStatusButton';
 import UpdateTriggerButton from '../buttons/updateTriggerButton';
@@ -50,10 +50,13 @@ const Triggers = () => {
   };
 
   return (
-    <Box sx={{ mt: 4 }}>
+    <Box sx={{ mt: 2 }}>
       <Typography variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
-        Your triggers.
+        Your Triggers
       </Typography>
+      <Box p={2} display="flex" justifyContent="center">
+        <AddTriggerButton onTriggerAdded={fetchTriggers} />
+      </Box>
 
       {loading ? (
         <Box display="flex" justifyContent="center" mt={4}>
@@ -116,10 +119,6 @@ const Triggers = () => {
           You don't have any triggers yet.
         </Typography>
       )}
-
-      {/* <Box mt={3} display="flex" justifyContent="center">
-        <AddTriggerButton onTriggerAdded={fetchTriggers} />
-      </Box> */}
     </Box>
   );
 };

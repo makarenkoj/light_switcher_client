@@ -17,7 +17,7 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const UserForm = ({ open, onClose, onUserDeleted }) => {
+const UserForm = ({ open, onClose, onUserDeleted, userData }) => {
   const [form, setForm] = useState({ email: '', password: '', phoneNumber: '' });
   const [message, setMessage] = useState('');
   const { updateUserRequest, deleteUserRequest, loading, error } = useUserService();
@@ -70,6 +70,7 @@ const UserForm = ({ open, onClose, onUserDeleted }) => {
                   </DialogContentText>
                   <TextField
                     autoFocus
+                    placeholder={userData.email}
                     margin="dense"
                     label="Email"
                     type="email"
@@ -80,6 +81,7 @@ const UserForm = ({ open, onClose, onUserDeleted }) => {
                   />
                   <TextField
                     margin="dense"
+                    placeholder={'**********'}
                     label="Password"
                     type="password"
                     fullWidth
@@ -89,6 +91,7 @@ const UserForm = ({ open, onClose, onUserDeleted }) => {
                   />
                   <TextField
                     margin="dense"
+                    placeholder={userData.phoneNumber}
                     label="Phone Number"
                     type="tel"
                     fullWidth

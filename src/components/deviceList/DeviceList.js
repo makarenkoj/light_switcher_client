@@ -3,9 +3,7 @@ import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useDeviceService from '../../services/deviceService';
-// import AddDevice from '../buttons/addDevice';
-// import UpdateDeviceButton from '../buttons/updateDeviceButton';
-// import DeleteDeviceButton from '../buttons/deleteDeviceButton';
+import AddDevice from '../buttons/addDevice';
 import ChangeStatusButton from '../buttons/changeStatusButton';
 import Device from '../device/device';
 import {
@@ -68,57 +66,55 @@ const DeviceList = ({onDeviceAdded}) => {
 
   return (
     <>
-    {errorMessage}
-    {spinner}
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
+            Your Devices
+        </Typography>
+        {errorMessage}
+        {spinner}
 
-    {/* <Box width="100%" display="flex" justifyContent="center">
-      <AddDevice onDeviceAdded={fetchDevices} />
-    </Box> */}
+        <Box width="100%" display="flex" justifyContent="center">
+          <AddDevice onDeviceAdded={fetchDevices} />
+        </Box>
 
-    {devices.length > 0 && (
-        <>
-          <Grid container spacing={4} mt={2}>
-            {devices.map((device) => (
-              <Grid item xs={12} sm={6} md={4} size={4} key={device._id}>
-                <Card>
-                  <CardContent>
-                    <Typography >
-                      <Tooltip title='Open Device' >
-                        <Stack sx={{ gap: 1, alignItems: 'center' }}>
-                          <Button size="small" variant="contained" color="inherit" 
-                                  onClick={() => {
-                                    setSelectedDevice(device._id);
-                                    setIsDeviceOpen(true)}
-                                    }>
-                            {device.name}
-                          </Button>
-                        </Stack>
-                      </Tooltip>
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Box width="100%" display="flex" justifyContent="center">
-                      <ChangeStatusButton deviceId={device._id} status={device.status} oneUpdateStatus={(newStatus) => handleDeviceStatusUpdate(device._id, newStatus)} />
-                    </Box>
-                  </CardActions>
-                  {/* <CardActions>
-                    <UpdateDeviceButton device={device} onDeviceUpdated={fetchDevices}/>
-                  </CardActions>
-                  <CardActions>
-                    <DeleteDeviceButton device={device} onDeviceDeleted={fetchDevices}/>
-                  </CardActions> */}
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-          {/* Pagination */}
-          <Box mt={4} display="flex" justifyContent="center">
-            <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} />
-          </Box>
-        </>
-      )}
+        {devices.length > 0 && (
+          <>
+            <Grid container spacing={4} mt={2}>
+              {devices.map((device) => (
+                <Grid item xs={12} sm={6} md={4} size={4} key={device._id}>
+                  <Card>
+                    <CardContent>
+                      <Typography >
+                        <Tooltip title='Open Device' >
+                          <Stack sx={{ gap: 1, alignItems: 'center' }}>
+                            <Button size="small" variant="contained" color="inherit" 
+                                    onClick={() => {
+                                      setSelectedDevice(device._id);
+                                      setIsDeviceOpen(true)}
+                                      }>
+                              {device.name}
+                            </Button>
+                          </Stack>
+                        </Tooltip>
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Box width="100%" display="flex" justifyContent="center">
+                        <ChangeStatusButton deviceId={device._id} status={device.status} oneUpdateStatus={(newStatus) => handleDeviceStatusUpdate(device._id, newStatus)} />
+                      </Box>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+            <Box mt={4} display="flex" justifyContent="center">
+              <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} />
+            </Box>
+          </>
+        )}
 
-      <Device open={IsDeviceOpen} onClose={() => setIsDeviceOpen(false)} deviceId={selectedDevice} onDeviceUpdated={fetchDevices} onDeviceDeleted={handleDeviceDeleted} />
+        <Device open={IsDeviceOpen} onClose={() => setIsDeviceOpen(false)} deviceId={selectedDevice} onDeviceUpdated={fetchDevices} onDeviceDeleted={handleDeviceDeleted} />
+      </Box>
     </>
   )
 };

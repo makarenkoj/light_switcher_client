@@ -1,18 +1,40 @@
-import { useEffect, useState } from 'react';
-import { Typography, Box } from '@mui/material';
+import { useEffect, useState, useMemo } from 'react';
+import { Tabs, Tab, Typography, Box, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import useUserService from '../../services/userService';
-import LocalStorageService, {JWT_TOKEN, USER_ID} from '../../services/LocalStorageService';
+import useTelegramService from '../../services/telegramService';
+import LocalStorageService, { JWT_TOKEN, USER_ID } from '../../services/LocalStorageService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+import OpenTelegramFormButton from '../buttons/openTelegramFormButton';
+import UpdateTelegramButton from '../buttons/updateTelegramButton';
+import UpdateUserButton from '../buttons/updateUserButton';
 
-const UserInfo = () => {
+const UserInfo = ({handleUserDeleted}) => {
   const [user, setUser] = useState({});
   const [devicesCount, setDevicesCount] = useState(0);
   const [telegramSession, setTelegramSession] = useState(false);
+  const [telegramData, setTelegramData] = useState(false);
+  const [userHasTelegram, setUserHasTelegram] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
+  const [showApiId, setShowApiId] = useState(false);
+  const [showApiHash, setShowApiHash] = useState(false);
   const { getUserRequest, loading, error } = useUserService();
-  const localStorageService = new LocalStorageService();
-  const token = localStorageService.getItem(JWT_TOKEN);
-  const userId = localStorageService.getItem(USER_ID);
+  const { getTelegramData } = useTelegramService();
+  const localStorageService = useMemo(() => new LocalStorageService(), []);
+  const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
+  const userId = useMemo(() => localStorageService.getItem(USER_ID), [localStorageService]);
+
+  const handleTelegramData = async () => {
+    try {
+      const response = await getTelegramData(token);
+      setUserHasTelegram(true);
+      setTelegramData(response.telegram);
+    } catch (error) {
+      setUserHasTelegram(false);
+      console.error('Error fetching Telegram data:', error.message);
+    }
+  };
 
   useEffect(() => {
     const handleUser = async () => {
@@ -22,31 +44,67 @@ const UserInfo = () => {
         setDevicesCount(response.devicesCount);
         setTelegramSession(response.telegramSession);
       } catch (error) {
-        console.error('Error fetching Telegram status:Error fetching user:', error.message);
+        console.error('Error fetching user:', error.message);
       }
     };
 
     handleUser();
+    handleTelegramData();
      // eslint-disable-next-line
   }, []);
 
-  const content = <Box mt={4} p={2} bgcolor="grey.100" borderRadius={2} textAlign="center">
-                    <Typography variant="h6">User Information</Typography>
-                    <Typography>Email: {user.email}</Typography>
-                    <Typography>Phone: {user.phoneNumber}</Typography>
-                    <Typography>Total Devices: {devicesCount}</Typography>
-                    <Typography>Telegram session save: {telegramSession.toString()}</Typography>
-                  </Box>;
+  const handleTabChange = (event, newIndex) => {
+    setTabIndex(newIndex);
+  };
 
-  const errorMessage = error ? <ErrorMessage /> : null;
-  const spinner = loading ? <Spinner /> : null;
+  const handleSubmit = (data) => {
+    console.log('Telegram data:', data);
+    handleTelegramData();
+  };
 
   return (
-    <>
-      {errorMessage}
-      {spinner}
-      {content}
-    </>
+    <Box sx={{ width: '100%' }}>
+      <Tabs value={tabIndex} onChange={handleTabChange} centered>
+        <Tab label="General Info" />
+        <Tab label="Telegram Credentials" />
+      </Tabs>
+
+      {tabIndex === 0 && (
+        <Box p={3} textAlign="center" borderRadius={2} >
+          <Typography>Email: {user.email}</Typography>
+          <Typography>Phone: {user.phoneNumber}</Typography>
+          <Typography>Total Devices: {devicesCount}</Typography>
+          <UpdateUserButton  handleUserDeleted={handleUserDeleted} userData={user}/>
+        </Box>
+      )}
+      {tabIndex === 1 && (
+        <Box p={3} textAlign="center">
+          {userHasTelegram ? (
+          <>
+            <Typography>Telegram session saved: {telegramSession.toString()}</Typography>
+              <Typography>
+                API ID: {showApiId ? telegramData.apiId : '*******'}
+                <IconButton onClick={() => setShowApiId(!showApiId)}>
+                  {showApiId ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </Typography>
+              <Typography>
+                API Hash: {showApiHash ? telegramData.apiHash : '**************'}
+                <IconButton onClick={() => setShowApiHash(!showApiHash)}>
+                  {showApiHash ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </Typography>
+              <Typography>Channel: {telegramData.channel}</Typography>
+              <UpdateTelegramButton telegramData={telegramData} onUpdate={handleSubmit} />
+          </>
+          ) : (
+          <OpenTelegramFormButton onSubmit={handleSubmit}/>)}
+        </Box>
+      )}
+
+      {loading && <Spinner />}
+      {error && <ErrorMessage />}
+    </Box>
   );
 };
 
