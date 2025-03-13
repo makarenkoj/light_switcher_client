@@ -1,8 +1,17 @@
 import { useState, useCallback } from "react";
+import LocalStorageService from "../services/LocalStorageService";
 
 const useHttp = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const localStorageService = new LocalStorageService();
+
+    const handleUnathorized = (error) => {
+        if (error.message === 'Unauthorized') {
+            localStorageService.clear();
+            window.location.reload();
+        };
+    };
 
     const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => {
         setLoading(true);
@@ -26,8 +35,11 @@ const useHttp = () => {
         } catch(e) {
             setLoading(false);
             setError(e.message);
+            handleUnathorized(e);
             throw e;
         }
+
+        // eslint-disable-next-line
     }, []);
 
     const clearError = useCallback(() => setError(null), []);
