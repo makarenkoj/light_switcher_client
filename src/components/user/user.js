@@ -8,8 +8,9 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import OpenTelegramFormButton from '../buttons/openTelegramFormButton';
 import UpdateTelegramButton from '../buttons/updateTelegramButton';
+import UpdateUserButton from '../buttons/updateUserButton';
 
-const UserInfo = () => {
+const UserInfo = ({handleUserDeleted}) => {
   const [user, setUser] = useState({});
   const [devicesCount, setDevicesCount] = useState(0);
   const [telegramSession, setTelegramSession] = useState(false);
@@ -62,17 +63,18 @@ const UserInfo = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+    <Box sx={{ width: '100%' }}>
       <Tabs value={tabIndex} onChange={handleTabChange} centered>
         <Tab label="General Info" />
         <Tab label="Telegram Credentials" />
       </Tabs>
 
       {tabIndex === 0 && (
-        <Box mt={4} p={3} textAlign="center" bgcolor="grey.100"  borderRadius={2}>
+        <Box p={3} textAlign="center" borderRadius={2} >
           <Typography>Email: {user.email}</Typography>
           <Typography>Phone: {user.phoneNumber}</Typography>
           <Typography>Total Devices: {devicesCount}</Typography>
+          <UpdateUserButton  handleUserDeleted={handleUserDeleted} userData={user}/>
         </Box>
       )}
       {tabIndex === 1 && (

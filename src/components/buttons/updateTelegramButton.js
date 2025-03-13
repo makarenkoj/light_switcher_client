@@ -11,7 +11,7 @@ const UpdateTelegramButton = ({ telegramData, onUpdate }) => {
 
   return (
     <>
-      <Button variant="outlined" color="secondary" size="small" onClick={() => setOpen(true)}>
+      <Button variant="outlined" color="inherit" size="small" onClick={() => setOpen(true)}>
         Update Data
       </Button>
       <UpdateTelegramForm open={open} onClose={handleCloseForm} onUpdate={onUpdate} telegramData={telegramData} />

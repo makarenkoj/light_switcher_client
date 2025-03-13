@@ -3,19 +3,16 @@ import LoginForm from '../forms/loginForm';
 import TelegramButton from '../buttons/telegramButton';
 import LogoutButton from '../buttons/logoutButton';
 import UserInfo from '../user/user';
-import UpdateUserButton from '../buttons/updateUserButton';
 import DeviceList from '../deviceList/DeviceList';
-import CreateDeviceForm from '../forms/createDeviceForm';
-// import TriggersButton from '../buttons/triggersButton';
 import Triggers from '../triggers/triggers';
-import AddDevice from '../buttons/addDevice';
-import AddTriggerButton from '../buttons/addTriggerButton';
 
 // MUI
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
 import React, { useState, useEffect } from 'react';
 import {
   AppBar,
+  Tabs,
+  Tab,
   Toolbar,
   Typography,
   Button,
@@ -31,10 +28,11 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
   const theme = useTheme();
 
-  const handleOnDeviceAdded = () => {
-    // onDeviceAdded(); /////////
+  const handleTabChange = (event, newIndex) => {
+    setTabIndex(newIndex);
   };
 
   const handleLoginOpen = () => setIsLoginOpen(true);
@@ -64,10 +62,7 @@ const App = () => {
             {isLoggedIn ? (
               <>
               <Box sx={{ display: 'flex', gap: 2 }}>
-                <AddTriggerButton />
-                <AddDevice onDeviceAdded={handleOnDeviceAdded} />
                 <TelegramButton />
-                <UpdateUserButton  handleUserDeleted={handleUserDeleted}/>
                 <LogoutButton onLogout={handleLogout} />
               </Box>
               </>
@@ -82,12 +77,9 @@ const App = () => {
           </Toolbar>
         </AppBar>
 
-        {/* Main Content */}
-        <Container sx={{ mt: 4, minHeight: 'calc(100vh - 200px)' }}>
-          {/* User information section */}
+        <Container sx={{ mt: 4, minHeight: 'calc(100vh - 200px)' }} >
           {isLoggedIn ? (
             <>
-            {/* Info Section */}
             <Box mt={4} display="flex" justifyContent="space-around">
               <Typography variant="body1" display="flex" alignItems="center">
                 <Home sx={{ mr: 1 }} /> Electricity: {Math.random() > 0.5 ? 'Available' : 'Not Available'}
@@ -107,14 +99,23 @@ const App = () => {
               </Typography>
             </Box>
 
-            <UserInfo />
-            <Triggers />
+            <Tabs value={tabIndex} onChange={handleTabChange} centered>
+              <Tab label="General" />
+              <Tab label="User info" />
+            </Tabs>
 
-            {/* device list */}
-            <DeviceList onDeviceAdded={handleOnDeviceAdded}/>
+            {tabIndex === 0 && (
+              <Box mt={4} p={3} textAlign="center" bgcolor="grey.100"  borderRadius={2}>
+                <Triggers />
+                <DeviceList />
+              </Box>
+            )}
+            {tabIndex === 1 && (
+              <Box mt={4} p={3} textAlign="center" bgcolor="grey.100"  borderRadius={2}>
+                <UserInfo handleUserDeleted={handleUserDeleted}/>
+              </Box>
+            )}
             </>) : null}
-
-            <CreateDeviceForm/>
 
         </Container>
         {/* Footer */}
