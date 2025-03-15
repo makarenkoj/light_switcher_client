@@ -18,6 +18,9 @@ import {
   Stack
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import io from "socket.io-client";
+
+const socket = io(process.env.REACT_APP_API_URL || 'http://localhost:3001');
 
 const DeviceList = ({onDeviceAdded}) => {
   const [devices, setDevices] = useState([]);
@@ -39,6 +42,20 @@ const DeviceList = ({onDeviceAdded}) => {
       console.error('Device list error:', error.message);
     }
   };
+
+  useEffect(() => {
+    socket.on("deviceStatusUpdate", ({ deviceId, status }) => {
+      setDevices((prevDevices) =>
+        prevDevices.map((device) =>
+          device._id === deviceId ? { ...device, status } : device
+        )
+      );
+    });
+
+    return () => {
+      socket.off("deviceStatusUpdate");
+    };
+  }, []);
 
   useEffect(() => {
     fetchDevices();

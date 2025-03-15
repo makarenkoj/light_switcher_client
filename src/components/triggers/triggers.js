@@ -11,7 +11,9 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import io from "socket.io-client";
 
+const socket = io(process.env.REACT_APP_API_URL || 'http://localhost:3001');
 const TRUNCATION_LENGTH = 7;
 
 const Triggers = () => {
@@ -23,6 +25,20 @@ const Triggers = () => {
   const localStorageService = useMemo(() => new LocalStorageService(), []);
   const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
   const { showTriggersRequest } = useTriggerService();
+
+    useEffect(() => {
+      socket.on("triggerStatusUpdate", ({ triggerId, status }) => {
+        setTriggers((prevTriggers) =>
+          prevTriggers.map((trigger) =>
+            trigger._id === triggerId ? { ...trigger, status } : trigger
+          )
+        );
+      });
+  
+      return () => {
+        socket.off("triggerStatusUpdate");
+      };
+    }, []);
 
   useEffect(() => {
     setLimit(10);
