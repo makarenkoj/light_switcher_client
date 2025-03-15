@@ -20,19 +20,17 @@ export default function AddDevice({ onDeviceAdded }) {
 
   return (
     <>
-      {/* <Stack direction="row" sx={{ gap: 18 }} mt={2}> */}
-        <ThemeProvider theme={defaultContrastThresholdTheme}>
-          <Stack sx={{ gap: 1, alignItems: 'center' }}>
-            <Tooltip title='Add Device'>
-              <Stack direction="row" sx={{ gap: 1 }}>
-                <Button variant="contained" color="warning" onClick={handleClick}>
-                  Add Device
-                </Button>
-              </Stack>
-            </Tooltip>
-          </Stack>
-        </ThemeProvider>
-      {/* </Stack> */}
+      <ThemeProvider theme={defaultContrastThresholdTheme}>
+        <Stack sx={{ gap: 1, alignItems: 'center' }}>
+          <Tooltip title='Add Device'>
+            <Stack direction="row" sx={{ gap: 1 }}>
+              <Button variant="contained" color="warning" onClick={handleClick}>
+                Add Device
+              </Button>
+            </Stack>
+          </Tooltip>
+        </Stack>
+      </ThemeProvider>
 
       <CreateDeviceForm
         open={isCreateFormOpen}
