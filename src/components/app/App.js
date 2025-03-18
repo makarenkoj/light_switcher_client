@@ -23,12 +23,16 @@ import {
 import { Brightness4, Brightness7, Warning, Home } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/AppProvider';
+import io from "socket.io-client";
+
+const socket = io(process.env.REACT_APP_API_URL || 'http://localhost:3001');
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
+  const [reconnectTimer, setReconnectTimer] = useState(null);
   const theme = useTheme();
 
   const handleTabChange = (event, newIndex) => {
@@ -48,6 +52,33 @@ const App = () => {
   useEffect(() => {
     setIsLoggedIn(token ? true : false);
   }, [token]);
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      clearTimeout(reconnectTimer);
+      setReconnectTimer(null);
+    });
+
+    socket.on('disconnect', () => {
+      if (!reconnectTimer) {
+          const timer = setTimeout(() => {
+              window.location.reload();
+          }, 15000);
+          setReconnectTimer(timer);
+      }
+    });
+
+    socket.on('serverStarted', ({ message }) => {
+        window.location.reload();
+    });
+
+    return () => {
+        socket.off('serverStarted');
+        socket.off('connect');
+        socket.off('disconnect');
+        clearTimeout(reconnectTimer);
+    };
+  }, [reconnectTimer]);
 
   return (
     <>
