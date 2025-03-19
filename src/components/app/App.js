@@ -5,6 +5,8 @@ import LogoutButton from '../buttons/logoutButton';
 import UserInfo from '../user/user';
 import DeviceList from '../deviceList/DeviceList';
 import Triggers from '../triggers/triggers';
+// import { useTranslation } from 'react-i18next';
+// import '../../i18n';
 
 // MUI
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
@@ -25,7 +27,7 @@ import { useTheme } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import io from "socket.io-client";
 
-const socket = io(process.env.REACT_APP_API_URL || 'http://localhost:3001');
+const socket = io(process.env.REACT_APP_API_URL);
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,6 +36,7 @@ const App = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [reconnectTimer, setReconnectTimer] = useState(null);
   const theme = useTheme();
+  // const { i18n } = useTranslation();
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
@@ -95,6 +98,8 @@ const App = () => {
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <TelegramButton />
                 <LogoutButton onLogout={handleLogout} />
+                {/* <button onClick={() => i18n.changeLanguage('en')}>🇬🇧 English</button>
+                <button onClick={() => i18n.changeLanguage('uk')}>🇺🇦 Українська</button> */}
               </Box>
               </>
             ) : (
@@ -102,6 +107,8 @@ const App = () => {
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <Button variant="contained" color="primary" onClick={handleLoginOpen}>Login</Button>
                 <Button variant="contained" color="secondary" onClick={handleRegisterOpen}>Register</Button>
+                {/* <button onClick={() => i18n.changeLanguage('en')}>🇬🇧 English</button>
+                <button onClick={() => i18n.changeLanguage('uk')}>🇺🇦 Українська</button> */}
               </Box>
               </>
             )}

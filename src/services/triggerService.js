@@ -2,7 +2,7 @@ import useHttp from "../hooks/http.hook";
 
 const useTriggerService = () => {
   const { loading, request, error, clearError } = useHttp();
-	const _baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+	const _baseUrl = process.env.REACT_APP_API_URL;
 
   const showTriggerRequest = async (id, token) => {
     const res = await request(`${_baseUrl}/api/triggers/${id}`,

@@ -2,7 +2,7 @@ import useHttp from "../hooks/http.hook";
 
 const useRegistrationService = () => {
   const { loading, request, error, clearError } = useHttp();
-  const _baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+  const _baseUrl = process.env.REACT_APP_API_URL;
   const _cors_client = process.env.CLIENT || '*';
 
   const registrationRequest = async (email, password, phoneNumber ) => {

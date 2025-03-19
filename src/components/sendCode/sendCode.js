@@ -4,10 +4,10 @@ const SendCode = () => {
   const token = localStorage.getItem('token');
   // const {loading, error, codeRequest} = useTelegramService();
   const step = localStorage.getItem('step');
-
+  const _baseUrl = process.env.REACT_APP_API_URL
   const handleClick = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/telegram/sendCode", {
+      const response = await fetch(`${_baseUrl}/api/telegram/sendCode`, {
         method: "POST",
         headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` },
         // body: JSON.stringify({  }),
