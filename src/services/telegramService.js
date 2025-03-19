@@ -2,7 +2,7 @@ import useHttp from "../hooks/http.hook";
 
 const useTelegramService = () => {
 	const { loading, request, error, clearError } = useHttp();
-	const _baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+	const _baseUrl = process.env.REACT_APP_API_URL;
 
 	const getTelegramData = async (token) => {
 		const res = await request(`${_baseUrl}/api/telegram`,
