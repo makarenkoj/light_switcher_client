@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Button } from '@mui/material';
 import UserForm from '../forms/userForm';
+import { useTranslation } from 'react-i18next';
 
 const UpdateUserButton = ({handleUserDeleted, userData}) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const handleClick = async () => setIsFormOpen(true);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -13,7 +15,7 @@ const UpdateUserButton = ({handleUserDeleted, userData}) => {
         color="inherit"
         size="small"
         onClick={handleClick}>
-        Update User
+        {t('user.update_user')}
       </Button>
       <UserForm
         open={isFormOpen}

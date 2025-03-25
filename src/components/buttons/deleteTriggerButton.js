@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Stack, Button, Dialog, DialogActions, DialogTitle, Tooltip } from '@mui/material';
 import useTriggerService from '../../services/triggerService';
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 export default function DeleteTriggerButton({ trigger, onTriggerDeleted }) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { deleteTriggerRequest } = useTriggerService();
+  const { t } = useTranslation();
 
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
@@ -24,27 +26,27 @@ export default function DeleteTriggerButton({ trigger, onTriggerDeleted }) {
       onTriggerDeleted();
       setIsConfirmOpen(false);
     } catch (error) {
-      console.error('Error deleting trigger:', error.message);
+      console.error(t('errors.delete_trigger', { error: error.message}));
     }
   };
 
   return (
     <>
-      <Tooltip title='Delete Trigger' >
+      <Tooltip title={t('trigger.delete_trigger_title')} >
         <Stack sx={{ gap: 1, alignItems: 'center' }}>
           <Button size="small" variant="contained" color="inherit" onClick={handleOpenConfirm}>
-            Delete Trigger
+            {t('trigger.delete_trigger')}
           </Button>
         </Stack>
       </Tooltip>
       <Dialog open={isConfirmOpen} onClose={handleCloseConfirm}>
-        <DialogTitle>Are you sure you want to delete this trigger?</DialogTitle>
+        <DialogTitle>{t('trigger.delete_trigger_text')}</DialogTitle>
         <DialogActions>
           <Button onClick={handleCloseConfirm} color="primary">
-            Cancel
+            {t('cancel')}
           </Button>
           <Button onClick={handleDelete} color="error">
-            Delete
+            {t('delete')}
           </Button>
         </DialogActions>
       </Dialog>

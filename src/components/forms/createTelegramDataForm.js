@@ -14,6 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import useTelegramService from '../../services/telegramService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 const CreateTelegramDataForm = ({ open, onClose, onSubmit }) => {
   const [apiId, setApiId] = useState('');
@@ -25,6 +26,8 @@ const CreateTelegramDataForm = ({ open, onClose, onSubmit }) => {
   const localStorageService = useMemo(() => new LocalStorageService(), []);
   const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
   const { createTelegramData } = useTelegramService();
+  const { t } = useTranslation();
+
   const resetForm = () => {
     setApiId('');
     setApiHash('');
@@ -50,7 +53,8 @@ const CreateTelegramDataForm = ({ open, onClose, onSubmit }) => {
       onClose();
     } catch (err) {
       setMessage(err.message);
-      setError(err.message || 'Error creating Telegram Data');
+      setError(t('errors.telegram.telegram_create', {error: err.message}));
+      console.error(error);
     }
     setLoading(false);
   };
@@ -69,37 +73,37 @@ const CreateTelegramDataForm = ({ open, onClose, onSubmit }) => {
         >
         <CloseIcon />
       </IconButton>
-      <DialogTitle>Create Telegram Data</DialogTitle>
+      <DialogTitle>{t('telegram.create_telegram_credentials')}</DialogTitle>
       <DialogContent>
         {error && <ErrorMessage message={error} />}
         <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
-          {message} 
+          {message}
         </DialogContentText>
         <TextField
           fullWidth
           margin="normal"
-          label="API ID"
+          label={t('api_id')}
           value={apiId}
           onChange={(e) => setApiId(e.target.value)}
         />
         <TextField
           fullWidth
           margin="normal"
-          label="API Hash"
+          label={t('api_hash')}
           value={apiHash}
           onChange={(e) => setApiHash(e.target.value)}
         />
         <TextField
           fullWidth
           margin="normal"
-          label="Канал"
+          label={t('channel')}
           value={channel}
           onChange={(e) => setChannel(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit} variant="contained" color="primary" disabled={loading}>
-          {loading ? <CircularProgress size={24} /> : 'Створити'}
+          {loading ? <CircularProgress size={24} /> : t('create')}
         </Button>
       </DialogActions>
     </Dialog>

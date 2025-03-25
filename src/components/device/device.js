@@ -23,6 +23,7 @@ import UpdateDeviceButton from '../buttons/updateDeviceButton';
 import DeleteDeviceButton from '../buttons/deleteDeviceButton';
 import AddDeviceTriggersButton from '../buttons/addDeviceTriggerButton';
 import DeviceTriggersButton from '../buttons/deviceTriggersButton';
+import { useTranslation } from 'react-i18next';
 // import CreateDeviceTriggerForm from '../forms/createDeviceTriggerForm';
 
 const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) => {
@@ -32,6 +33,7 @@ const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) =
   // const [isTriggerFormOpen, setIsTriggerFormOpen] = useState(false);
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (open && deviceId) {
@@ -46,7 +48,7 @@ const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) =
       setDevice(response.device);
       setDevicesTriggers(response.devicesTriggers);
     } catch (error) {
-      console.error('Error fetching device:', error);
+      console.error(t('errors.fetching_devices:', {error: error}));
     }
   };
 
@@ -87,27 +89,27 @@ const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) =
                 <Divider sx={{ my: 2 }} />
                 <Stack spacing={1}>
                   <Typography variant="body1">
-                    <strong>Device ID:</strong> {device.deviceId}
+                    <strong>{t('device.device_id')}</strong> {device.deviceId}
                   </Typography>
                   <Typography variant="body1">
-                    <strong>Access ID:</strong> {device.accessId}
+                    <strong>{t('device.access_id')}</strong> {device.accessId}
                   </Typography>
                   <Typography variant="body1">
-                    <strong>Secret Key:</strong> {device.secretKey}
+                    <strong>{t('device.secret_key')}</strong> {device.secretKey}
                   </Typography>
                 </Stack>
               </CardContent>
             </Card>
 
             <Stack direction="row" spacing={2} mt={3} justifyContent="center">
-              <Tooltip title="Manage Triggers">
+              <Tooltip title={t('trigger.title_manage_triggers')}>
                 {devicesTriggers.length <= 0 ? (
                   <AddDeviceTriggersButton deviceId={deviceId} onTriggerAdded={handleDeviceUpdate} />
                 ) : (
                   <DeviceTriggersButton deviceId={deviceId} triggersCount={devicesTriggers.length} deviceName={device.name} />
                 )}
               </Tooltip>
-              <Tooltip title="Change Status">
+              <Tooltip title={t('trigger.title_change_status')}>
                 <ChangeStatusButton deviceId={deviceId} status={device.status} oneUpdateStatus={handleDeviceUpdate} />
               </Tooltip>
             </Stack>
@@ -120,7 +122,7 @@ const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) =
         </Paper>
       ) : (
         <Typography align="center" sx={{ padding: 3 }}>
-          Device not found
+          {t('device.not found')}
         </Typography>
       )}
       {/* <CreateDeviceTriggerForm open={isTriggerFormOpen} onClose={() => setIsTriggerFormOpen(false)} deviceId={deviceId} onTriggerAdded={fetchDevice} /> */}

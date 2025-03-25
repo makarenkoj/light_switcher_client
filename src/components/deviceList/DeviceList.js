@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import io from "socket.io-client";
+import { useTranslation } from 'react-i18next';
 
 const socket = io(process.env.REACT_APP_API_URL);
 
@@ -32,6 +33,7 @@ const DeviceList = ({onDeviceAdded}) => {
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
   const { showDevicesRequest, error, loading } = useDeviceService();
+  const { t } = useTranslation();
 
   const fetchDevices = async () => {
     try {
@@ -39,7 +41,7 @@ const DeviceList = ({onDeviceAdded}) => {
       setDevices(response.devices);
       setTotalPages(response.totalPages);
     } catch (error) {
-      console.error('Device list error:', error.message);
+      console.error(t('errors.device.device_list', {error: error.message}));
     }
   };
 
@@ -85,7 +87,7 @@ const DeviceList = ({onDeviceAdded}) => {
     <>
       <Box sx={{ mt: 2 }}>
         <Typography variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
-            Your Devices
+            {t('device.your_devices')}
         </Typography>
         {errorMessage}
         {spinner}
@@ -102,7 +104,7 @@ const DeviceList = ({onDeviceAdded}) => {
                   <Card>
                     <CardContent>
                       <Typography >
-                        <Tooltip title='Open Device' >
+                        <Tooltip title={t('device.open_device')} >
                           <Stack sx={{ gap: 1, alignItems: 'center' }}>
                             <Button size="small" variant="contained" color="inherit" 
                                     onClick={() => {

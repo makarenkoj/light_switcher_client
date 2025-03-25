@@ -14,12 +14,14 @@ import {
   IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 
 const LoginForm = ({ open, onClose}) => {
   const { loginRequest, loading, error } = useRegistrationService();
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
   const localStorageService = new LocalStorageService();
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,22 +40,21 @@ const LoginForm = ({ open, onClose}) => {
       onClose();
     } catch (error) {
       localStorageService.clear();
-      console.error('Login error:', error.message);
-      // alert(error.message);
-      setMessage('Login failed: ' + error.message);
+      console.error(t('errors.form.login_error', {error: error.message}));
+      setMessage(t('errors.form.login_error', {error: error.message}));
     }
   };
 
   const content =  <>
-                  <DialogTitle>Login</DialogTitle>
+                  <DialogTitle>{t('form.login')}</DialogTitle>
                   <DialogContent>
                     <DialogContentText>
-                      Please enter your email and password to log in.
+                      {t('form.login_enter')}
                     </DialogContentText>
                     <TextField
                       autoFocus
                       margin="dense"
-                      label="Email"
+                      label={t('form.email')}
                       type="email"
                       fullWidth
                       name="email"
@@ -62,7 +63,7 @@ const LoginForm = ({ open, onClose}) => {
                     />
                     <TextField
                       margin="dense"
-                      label="Password"
+                      label={t('form.password')}
                       type="password"
                       fullWidth
                       name="password"
@@ -75,7 +76,7 @@ const LoginForm = ({ open, onClose}) => {
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleSubmit} disabled={!loginForm.email || !loginForm.password}>
-                      Submit
+                      {t('form.submit')}
                     </Button>
                   </DialogActions>
                 </>;    

@@ -2,10 +2,12 @@ import Triggers from '../triggers/triggers';
 import { useState } from 'react';
 import {Button, Tooltip} from '@mui/material';
 import { Stack } from '@mui/system';
+import { useTranslation } from 'react-i18next';
 
 const TriggersButton = () => {
   const [isTriggersOpen, setIsTriggersOpen] = useState(false);
-  
+  const { t } = useTranslation();
+
     const handleClick = async () => {
       setIsTriggersOpen(true);
     }
@@ -21,7 +23,7 @@ const TriggersButton = () => {
             <Tooltip title='SHow Triggers'>
               <Stack direction="row" sx={{ gap: 1 }}>
                 <Button variant="contained" color="warning" onClick={handleClick}>
-                  Triggers
+                  {t('trigger.triggers')}
                 </Button>
               </Stack>
             </Tooltip>

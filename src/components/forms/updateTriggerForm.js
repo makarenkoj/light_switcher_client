@@ -18,6 +18,7 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useTriggerService from '../../services/triggerService';
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
   const { updateTriggerRequest, error, loading } = useTriggerService();
@@ -30,7 +31,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
   const [triggerOffErrorMessage, setTriggerOffErrorMessage] = useState('');
   const [chanelNameError, setChanelNameError] = useState(false); 
   const [chanelNameErrorMessage, setChanelNameErrorMessage] = useState(false); 
-
+  const { t } = useTranslation();
   const [form, setForm] = useState({ status: trigger.status, name: '', triggerOn: '', triggerOff: '', chanelName: '' });
 
   const localStorageService = new LocalStorageService();
@@ -54,7 +55,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
       onTriggerUpdated();
       onClose();
     } catch (error) {
-      console.log('Error:', error.message);
+      console.log(t('errors.error', {error: error.message}));
       setMessage(error.message);
     }
   };
@@ -69,7 +70,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
 
     if (name.value.length && name.value.length < 2) {
       setNameError(true);
-      setNameErrorMessage('Please enter a valid name.');
+      setNameErrorMessage(t('errors.form.valid_name'));
       isValid = false;
     } else {
       setNameError(false);
@@ -78,7 +79,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
 
     if (triggerOn.value.length && triggerOn.value.length > 150) {
       setTriggerOnError(true);
-      setTriggerOnErrorMessage('TriggerOn must be at least 6 characters long.');
+      setTriggerOnErrorMessage(t('errors.form.trigger_on'));
       isValid = false;
     } else {
       setTriggerOnError(false);
@@ -87,7 +88,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
 
     if (triggerOff.value.length && triggerOff.value.length > 150) {
       setTriggerOffError(true);
-      setTriggerOffErrorMessage(`TriggerOff must be at least 150 characters long(${triggerOff.value.length}).`);
+      setTriggerOffErrorMessage(t('errors.form.trigger_off'));
       isValid = false;
     } else {
       setTriggerOffError(false);
@@ -96,7 +97,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
 
     if (chanelName.value.length && chanelName.value.length < 2) {
       setChanelNameError(true);
-      setChanelNameErrorMessage('ChanelName must be at least 6 characters long.');
+      setChanelNameErrorMessage(t('errors.form.channel_name'));
       isValid = false;
     } else {
       setChanelNameError(false);
@@ -108,12 +109,12 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
 
   const content = <>
                     <DialogTitle>
-                      Update Trigger
+                      {t('trigger.update_trigger')}
                     </DialogTitle>
                     <SitemarkIcon />
                     <DialogContent>
                       <DialogContentText>
-                        Please fill out the form below to create a new account.
+                        {t('trigger.fill_out')}
                       </DialogContentText>
                       <Box
                         component="form"
@@ -127,7 +128,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
                         }}
                       >
                         <FormControl>
-                          <FormLabel htmlFor="name">Trigger Name</FormLabel>
+                          <FormLabel htmlFor="name">{t('trigger.name')}</FormLabel>
                           <TextField
                             error={setNameError}
                             helperText={nameErrorMessage}
@@ -145,7 +146,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
                           />
                         </FormControl>
                         <FormControl>
-                          <FormLabel htmlFor="triggerOn">Trigger On</FormLabel>
+                          <FormLabel htmlFor="triggerOn">{t('trigger.on')}</FormLabel>
                             <TextField
                               error={triggerOnError}
                               helperText={triggerOnErrorMessage}
@@ -163,7 +164,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
                             />
                         </FormControl>
                         <FormControl>
-                          <FormLabel htmlFor="triggerOff">Trigger Off</FormLabel>
+                          <FormLabel htmlFor="triggerOff">{t('trigger.off')}</FormLabel>
                           <TextField
                               error={triggerOffError}
                               helperText={triggerOffErrorMessage}
@@ -181,7 +182,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="chanelName">Chanel Name</FormLabel>
+                            <FormLabel htmlFor="chanelName">{t('channel')}</FormLabel>
                             <TextField
                               error={chanelNameError}
                               helperText={chanelNameErrorMessage}
@@ -199,7 +200,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="chanelName">Status</FormLabel>
+                            <FormLabel htmlFor="chanelName">{t('status')}</FormLabel>
                             <Select
                               name="status"
                               placeholder="true"
@@ -208,8 +209,8 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
                               value={form.status}
                               onChange={handleChange}
                             >
-                              <MenuItem value="false">Off</MenuItem>
-                              <MenuItem value="true">On</MenuItem>
+                              <MenuItem value="false">{t('off')}</MenuItem>
+                              <MenuItem value="true">{t('on')}</MenuItem>
                             </Select>
                           </FormControl>
                           <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
@@ -221,7 +222,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
                             variant="contained"
                             onClick={validateInputs}
                           >
-                            Update Trigger
+                            {t('trigger.update_trigger')}
                           </Button>
                         </Box>
                     </DialogContent>

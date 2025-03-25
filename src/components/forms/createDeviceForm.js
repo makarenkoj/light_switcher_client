@@ -20,6 +20,7 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useDeviceService from '../../services/deviceService';
 import LocalStorageService, {JWT_TOKEN, USER_ID} from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -75,6 +76,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
   const [secretKeyError, setSecretKeyError] = useState(false);
   const [secretKeyErrorMessage, setSecretKeyErrorMessage] = useState('');
   const [form, setForm] = useState({ name: '', deviceId: '', accessId: '', accessSecret: '' });
+  const { t } = useTranslation();
 
   const localStorageService = new LocalStorageService();
   const handleChange = (e) => {
@@ -113,7 +115,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
       onDeviceAdded();
       onClose();
     } catch (error) {
-      console.log('Error:', error.message);
+      console.log(t('errors.error', {error: error.message}));
       setMessage(error.message);
     }
   };
@@ -128,7 +130,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
 
     if (!name.value || name.value.length < 2) {
       setNameError(true);
-      setNameErrorMessage('Please enter a valid name.');
+      setNameErrorMessage(t('errors.form.valid_name'));
       isValid = false;
     } else {
       setNameError(false);
@@ -137,7 +139,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
 
     if (!deviceId.value || deviceId.value.length < 6) {
       setDeviceIdError(true);
-      setDeviceIdErrorMessage('DeviceId must be at least 6 characters long.');
+      setDeviceIdErrorMessage(t('errors.form.device_id'));
       isValid = false;
     } else {
       setDeviceIdError(false);
@@ -146,7 +148,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
 
     if (!accessId.value || accessId.value.length < 6) {
       setAccessIdError(true);
-      setAccessIdErrorMessage('AccessId must be at least 6 characters long.');
+      setAccessIdErrorMessage(t('errors.form.access_id'));
       isValid = false;
     } else {
       setAccessIdError(false);
@@ -155,7 +157,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
 
     if (!secretKey.value || secretKey.value.length < 6) {
       setSecretKeyError(true);
-      setSecretKeyErrorMessage('SecretKey must be at least 6 characters long.');
+      setSecretKeyErrorMessage(t('errors.form.secret_key'));
       isValid = false;
     } else {
       setSecretKeyError(false);
@@ -174,7 +176,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
                           variant="h4"
                           sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
                         >
-                          Add New Device
+                          {t('device.add_device')}
                         </Typography>
                         <Box
                           component="form"
@@ -188,7 +190,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
                           }}
                         >
                           <FormControl>
-                            <FormLabel htmlFor="name">Device Name</FormLabel>
+                            <FormLabel htmlFor="name">{t('form.name')}</FormLabel>
                             <TextField
                               error={nameError}
                               helperText={nameErrorMessage}
@@ -206,7 +208,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="deviceId">Device Id</FormLabel>
+                            <FormLabel htmlFor="deviceId">{t('form.device_id')}</FormLabel>
                             <TextField
                               error={deviceIdError}
                               helperText={deviceIdErrorMessage}
@@ -223,7 +225,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="accessId">Access Id</FormLabel>
+                            <FormLabel htmlFor="accessId">{t('form.access_id')}</FormLabel>
                             <TextField
                               error={accessIdError}
                               helperText={accessIdErrorMessage}
@@ -241,7 +243,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="secretKey">SecretKey Id</FormLabel>
+                            <FormLabel htmlFor="secretKey">{t('form.secret_key')}</FormLabel>
                             <TextField
                               error={secretKeyError}
                               helperText={secretKeyErrorMessage}

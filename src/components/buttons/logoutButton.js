@@ -1,5 +1,6 @@
 import { Button } from '@mui/material';
 import LocalStorageService from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 const LogoutButton = ({ onLogout }) => {
   const handleLogout = () => {
@@ -7,14 +8,15 @@ const LogoutButton = ({ onLogout }) => {
     localStorageService.clear();
     onLogout();
   };
+  const { t } = useTranslation();
+
 
   return (
     <Button
-      // variant="outlined"
       color="inherit"
       onClick={handleLogout}
     >
-      Logout
+      {t('logout')}
     </Button>
   );
 };
