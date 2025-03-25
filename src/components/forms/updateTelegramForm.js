@@ -3,6 +3,7 @@ import { Box, TextField, Button, Dialog, IconButton, DialogContent, DialogConten
 import CloseIcon from '@mui/icons-material/Close';
 import useTelegramService from '../../services/telegramService';
 import LocalStorageService, { JWT_TOKEN } from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 const UpdateTelegramForm = ({ telegramData, open, onClose, onUpdate }) => {
   const { updateTelegramData } = useTelegramService();
@@ -11,7 +12,7 @@ const UpdateTelegramForm = ({ telegramData, open, onClose, onUpdate }) => {
   const [message, setMessage] = useState('');
   const localStorageService = useMemo(() => new LocalStorageService(), []);
   const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
-
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,7 +40,7 @@ const UpdateTelegramForm = ({ telegramData, open, onClose, onUpdate }) => {
       clearForm();
     } catch (error) {
       setMessage(error.message);
-      console.error('Error updating Telegram data:', error.message);
+      console.error(t('errors.telegram.update_credentials', {error: error.message}));
     } finally {
       setLoading(false);
     }
@@ -64,9 +65,9 @@ const UpdateTelegramForm = ({ telegramData, open, onClose, onUpdate }) => {
           {message}
         </DialogContentText>
         <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <TextField label="API ID" name="apiId" value={formData.apiId} onChange={handleChange} placeholder={telegramData.apiId}/>
-          <TextField label="API Hash" name="apiHash" value={formData.apiHash} onChange={handleChange} placeholder={telegramData.apiHash}/>
-          <TextField label="Channel" name="channel" value={formData.channel} onChange={handleChange} placeholder={telegramData.channel}/>
+          <TextField label={t("api_id")} name="apiId" value={formData.apiId} onChange={handleChange} placeholder={telegramData.apiId}/>
+          <TextField label={t('api_hash')} name="apiHash" value={formData.apiHash} onChange={handleChange} placeholder={telegramData.apiHash}/>
+          <TextField label={t('channel')} name="channel" value={formData.channel} onChange={handleChange} placeholder={telegramData.channel}/>
           <Button type="submit" variant="contained" color="primary" disabled={loading}>
             {loading ? 'Updating...' : 'Update'}
           </Button>

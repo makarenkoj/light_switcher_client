@@ -26,6 +26,7 @@ import DeleteTriggerButton from '../buttons/deleteTriggerButton';
 import UpdateTriggerButton from '../buttons/updateTriggerButton';
 import AddDeviceTriggerButton from '../buttons/addDeviceTriggerButton';
 import DisconnectTriggerButton from "../buttons/disconnectTriggerButton";
+import { useTranslation } from 'react-i18next';
 
 const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,6 +40,7 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
   const { getDeviceTriggersRequest } = useDeviceService();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedTrigger, setSelectedTrigger] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isOpen) {
@@ -57,7 +59,7 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
       setTotalPages(response.totalPages);
       setTriggers(reset ? response.triggers : response.triggers);
     } catch (error) {
-      console.error('Error fetching device triggers:', error.message);
+      console.error(t('errors.device_triggers', {error: error.message}));
     } finally {
       setLoading(false);
     }
@@ -99,7 +101,7 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
   return (
     <>
       <Button variant="contained" color="primary" onClick={() => setIsOpen(true)}>
-        Тригери ({triggersCount})
+        {t('trigger.triggers')} ({triggersCount})
       </Button>
 
       <Dialog open={isOpen} onClose={() => setIsOpen(false)} maxWidth="md" fullWidth>
@@ -117,7 +119,7 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
         </IconButton>
         <Box p={3}>
           <Typography variant="h6" textAlign="center" mb={2}>
-          Triggers for: {deviceName}
+          {t('trigger.triggers_for', {device: deviceName})}
           </Typography>
 
           {loading && (
@@ -131,11 +133,11 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell><strong>Name</strong></TableCell>
-                    <TableCell><strong>Status</strong></TableCell>
-                    <TableCell><strong>On</strong></TableCell>
-                    <TableCell><strong>Off</strong></TableCell>
-                    <TableCell><strong>Channel</strong></TableCell>
+                    <TableCell><strong>{t('name')}</strong></TableCell>
+                    <TableCell><strong>{t('status')}</strong></TableCell>
+                    <TableCell><strong>{t('on')}</strong></TableCell>
+                    <TableCell><strong>{t('off')}</strong></TableCell>
+                    <TableCell><strong>{t('channel')}</strong></TableCell>
                     <TableCell align="right"><strong></strong></TableCell>
                   </TableRow>
                 </TableHead>
@@ -167,7 +169,7 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
             </TableContainer>
           ) : (
             <Typography textAlign="center" mt={2} color="gray">
-              You don't have any triggers yet.
+              {t('trigger.any_triggers')}
             </Typography>
           )}
 
@@ -200,7 +202,6 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
             </MenuItem>
             <MenuItem >
               <UpdateTriggerButton trigger={selectedTrigger} onTriggerUpdated={() => {fetchTriggers(0, rowsPerPage, true); handleMenuClose();}} />
-                {console.log('Update Trigger:', selectedTrigger)}
             </MenuItem>
             <MenuItem >
               <DeleteTriggerButton trigger={selectedTrigger} onTriggerDeleted={() => {fetchTriggers(0, rowsPerPage, true); handleMenuClose();}} />

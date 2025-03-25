@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Stack, Button, Dialog, DialogActions, DialogTitle, Tooltip } from '@mui/material';
 import useDeviceService from '../../services/deviceService';
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 export default function DeleteDeviceButton({ device, onDeviceDeleted }) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { deleteDeviceRequest } = useDeviceService();
+  const { t } = useTranslation();
 
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
@@ -24,27 +26,27 @@ export default function DeleteDeviceButton({ device, onDeviceDeleted }) {
       onDeviceDeleted();
       setIsConfirmOpen(false);
     } catch (error) {
-      console.error('Error deleting device:', error.message);
+      console.error(t('errors.deleting_device', {error: error.message}));
     }
   };
 
   return (
     <>
-      <Tooltip title='Delete Device' >
+      <Tooltip title={t('device.delete_device_title')} >
         <Stack sx={{ gap: 1, alignItems: 'center' }}>
           <Button size="small" variant="contained" color="inherit" onClick={handleOpenConfirm}>
-            Delete Device
+           {t('device.delete_device')}
           </Button>
         </Stack>
       </Tooltip>
       <Dialog open={isConfirmOpen} onClose={handleCloseConfirm}>
-        <DialogTitle>Are you sure you want to delete this device?</DialogTitle>
+        <DialogTitle>{t('device.delete_device_text')}</DialogTitle>
         <DialogActions>
           <Button onClick={handleCloseConfirm} color="primary">
-            Cancel
+            {t('cancel')}
           </Button>
           <Button onClick={handleDelete} color="error">
-            Delete
+            {t('delete')}
           </Button>
         </DialogActions>
       </Dialog>

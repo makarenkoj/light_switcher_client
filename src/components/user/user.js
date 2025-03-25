@@ -9,6 +9,7 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 import OpenTelegramFormButton from '../buttons/openTelegramFormButton';
 import UpdateTelegramButton from '../buttons/updateTelegramButton';
 import UpdateUserButton from '../buttons/updateUserButton';
+import { useTranslation } from 'react-i18next';
 
 const UserInfo = ({handleUserDeleted}) => {
   const [user, setUser] = useState({});
@@ -24,6 +25,7 @@ const UserInfo = ({handleUserDeleted}) => {
   const localStorageService = useMemo(() => new LocalStorageService(), []);
   const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
   const userId = useMemo(() => localStorageService.getItem(USER_ID), [localStorageService]);
+  const { t } = useTranslation();
 
   const handleTelegramData = async () => {
     try {
@@ -32,7 +34,7 @@ const UserInfo = ({handleUserDeleted}) => {
       setTelegramData(response.telegram);
     } catch (error) {
       setUserHasTelegram(false);
-      console.error('Error fetching Telegram data:', error.message);
+      console.error(t('errors.telegram.telegram_credentials', {error: error.message}));
     }
   };
 
@@ -44,7 +46,7 @@ const UserInfo = ({handleUserDeleted}) => {
         setDevicesCount(response.devicesCount);
         setTelegramSession(response.telegramSession);
       } catch (error) {
-        console.error('Error fetching user:', error.message);
+        console.error(t('errors.user.user_fetching', {error: error.message}));
       }
     };
 
@@ -58,22 +60,21 @@ const UserInfo = ({handleUserDeleted}) => {
   };
 
   const handleSubmit = (data) => {
-    console.log('Telegram data:', data);
     handleTelegramData();
   };
 
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={tabIndex} onChange={handleTabChange} centered>
-        <Tab label="General Info" />
-        <Tab label="Telegram Credentials" />
+        <Tab label={t('tab.user_general_info')} />
+        <Tab label={t('tab.telegram_credentials')} />
       </Tabs>
 
       {tabIndex === 0 && (
         <Box p={3} textAlign="center" borderRadius={2} >
-          <Typography>Email: {user.email}</Typography>
-          <Typography>Phone: {user.phoneNumber}</Typography>
-          <Typography>Total Devices: {devicesCount}</Typography>
+          <Typography>{t('email')}: {user.email}</Typography>
+          <Typography>{t('phone')}: {user.phoneNumber}</Typography>
+          <Typography>{t('device.total_devices', {count: devicesCount})}</Typography>
           <UpdateUserButton  handleUserDeleted={handleUserDeleted} userData={user}/>
         </Box>
       )}
@@ -81,20 +82,20 @@ const UserInfo = ({handleUserDeleted}) => {
         <Box p={3} textAlign="center">
           {userHasTelegram ? (
           <>
-            <Typography>Telegram session saved: {telegramSession.toString()}</Typography>
+            <Typography>{t('telegram.telegram_session_saved', {session: telegramSession ? t('true') : t('false')})}</Typography>
               <Typography>
-                API ID: {showApiId ? telegramData.apiId : '*******'}
+                {t('api_id')}: {showApiId ? telegramData.apiId : '*******'}
                 <IconButton onClick={() => setShowApiId(!showApiId)}>
                   {showApiId ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </Typography>
               <Typography>
-                API Hash: {showApiHash ? telegramData.apiHash : '**************'}
+                {t('api_hash')}: {showApiHash ? telegramData.apiHash : '**************'}
                 <IconButton onClick={() => setShowApiHash(!showApiHash)}>
                   {showApiHash ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </Typography>
-              <Typography>Channel: {telegramData.channel}</Typography>
+              <Typography>{t('channel')}: {telegramData.channel}</Typography>
               <UpdateTelegramButton telegramData={telegramData} onUpdate={handleSubmit} />
           </>
           ) : (

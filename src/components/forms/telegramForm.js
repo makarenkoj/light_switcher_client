@@ -3,7 +3,7 @@ import useTelegramService from '../../services/telegramService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import LocalStorageService from '../../services/LocalStorageService';
-
+import { useTranslation } from 'react-i18next';
 
 import {
   Dialog,
@@ -20,6 +20,7 @@ const TelegramForm = ({ open, onClose }) => {
   const [message, setMessage] = useState('');
   const { sendCodeRequest, loading, error } = useTelegramService();
   const localStorageService = new LocalStorageService();
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,21 +40,21 @@ const TelegramForm = ({ open, onClose }) => {
       setMessage(response.message);
       onClose();
     } catch (error) {
-      console.log('Error:', error.message);
-      setMessage(error.message);
+      console.log(t('errors.error', {error: error.message}));
+      setMessage(t('errors.error', {error: error.message}));
     }
   };
 
   const content =  <>
-                  <DialogTitle>Enter Telegram SMS Code</DialogTitle>
+                  <DialogTitle>{t('form.sms_code_enter')}</DialogTitle>
                   <DialogContent>
                     <DialogContentText>
-                      Please enter your Telegram code to activate the service.
+                      {t('form.enter_code')}
                     </DialogContentText>
                     <TextField
                       autoFocus
                       margin="dense"
-                      label="SMS Code"
+                      label={t('form.sms_code')}
                       type="code"
                       fullWidth
                       name="code"
@@ -65,9 +66,9 @@ const TelegramForm = ({ open, onClose }) => {
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={onClose}>Cancel</Button>
+                    <Button onClick={onClose}>{t('cancel')}</Button>
                     <Button onClick={handleSubmit} disabled={!telegramForm.code}>
-                      Submit
+                      {t('submit')}
                     </Button>
                   </DialogActions>
                   </>;  

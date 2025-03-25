@@ -17,6 +17,7 @@ import useDeviceService from '../../services/deviceService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import LocalStorageService, { JWT_TOKEN } from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) => {
   const [triggers, setTriggers] = useState([]);
@@ -30,6 +31,7 @@ const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) =>
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
   const itemsPerPage = 5;
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (open) {
@@ -54,7 +56,7 @@ const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) =>
       setTriggers((prev) => [...prev, ...response.triggers]);
       setHasMore(response.triggers.length === itemsPerPage);
     } catch (error) {
-      console.error('Error fetching triggers:', error);
+      console.error(t('errors.triggers.fetching_triggers', {error: error}));
     }
     setLoadingMore(false);
   };
@@ -95,25 +97,25 @@ const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) =>
       resetForm();
       loadTriggers(1);
     } catch (error) {
-      console.error('Error adding trigger:', error);
+      console.error(t('errors.trigger.adding_trigger', {error: error}));
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Додати тригер до девайса</DialogTitle>
+      <DialogTitle>{t('trigger.add_to_device')}</DialogTitle>
       <DialogContent>
         {loading && <Spinner />}
         {error && <ErrorMessage />}
         <FormControl fullWidth sx={{ mt: 2 }}>
-          <InputLabel shrink sx={{ transform: 'translateY(-20px)' }}>Оберіть тригер</InputLabel>
+          <InputLabel shrink sx={{ transform: 'translateY(-20px)' }}>{t('form.choose_trigger')}</InputLabel>
           <Select
             value={selectedTrigger}
             onChange={(e) => setSelectedTrigger(e.target.value)}
             displayEmpty
           >
             {triggers.length === 0 ? (
-              <MenuItem disabled>Тригери відсутні</MenuItem>
+              <MenuItem disabled>{t('form.missing_triggers')}</MenuItem>
             ) : (
               triggers.map((trigger, index) => (
                 <MenuItem
@@ -134,9 +136,9 @@ const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) =>
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">Скасувати</Button>
+        <Button onClick={onClose} color="secondary">{t('cancel')}</Button>
         <Button onClick={handleSubmit} variant="contained" color="primary" disabled={!selectedTrigger}>
-          Додати
+          {t('add')}
         </Button>
       </DialogActions>
     </Dialog>

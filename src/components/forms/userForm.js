@@ -3,6 +3,7 @@ import useUserService from '../../services/userService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import LocalStorageService, {JWT_TOKEN, USER_ID} from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 import {
   Dialog,
@@ -22,6 +23,7 @@ const UserForm = ({ open, onClose, onUserDeleted, userData }) => {
   const [message, setMessage] = useState('');
   const { updateUserRequest, deleteUserRequest, loading, error } = useUserService();
   const localStorageService = new LocalStorageService();
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,7 +43,7 @@ const UserForm = ({ open, onClose, onUserDeleted, userData }) => {
       onUserDeleted();
       onClose();
     } catch (error) {
-      console.log('Error:', error.message);
+      console.log(t('errors.error', {error: error.message}));
       setMessage(error.message);
     }
   }
@@ -57,22 +59,22 @@ const UserForm = ({ open, onClose, onUserDeleted, userData }) => {
       setMessage(response.message);
       onClose();
     } catch (error) {
-      console.log('Error:', error.message);
+      console.log(t('errors.error', {error: error.message}));
       setMessage(error.message);
     }
   };
 
   const content =  <>
-                  <DialogTitle>Update Accaunt</DialogTitle>
+                  <DialogTitle>{t('form.update_account')}</DialogTitle>
                   <DialogContent>
                   <DialogContentText>
-                    Please fill out the form below to a update account.
+                    {t('form.update_account_title')}
                   </DialogContentText>
                   <TextField
                     autoFocus
                     placeholder={userData.email}
                     margin="dense"
-                    label="Email"
+                    label={t('email')}
                     type="email"
                     fullWidth
                     name="email"
@@ -82,7 +84,7 @@ const UserForm = ({ open, onClose, onUserDeleted, userData }) => {
                   <TextField
                     margin="dense"
                     placeholder={'**********'}
-                    label="Password"
+                    label={t('password')}
                     type="password"
                     fullWidth
                     name="password"
@@ -92,7 +94,7 @@ const UserForm = ({ open, onClose, onUserDeleted, userData }) => {
                   <TextField
                     margin="dense"
                     placeholder={userData.phoneNumber}
-                    label="Phone Number"
+                    label={t('phone_number')}
                     type="tel"
                     fullWidth
                     name="phoneNumber"
@@ -103,15 +105,15 @@ const UserForm = ({ open, onClose, onUserDeleted, userData }) => {
                   <DialogActions>
 
                   {/* Delete user button */}
-                  <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-start' }}  title={error || 'Delete Your Account'}>
+                  <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-start' }}  title={error || t('form.delete_account')}>
                     <IconButton aria-label="delete" size="large">
                       <DeleteIcon fontSize="inherit" onClick={handleDelete}/>
                     </IconButton>
                   </Stack>
 
                   {/* <DialogActions> */}
-                    <Button onClick={onClose}>Cancel</Button>
-                    <Button onClick={handleSubmit}>Submit</Button>
+                    <Button onClick={onClose}>{t('cancel')}</Button>
+                    <Button onClick={handleSubmit}>{t('form.account_update')}</Button>
                   </DialogActions>
                   {message && (
                     <DialogContentText style={{ color: message.includes('failed') ? 'red' : 'green', marginTop: '10px' }}>

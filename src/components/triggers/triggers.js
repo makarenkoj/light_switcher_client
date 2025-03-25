@@ -12,6 +12,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import io from "socket.io-client";
+import { useTranslation } from 'react-i18next';
 
 const socket = io(process.env.REACT_APP_API_URL);
 const TRUNCATION_LENGTH = 7;
@@ -25,6 +26,7 @@ const Triggers = () => {
   const localStorageService = useMemo(() => new LocalStorageService(), []);
   const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
   const { showTriggersRequest } = useTriggerService();
+  const { t } = useTranslation();
 
     useEffect(() => {
       socket.on("triggerStatusUpdate", ({ triggerId, status }) => {
@@ -59,7 +61,7 @@ const Triggers = () => {
         return reset ? response.triggers : [...prev, ...newTriggers];
       });
     } catch (error) {
-      console.error('Error fetching device triggers:', error.message);
+      console.error(t('errors.device_triggers.device_triggers', {error: error.message}));
     } finally {
       setLoading(false);
     }
@@ -68,7 +70,7 @@ const Triggers = () => {
   return (
     <Box sx={{ mt: 2 }}>
       <Typography variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
-        Your Triggers
+        {t('trigger.your_triggers')}
       </Typography>
       <Box p={2} display="flex" justifyContent="center">
         <AddTriggerButton onTriggerAdded={fetchTriggers} />
@@ -105,9 +107,9 @@ const Triggers = () => {
                   <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                     {trigger.name}
                   </Typography>
-                  <Typography color="text.secondary">On: {trigger.triggerOn.length > TRUNCATION_LENGTH ? trigger.triggerOn.slice(0, TRUNCATION_LENGTH) + '...' : trigger.triggerOn}</Typography>
-                  <Typography color="text.secondary">Off: {trigger.triggerOff.length > TRUNCATION_LENGTH ? trigger.triggerOff.slice(0, TRUNCATION_LENGTH) + '...' : trigger.triggerOff}</Typography>
-                  <Typography color="text.secondary">Channel: {trigger.chanelName.length > TRUNCATION_LENGTH ? trigger.chanelName.slice(0, TRUNCATION_LENGTH) + '...' : trigger.chanelName}</Typography>
+                  <Typography color="text.secondary">{t('trigger.trigger_on')}: {trigger.triggerOn.length > TRUNCATION_LENGTH ? trigger.triggerOn.slice(0, TRUNCATION_LENGTH) + '...' : trigger.triggerOn}</Typography>
+                  <Typography color="text.secondary">{t('trigger.trigger_off')}: {trigger.triggerOff.length > TRUNCATION_LENGTH ? trigger.triggerOff.slice(0, TRUNCATION_LENGTH) + '...' : trigger.triggerOff}</Typography>
+                  <Typography color="text.secondary">{t('channel')}: {trigger.chanelName.length > TRUNCATION_LENGTH ? trigger.chanelName.slice(0, TRUNCATION_LENGTH) + '...' : trigger.chanelName}</Typography>
                   <Box mt={2} display="flex" justifyContent="center">
                     <ChangeTriggerStatusButton
                       triggerId={trigger._id}
@@ -132,7 +134,7 @@ const Triggers = () => {
         </Swiper>
       ) : (
         <Typography textAlign="center" sx={{ color: 'gray', mt: 2 }}>
-          You don't have any triggers yet.
+          {t('trigger.dont_have_triggers')}
         </Typography>
       )}
     </Box>

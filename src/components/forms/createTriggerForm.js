@@ -22,6 +22,7 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useTriggerService from '../../services/triggerService';
 import LocalStorageService, {JWT_TOKEN, USER_ID} from '../../services/LocalStorageService';
+import { useTranslation } from 'react-i18next';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -77,6 +78,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
   const [chanelNameError, setChanelNameError] = useState(false);
   const [chanelNameErrorMessage, setChanelNameErrorMessage] = useState('');
   const [form, setForm] = useState({ name: '', triggerOn: '', triggerOff: '', chanelName: '', status: false });
+  const { t } = useTranslation();
 
   const localStorageService = new LocalStorageService();
 
@@ -101,7 +103,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
       onTriggerAdded();
       onClose();
     } catch (error) {
-      console.log('Error:', error.message);
+      console.log(t('errors.error', {error: error.message}));
       setMessage(error.message);
     }
   };
@@ -116,7 +118,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
     if (!name.value || name.value.length < 2) {
       setNameError(true);
-      setNameErrorMessage('Please enter a valid name.');
+      setNameErrorMessage(t('errors.form.valid_trigger_name'));
       isValid = false;
     } else {
       setNameError(false);
@@ -125,7 +127,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
     if (!triggerOn.value || triggerOn.value.length > 51) {
       setTriggerOnError(true);
-      setTriggerOnErrorMessage('TriggerOn must be at least 6 characters long.');
+      setTriggerOnErrorMessage(t('errors.form.trigger_on'));
       isValid = false;
     } else {
       setTriggerOnError(false);
@@ -134,7 +136,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
     if (!triggerOff.value || triggerOff.value.length > 51) {
       setTriggerOffError(true);
-      setTriggerOffErrorMessage('TriggerOff must be at least 6 characters long.');
+      setTriggerOffErrorMessage(t('errors.form.trigger_off'));
       isValid = false;
     } else {
       setTriggerOffError(false);
@@ -143,7 +145,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
     if (!chanelName.value || chanelName.value.length < 2) {
       setChanelNameError(true);
-      setChanelNameErrorMessage('ChanelName must be at least 6 characters long.');
+      setChanelNameErrorMessage(t('errors.form.channel_name'));
       isValid = false;
     } else {
       setChanelNameError(false);
@@ -162,7 +164,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
                           variant="h4"
                           sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
                         >
-                          New Trigger
+                          {t('trigger.new_trigger')}
                         </Typography>
                         <Box
                           component="form"
@@ -176,14 +178,14 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
                           }}
                         >
                           <FormControl>
-                            <FormLabel htmlFor="name">Triger Name</FormLabel>
+                            <FormLabel htmlFor="name">{t('form.trigger_name')}</FormLabel>
                             <TextField
                               error={nameError}
                               helperText={nameErrorMessage}
                               id="name"
                               type="name"
                               name="name"
-                              placeholder="Start Light"
+                              placeholder={t('form.trigger_name_placeholder')}
                               autoComplete="name"
                               autoFocus
                               required
@@ -194,12 +196,12 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="chanelName">Chanel Name</FormLabel>
+                            <FormLabel htmlFor="chanelName">{t('form.channel_name')}</FormLabel>
                             <TextField
                               error={chanelNameError}
                               helperText={chanelNameErrorMessage}
                               name="chanelName"
-                              placeholder="My Chanel"
+                              placeholder={t('form.channel_name_placeholder')}
                               type="chanelName"
                               id="chanelName"
                               autoComplete="current-chanelName"
@@ -212,12 +214,12 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="triggerOn">On</FormLabel>
+                            <FormLabel htmlFor="triggerOn">{t('form.trigger_on')}</FormLabel>
                             <TextField
                               error={triggerOnError}
                               helperText={triggerOnErrorMessage}
                               name="triggerOn"
-                              placeholder="start"
+                              placeholder={t('form.trigger_on_placeholder')}
                               type="triggerOn"
                               id="triggerOn"
                               autoFocus
@@ -229,12 +231,12 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="triggerOff">Off</FormLabel>
+                            <FormLabel htmlFor="triggerOff">{t('form.trigger_off')}</FormLabel>
                             <TextField
                               error={triggerOffError}
                               helperText={triggerOffErrorMessage}
                               name="triggerOff"
-                              placeholder="stop"
+                              placeholder={t('form.trigger_off_placeholder')}
                               type="triggerOff"
                               id="triggerOff"
                               autoComplete="current-triggerOff"
@@ -247,7 +249,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
                             />
                           </FormControl>
                           <FormControl>
-                            <FormLabel htmlFor="chanelName">Status</FormLabel>
+                            <FormLabel htmlFor="chanelName">{t('status')}</FormLabel>
                             <Select
                               name="status"
                               placeholder="true"
@@ -256,8 +258,8 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
                               value={form.status}
                               onChange={handleChange}
                             >
-                              <MenuItem value="false">Off</MenuItem>
-                              <MenuItem value="true">On</MenuItem>
+                              <MenuItem value="false">{t('off')}</MenuItem>
+                              <MenuItem value="true">{t('on')}</MenuItem>
                             </Select>
                           </FormControl>
                           <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
@@ -269,7 +271,7 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
                             variant="contained"
                             onClick={validateInputs}
                           >
-                            Add Device
+                            {t('trigger.create_trigger')}
                           </Button>
                         </Box>
                       </Card>

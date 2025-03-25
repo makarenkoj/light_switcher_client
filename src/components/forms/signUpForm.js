@@ -14,12 +14,14 @@ import {
   IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 
 const SignUpForm = ({ open, onClose }) => {
   const { registrationRequest, loading, error } = useRegistrationService();
   const [form, setForm] = useState({ email: '', password: '', phoneNumber: '' });
   const [message, setMessage] = useState('');
   const localStorageService = new LocalStorageService();
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,22 +38,21 @@ const SignUpForm = ({ open, onClose }) => {
       onClose();
     }catch (error) {
       localStorageService.clear();
-      console.error('Login error:', error.message);
-      // alert(error.message);
-      setMessage('Login failed: ' + error.message);
+      console.error(t('errors.form.sign_up', {errors: error.message}));
+      setMessage(t('errors.form.sign_up', {errors: error.message}));
     }
   };
 
   const content =  <>
-                  <DialogTitle>Register</DialogTitle>
+                  <DialogTitle>{t('form.register')}</DialogTitle>
                   <DialogContent>
                     <DialogContentText>
-                      Please fill out the form below to create a new account.
+                      {t('form.register_text')}
                     </DialogContentText>
                     <TextField
                       autoFocus
                       margin="dense"
-                      label="Email"
+                      label={t('email')}
                       type="email"
                       fullWidth
                       name="email"
@@ -60,7 +61,7 @@ const SignUpForm = ({ open, onClose }) => {
                     />
                     <TextField
                       margin="dense"
-                      label="Password"
+                      label={t('password')}
                       type="password"
                       fullWidth
                       name="password"
@@ -69,7 +70,7 @@ const SignUpForm = ({ open, onClose }) => {
                     />
                     <TextField
                       margin="dense"
-                      label="Phone Number"
+                      label={t('phone_number')}
                       type="tel"
                       fullWidth
                       name="phoneNumber"
@@ -78,7 +79,7 @@ const SignUpForm = ({ open, onClose }) => {
                     />
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={handleSubmit}>Submit</Button>
+                    <Button onClick={handleSubmit}>{t('register')}</Button>
                   </DialogActions>
                   {message && (
                     <DialogContentText style={{ color: message.includes('failed') ? 'red' : 'green', marginTop: '10px' }}>

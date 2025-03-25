@@ -1,6 +1,8 @@
 // import useTelegramService from "../../services/telegramService";
+import { useTranslation } from 'react-i18next';
 
 const SendCode = () => {
+  const { t } = useTranslation();
   const token = localStorage.getItem('token');
   // const {loading, error, codeRequest} = useTelegramService();
   const step = localStorage.getItem('step');
@@ -35,7 +37,7 @@ const SendCode = () => {
       <button 
       style={{'display' : step === 1 ? 'none' : 'block'}}
       onClick={handleClick}>
-        Send Request
+        {t('telegram.send_request')}
       </button>
     </div>
   )

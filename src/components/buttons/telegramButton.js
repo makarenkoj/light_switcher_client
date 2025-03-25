@@ -4,13 +4,13 @@ import { CheckCircle, Cancel } from '@mui/icons-material';
 import useTelegramService from '../../services/telegramService';
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
 import TelegramForm from '../forms/telegramForm';
-
+import { useTranslation } from 'react-i18next';
 
 const TelegramButton = ({ onPasswordRequest }) => {
   const [status, setStatus] = useState(false);
   const [isTelegramFormOpen, setIsTelegramFormOpen] = useState(false);
   const { getTelegramStatus, codeRequest, loading, error } = useTelegramService();
-
+  const { t } = useTranslation();
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
 
@@ -32,9 +32,7 @@ const TelegramButton = ({ onPasswordRequest }) => {
       localStorageService.setItem('phoneCodeHash',response.phoneCodeHash);
       setIsTelegramFormOpen(true);
     } catch (error) {
-      // localStorageService.clear();
-      console.log('Error:', error.message);
-      console.log('Error:', error);
+      console.error(t('errors.error', {error: error.message}));
     }
   };
 
@@ -44,7 +42,7 @@ const TelegramButton = ({ onPasswordRequest }) => {
         const response = await getTelegramStatus(token);
         setStatus(response.authorized);
       } catch (error) {
-        console.error('Error fetching Telegram status:', error.message);
+        console.error(t('errors.telegram.telegram_status', {error: error.message}));
       }
     };
 
@@ -55,7 +53,7 @@ const TelegramButton = ({ onPasswordRequest }) => {
 
   return (
     <>
-    <Tooltip title={error || (status ? 'Telegram is active' : 'Telegram is inactive')}>
+    <Tooltip title={error || (status ? t('telegram.telegram_active') : t('telegram.telegram_inactive'))}>
       <span>
         <Button
           variant="contained"
@@ -64,12 +62,11 @@ const TelegramButton = ({ onPasswordRequest }) => {
           disabled={loading}
           startIcon={loading ? <CircularProgress size={16} /> : status ? <CheckCircle /> : <Cancel />}
         >
-          Telegram {status ? 'On' : 'Off'}
+          {t('telegram.telegram')} {status ? t('on') : t('off')}
         </Button>
       </span>
     </Tooltip>
 
-    {/* Telegram Password Form */}
     <TelegramForm
       open={isTelegramFormOpen}
       onClose={() => setIsTelegramFormOpen(false)}
