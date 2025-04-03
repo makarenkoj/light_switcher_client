@@ -1,10 +1,12 @@
 import { useState, useCallback } from "react";
 import LocalStorageService from "../services/LocalStorageService";
+import i18n from '../i18n';
 
 const useHttp = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const localStorageService = new LocalStorageService();
+    const lang = i18n.language;
 
     const handleUnathorized = (error) => {
         if (error.message === 'Unauthorized') {
@@ -13,7 +15,7 @@ const useHttp = () => {
         };
     };
 
-    const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => {
+    const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json', 'Accept-Language': lang}) => {
         setLoading(true);
 
         try {

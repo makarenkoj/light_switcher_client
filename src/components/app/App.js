@@ -107,7 +107,7 @@ const App = () => {
                   </Tooltip>
 
                   <Tooltip title="Ukrainian">
-                    <IconButton onClick={() => i18n.changeLanguage('uk')}>
+                    <IconButton onClick={() => i18n.changeLanguage('ua')}>
                       <span role="img" aria-label="Ukrainian">🇺🇦</span>
                     </IconButton>
                   </Tooltip>
@@ -127,7 +127,7 @@ const App = () => {
                   </Tooltip>
 
                   <Tooltip title="Ukrainian">
-                    <IconButton onClick={() => i18n.changeLanguage('uk')}>
+                    <IconButton onClick={() => i18n.changeLanguage('ua')}>
                       <span role="img" aria-label="Ukrainian">🇺🇦</span>
                     </IconButton>
                   </Tooltip>

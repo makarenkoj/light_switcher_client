@@ -1,14 +1,16 @@
 import useHttp from "../hooks/http.hook";
+import i18n from '../i18n';
 
 const useTelegramService = () => {
 	const { loading, request, error, clearError } = useHttp();
 	const _baseUrl = process.env.REACT_APP_API_URL;
+  const lang = i18n.language;
 
 	const getTelegramData = async (token) => {
 		const res = await request(`${_baseUrl}/api/telegram`,
 															'GET',
 															null,
-															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
+															{ "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
 
 		return res;
 	};
@@ -19,7 +21,7 @@ const useTelegramService = () => {
 		const res = await request(`${_baseUrl}/api/telegram`,
 															'POST',
 															{ apiId, apiHash, channel },
-															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
+															{ "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
 
 		return res;
 	};
@@ -28,7 +30,7 @@ const useTelegramService = () => {
 		const res = await request(`${_baseUrl}/api/telegram`,
 															'PUT',
 															{ apiId, apiHash, channel },
-															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
+															{ "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
 
 		return res;
 	};
@@ -37,7 +39,7 @@ const useTelegramService = () => {
 		const res = await request(`${_baseUrl}/api/telegram`,
 															'DELETE',
 															null,
-															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
+															{ "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
 
 		return res;
 	};
@@ -46,7 +48,7 @@ const useTelegramService = () => {
 		const res = await request(`${_baseUrl}/api/telegram/checkSession`,
 															'GET',
 															null,
-															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
+															{ "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
 		return res;
 	};
 
@@ -54,7 +56,7 @@ const useTelegramService = () => {
     const res = await request(`${_baseUrl}/api/telegram/sendCode`,
 														  'POST',
 															null,
-															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
+															{ "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
     return res;
   };
 
@@ -62,7 +64,7 @@ const useTelegramService = () => {
     const res = await request(`${_baseUrl}/api/telegram/signIn`,
 															'POST',
 															{code, phoneNumber, phoneCodeHash},
-															{ "Content-Type": "application/json", 'Authorization': `Bearer ${token}` },
+															{ "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` },
 														);
 
     return res;
