@@ -42,6 +42,7 @@ class LocalStorageService {
 
     try {
       const decoded = jwtDecode(token);
+
       return decoded.role || "user";
     } catch (err) {
       return "user";

@@ -25,6 +25,7 @@ const UserInfo = ({handleUserDeleted}) => {
   const localStorageService = useMemo(() => new LocalStorageService(), []);
   const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
   const userId = useMemo(() => localStorageService.getItem(USER_ID), [localStorageService]);
+  const userRole = useMemo(() => localStorageService.getUserRole(), [localStorageService]);
   const { t } = useTranslation();
 
   const handleTelegramData = async () => {
@@ -51,7 +52,9 @@ const UserInfo = ({handleUserDeleted}) => {
     };
 
     handleUser();
-    handleTelegramData();
+    if (userRole === 'admin') {
+      handleTelegramData();
+    }
      // eslint-disable-next-line
   }, []);
 
@@ -63,49 +66,71 @@ const UserInfo = ({handleUserDeleted}) => {
     handleTelegramData();
   };
 
+  const tabUser = <Box sx={{ width: '100%' }}>
+                    <Tabs value={tabIndex} onChange={handleTabChange} centered>
+                      <Tab label={t('tab.user_general_info')} />
+                    </Tabs>
+
+                    {tabIndex === 0 && (
+                      <Box p={3} textAlign="center" borderRadius={2} >
+                        <Typography>{t('email')}: {user.email}</Typography>
+                        <Typography>{t('phone')}: {user.phoneNumber}</Typography>
+                        <Typography>{t('device.total_devices', {count: devicesCount})}</Typography>
+                        <UpdateUserButton  handleUserDeleted={handleUserDeleted} userData={user}/>
+                      </Box>
+                    )}
+
+                    {loading && <Spinner />}
+                    {error && <ErrorMessage />}
+                  </Box>
+
+  const tabAdmin = <Box sx={{ width: '100%' }}>
+                      <Tabs value={tabIndex} onChange={handleTabChange} centered>
+                        <Tab label={t('tab.user_general_info')} />
+                        <Tab label={t('tab.telegram_credentials')} />
+                      </Tabs>
+
+                      {tabIndex === 0 && (
+                        <Box p={3} textAlign="center" borderRadius={2} >
+                          <Typography>{t('email')}: {user.email}</Typography>
+                          <Typography>{t('phone')}: {user.phoneNumber}</Typography>
+                          <Typography>{t('device.total_devices', {count: devicesCount})}</Typography>
+                          <UpdateUserButton  handleUserDeleted={handleUserDeleted} userData={user}/>
+                        </Box>
+                      )}
+                      {tabIndex === 1 && (
+                        <Box p={3} textAlign="center">
+                          {userHasTelegram ? (
+                          <>
+                            <Typography>{t('telegram.telegram_session_saved', {session: telegramSession ? t('true') : t('false')})}</Typography>
+                              <Typography>
+                                {t('api_id')}: {showApiId ? telegramData.apiId : '*******'}
+                                <IconButton onClick={() => setShowApiId(!showApiId)}>
+                                  {showApiId ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                              </Typography>
+                              <Typography>
+                                {t('api_hash')}: {showApiHash ? telegramData.apiHash : '**************'}
+                                <IconButton onClick={() => setShowApiHash(!showApiHash)}>
+                                  {showApiHash ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                              </Typography>
+                              <Typography>{t('channel')}: {telegramData.channel}</Typography>
+                              <UpdateTelegramButton telegramData={telegramData} onUpdate={handleSubmit} />
+                          </>
+                          ) : (
+                          <OpenTelegramFormButton onSubmit={handleSubmit}/>)}
+                        </Box>
+                      )}
+
+                      {loading && <Spinner />}
+                      {error && <ErrorMessage />}
+                    </Box>
+
   return (
-    <Box sx={{ width: '100%' }}>
-      <Tabs value={tabIndex} onChange={handleTabChange} centered>
-        <Tab label={t('tab.user_general_info')} />
-        <Tab label={t('tab.telegram_credentials')} />
-      </Tabs>
-
-      {tabIndex === 0 && (
-        <Box p={3} textAlign="center" borderRadius={2} >
-          <Typography>{t('email')}: {user.email}</Typography>
-          <Typography>{t('phone')}: {user.phoneNumber}</Typography>
-          <Typography>{t('device.total_devices', {count: devicesCount})}</Typography>
-          <UpdateUserButton  handleUserDeleted={handleUserDeleted} userData={user}/>
-        </Box>
-      )}
-      {tabIndex === 1 && (
-        <Box p={3} textAlign="center">
-          {userHasTelegram ? (
-          <>
-            <Typography>{t('telegram.telegram_session_saved', {session: telegramSession ? t('true') : t('false')})}</Typography>
-              <Typography>
-                {t('api_id')}: {showApiId ? telegramData.apiId : '*******'}
-                <IconButton onClick={() => setShowApiId(!showApiId)}>
-                  {showApiId ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </Typography>
-              <Typography>
-                {t('api_hash')}: {showApiHash ? telegramData.apiHash : '**************'}
-                <IconButton onClick={() => setShowApiHash(!showApiHash)}>
-                  {showApiHash ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </Typography>
-              <Typography>{t('channel')}: {telegramData.channel}</Typography>
-              <UpdateTelegramButton telegramData={telegramData} onUpdate={handleSubmit} />
-          </>
-          ) : (
-          <OpenTelegramFormButton onSubmit={handleSubmit}/>)}
-        </Box>
-      )}
-
-      {loading && <Spinner />}
-      {error && <ErrorMessage />}
-    </Box>
+    <>
+      {userRole === 'admin' ? tabAdmin : tabUser}
+    </>
   );
 };
 
