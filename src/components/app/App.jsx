@@ -28,7 +28,7 @@ import { useTheme } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import io from "socket.io-client";
 
-const socket = io(process.env.REACT_APP_API_URL);
+const socket = io(import.meta.env.VITE_API_URL);
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

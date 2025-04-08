@@ -3,7 +3,7 @@ import i18n from '../i18n';
 
 const useTriggerService = () => {
   const { loading, request, error, clearError } = useHttp();
-	const _baseUrl = process.env.REACT_APP_API_URL;
+	const _baseUrl = import.meta.env.VITE_API_URL;
   const lang = i18n.language;
 
   const showTriggerRequest = async (id, token) => {

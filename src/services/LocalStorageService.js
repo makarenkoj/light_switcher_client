@@ -1,3 +1,5 @@
+import { jwtDecode } from 'jwt-decode';
+
 class LocalStorageService {
   get isStorageAvailable () {
     if (this.isAvailable === undefined) {
@@ -31,6 +33,18 @@ class LocalStorageService {
   clear () {
     if (this.isStorageAvailable) {
       localStorage.clear()
+    }
+  }
+
+  getUserRole() {
+    const token = this.getItem(JWT_TOKEN);
+    if (!token) return null;
+
+    try {
+      const decoded = jwtDecode(token);
+      return decoded.role || "user";
+    } catch (err) {
+      return "user";
     }
   }
 }

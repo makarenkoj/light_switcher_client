@@ -21,7 +21,7 @@ import Grid from '@mui/material/Grid2';
 import io from "socket.io-client";
 import { useTranslation } from 'react-i18next';
 
-const socket = io(process.env.REACT_APP_API_URL);
+const socket = io(import.meta.env.VITE_API_URL);
 
 const DeviceList = ({onDeviceAdded}) => {
   const [devices, setDevices] = useState([]);

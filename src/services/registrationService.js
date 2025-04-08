@@ -3,8 +3,8 @@ import i18n from '../i18n';
 
 const useRegistrationService = () => {
   const { loading, request, error, clearError } = useHttp();
-  const _baseUrl = process.env.REACT_APP_API_URL;
-  const _cors_client = process.env.CLIENT || '*';
+  const _baseUrl = import.meta.env.VITE_API_URL;
+  const _cors_client = import.meta.env.CLIENT || '*';
   const lang = i18n.language;
 
   const registrationRequest = async (email, password, phoneNumber ) => {
