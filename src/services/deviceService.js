@@ -1,14 +1,16 @@
 import useHttp from "../hooks/http.hook";
+import i18n from '../i18n';
 
 const useDeviceService = () => {
   const { loading, request, error, clearError } = useHttp();
-  const _baseUrl = process.env.REACT_APP_API_URL;
+  const _baseUrl = import.meta.env.VITE_API_URL;
+  const lang = i18n.language;
 
   const changeStatusRequest = async (id, token, status) => {
     const res = await request(`${_baseUrl}/api/devices/status/${id}`,
                               'PUT',
                               {status},
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
 
     return res;
   };
@@ -17,7 +19,7 @@ const useDeviceService = () => {
     const res = await request(`${_baseUrl}/api/devices/status/${id}`,
                               "GET",
                               null,
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -26,7 +28,7 @@ const useDeviceService = () => {
     const res = await request(`${_baseUrl}/api/devices/${id}`,
                               "GET",
                               null,
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -35,7 +37,7 @@ const useDeviceService = () => {
     const res = await request(`${_baseUrl}/api/devices?page=${page}&limit=${limit}`,
                               "GET",
                               null,
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -44,7 +46,7 @@ const useDeviceService = () => {
     const res = await request(`${_baseUrl}/api/devices/`,
                               "POST",
                               {id, name, deviceId, accessId, secretKey},
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -53,7 +55,7 @@ const useDeviceService = () => {
     const res = await request(`${_baseUrl}/api/devices/${id}`,
                               "PUT",
                               {name, deviceId, accessId, secretKey},
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -62,7 +64,7 @@ const useDeviceService = () => {
     const res = await request(`${_baseUrl}/api/devices/${id}`,
                               "DELETE",
                               null,
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -71,7 +73,7 @@ const useDeviceService = () => {
     const res = await request(`${_baseUrl}/api/devices/${id}/triggers?page=${page}&limit=${limit}`,
                               "GET",
                               null,
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -80,7 +82,7 @@ const useDeviceService = () => {
     const res = await request(`${_baseUrl}/api/devices/${id}/triggers`,
                               "POST",
                               {triggerId},
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -89,7 +91,7 @@ const useDeviceService = () => {
     const res = await request(`${_baseUrl}/api/devices/${id}/triggers`,
                               "DELETE",
                               {triggerId},
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };

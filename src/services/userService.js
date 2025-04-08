@@ -1,14 +1,16 @@
 import useHttp from "../hooks/http.hook";
+import i18n from '../i18n';
 
 const useUserService = () => {
   const { loading, request, error, clearError } = useHttp();
-  const _baseUrl = process.env.REACT_APP_API_URL;
+  const _baseUrl = import.meta.env.VITE_API_URL;
+  const lang = i18n.language;
 
   const getUserRequest = async (token, id) => {
     const res = await request(`${_baseUrl}/api/users/${id}`,
                               'GET',
                               null,
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
 
     return res;
   };
@@ -17,7 +19,7 @@ const useUserService = () => {
     const res = await request(`${_baseUrl}/api/users/${id}`,
                               "PUT",
                               { email, password, phoneNumber },
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };
@@ -26,7 +28,7 @@ const useUserService = () => {
     const res = await request(`${_baseUrl}/api/users/${id}`,
                               "DELETE",
                               null,
-                              { "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });  
 
     return res;
   };

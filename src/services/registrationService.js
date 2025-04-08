@@ -1,15 +1,17 @@
 import useHttp from "../hooks/http.hook";
+import i18n from '../i18n';
 
 const useRegistrationService = () => {
   const { loading, request, error, clearError } = useHttp();
-  const _baseUrl = process.env.REACT_APP_API_URL;
-  const _cors_client = process.env.CLIENT || '*';
+  const _baseUrl = import.meta.env.VITE_API_URL;
+  const _cors_client = import.meta.env.CLIENT || '*';
+  const lang = i18n.language;
 
   const registrationRequest = async (email, password, phoneNumber ) => {
     const res = await request(`${_baseUrl}/api/auth/register`,
                               'POST',
                               { email, password, phoneNumber },
-                              { 'Content-Type': 'application/json', "Access-Control-Allow-Credentials": _cors_client }
+                              { "Accept-Language": lang, 'Content-Type': 'application/json', "Access-Control-Allow-Credentials": _cors_client }
                               );
 
     return res;
@@ -19,7 +21,7 @@ const useRegistrationService = () => {
     const res = await request(`${_baseUrl}/api/auth/login`,
                               "POST",
                               { email, password },
-                              { "Content-Type": "application/json" }
+                              { "Accept-Language": lang, "Content-Type": "application/json" }
                               );  
 
     return res;
