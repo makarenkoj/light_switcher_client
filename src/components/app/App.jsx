@@ -10,7 +10,7 @@ import '../../i18n';
 
 // MUI
 import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   AppBar,
   Tabs,
@@ -28,7 +28,7 @@ import { useTheme } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import io from "socket.io-client";
 
-const socket = io(process.env.REACT_APP_API_URL);
+const socket = io(import.meta.env.VITE_API_URL);
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -50,8 +50,9 @@ const App = () => {
   const handleLogout = () =>  setIsLoggedIn(false);
   const handleUserDeleted = () => setIsLoggedIn(false);
   
-  const localStorageService = new LocalStorageService();
-  const token = localStorageService.getItem(JWT_TOKEN);
+  const localStorageService = useMemo(() => new LocalStorageService(), []);
+  const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
+  const userRole = useMemo(() => localStorageService.getUserRole(), [localStorageService]);
 
   useEffect(() => {
     setIsLoggedIn(token ? true : false);
@@ -97,7 +98,7 @@ const App = () => {
             {isLoggedIn ? (
               <>
               <Box sx={{ display: 'flex', gap: 2 }}>
-                <TelegramButton />
+                {userRole === 'admin' && <TelegramButton />}
                 <LogoutButton onLogout={handleLogout} />
                 <Box>
                   <Tooltip title="English">

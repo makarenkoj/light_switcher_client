@@ -3,7 +3,7 @@ import i18n from '../i18n';
 
 const useDeviceService = () => {
   const { loading, request, error, clearError } = useHttp();
-  const _baseUrl = process.env.REACT_APP_API_URL;
+  const _baseUrl = import.meta.env.VITE_API_URL;
   const lang = i18n.language;
 
   const changeStatusRequest = async (id, token, status) => {

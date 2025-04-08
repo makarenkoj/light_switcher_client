@@ -6,7 +6,7 @@ const SendCode = () => {
   const token = localStorage.getItem('token');
   // const {loading, error, codeRequest} = useTelegramService();
   const step = localStorage.getItem('step');
-  const _baseUrl = process.env.REACT_APP_API_URL
+  const _baseUrl = import.meta.env.VITE_API_URL
   const handleClick = async () => {
     try {
       const response = await fetch(`${_baseUrl}/api/telegram/sendCode`, {
