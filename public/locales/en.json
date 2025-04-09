@@ -101,7 +101,8 @@
     "secret_key": "Secret key:",
     "not_found": "Device not found",
     "your_devices": "Your devices",
-    "open_device": "Open device"
+    "open_device": "Open device",
+    "dont_have_devices": "You don't have any devices yet."
   },
   "form":{
     "name": "Device Name",
