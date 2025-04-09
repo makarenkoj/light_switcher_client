@@ -190,6 +190,10 @@
     "password": "Це поле має містити принаймні 6 символів",
     "password_confirmation": "Це поле має відповідати паролю",
     "unique": "Це поле має бути унікальним",
-    "confirmed": "Це поле має бути підтверджено"
+    "confirmed": "Це поле має бути підтверджено",
+    "context": "useAuth має використовуватися в AuthProvider",
+    "token_expired": "Термін дії токена минув",
+    "invalid_token": "AuthProvider: недійсний формат токена. {{error}}",
+    "token_found": "AuthProvider: токен не знайдено."
     }
 }

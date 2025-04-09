@@ -16,7 +16,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 
-const LoginForm = ({ open, onClose}) => {
+const LoginForm = ({ open, onClose, onLoginSuccess}) => {
   const { loginRequest, loading, error } = useRegistrationService();
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
@@ -37,6 +37,10 @@ const LoginForm = ({ open, onClose}) => {
       localStorageService.setItem(JWT_TOKEN, response.token);
       localStorageService.setItem(USER_ID, response.userId);
       setMessage(response.message);
+  
+      if (onLoginSuccess) {
+        onLoginSuccess({ id: response.userId, token: response.token });
+      }
       onClose();
     } catch (error) {
       localStorageService.clear();
@@ -85,16 +89,15 @@ const LoginForm = ({ open, onClose}) => {
   const spinner = loading ? <Spinner /> : null;
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} disableRestoreFocus={true}>
       <IconButton
         aria-label="close"
-        onClick={() => onClose(onClose)}
-                  sx={{
-                  position: 'absolute',
-                  right: 8,
-                  top: 8,
-                  color: (theme) => theme.palette.grey[500],
-                }}
+        onClick={onClose}
+        sx={{ position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
         >
         <CloseIcon />
       </IconButton>

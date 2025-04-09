@@ -9,8 +9,7 @@ import { useTranslation } from 'react-i18next';
 import '../../i18n';
 
 // MUI
-import LocalStorageService, {JWT_TOKEN} from '../../services/LocalStorageService';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Tabs,
@@ -27,11 +26,12 @@ import { Brightness4, Brightness7, Warning, Home } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import io from "socket.io-client";
+import { useAuth } from '../../context/AuthContext';
 
 const socket = io(import.meta.env.VITE_API_URL);
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, login, logout, isAdmin, isLoggedIn } = useAuth();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
@@ -47,16 +47,24 @@ const App = () => {
   const handleLoginClose = () => setIsLoginOpen(false);
   const handleRegisterOpen = () => setIsRegisterOpen(true);
   const handleRegisterClose = () => setIsRegisterOpen(false);
-  const handleLogout = () =>  setIsLoggedIn(false);
-  const handleUserDeleted = () => setIsLoggedIn(false);
-  
-  const localStorageService = useMemo(() => new LocalStorageService(), []);
-  const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
-  const userRole = useMemo(() => localStorageService.getUserRole(), [localStorageService]);
 
-  useEffect(() => {
-    setIsLoggedIn(token ? true : false);
-  }, [token]);
+  const handleLoginSuccess = (userData) => {
+    if (login) {
+      login(userData);
+    }
+  };
+
+  const handleLogout = () => {
+    if (logout) {
+      logout();
+    }
+  };
+
+  const handleUserDeleted = () => {
+    if (logout) {
+      logout();
+    }
+  };
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -98,7 +106,7 @@ const App = () => {
             {isLoggedIn ? (
               <>
               <Box sx={{ display: 'flex', gap: 2 }}>
-                {userRole === 'admin' && <TelegramButton />}
+                {isAdmin && <TelegramButton />}
                 <LogoutButton onLogout={handleLogout} />
                 <Box>
                   <Tooltip title="English">
@@ -201,9 +209,8 @@ const App = () => {
         </Box>
       </AppProvider>
 
-      <LoginForm open={isLoginOpen} onClose={handleLoginClose} />
-
-      <SignUpForm open={isRegisterOpen} onClose={handleRegisterClose} />
+      <LoginForm open={isLoginOpen} onClose={handleLoginClose} onLoginSuccess={handleLoginSuccess} />
+      <SignUpForm open={isRegisterOpen} onClose={handleRegisterClose} onSignUpSuccess={handleLoginSuccess}/>
     </>
   );
 };

@@ -191,7 +191,11 @@
     "password": "This field must be at least 6 characters",
     "password_confirmation": "This field must be equal to password",
     "unique": "This field must be unique",
-    "confirmed": "This field must be confirmed"
+    "confirmed": "This field must be confirmed",
+    "context": "useAuth must be used within an AuthProvider",
+    "token_expired": "Token expired",
+    "invalid_token": "AuthProvider: Invalid token format. {{error}}",
+    "token_found": "AuthProvider: No token found."
   }
 
 }
