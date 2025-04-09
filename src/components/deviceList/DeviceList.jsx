@@ -103,7 +103,7 @@ const DeviceList = ({onDeviceAdded}) => {
                 <Grid size={{xs: 122, sm: 6, md: 4}} key={device._id}>
                   <Card>
                     <CardContent>
-                      <Typography >
+                      <Typography component="div">
                         <Tooltip title={t('device.open_device')} >
                           <Stack sx={{ gap: 1, alignItems: 'center' }}>
                             <Button size="small" variant="contained" color="inherit" 
