@@ -96,14 +96,14 @@ const DeviceList = ({onDeviceAdded}) => {
           <AddDevice onDeviceAdded={fetchDevices} />
         </Box>
 
-        {devices.length > 0 && (
+        {devices.length > 0 ? (
           <>
             <Grid container spacing={4} mt={2}>
               {devices.map((device) => (
-                <Grid item xs={12} sm={6} md={4} size={4} key={device._id}>
-                  <Card>
+                <Grid size={{xs: 8, sm: 6, md: 4}} key={device._id}>
+                  <Card sx={{ height: '100%', minHeight: '100px', display: 'flex', flexDirection: 'column' }}>
                     <CardContent>
-                      <Typography >
+                      <Typography component="div">
                         <Tooltip title={t('device.open_device')} >
                           <Stack sx={{ gap: 1, alignItems: 'center' }}>
                             <Button size="small" variant="contained" color="inherit" 
@@ -130,6 +130,10 @@ const DeviceList = ({onDeviceAdded}) => {
               <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} />
             </Box>
           </>
+        ): (
+          <Typography textAlign="center" sx={{ color: 'gray', mt: 2 }}>
+            {t('device.dont_have_devices')}
+          </Typography>
         )}
 
         <Device open={IsDeviceOpen} onClose={() => setIsDeviceOpen(false)} deviceId={selectedDevice} onDeviceUpdated={fetchDevices} onDeviceDeleted={handleDeviceDeleted} />

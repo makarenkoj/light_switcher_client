@@ -122,7 +122,7 @@ const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) =
         </Paper>
       ) : (
         <Typography align="center" sx={{ padding: 3 }}>
-          {t('device.not found')}
+          {t('device.not_found')}
         </Typography>
       )}
       {/* <CreateDeviceTriggerForm open={isTriggerFormOpen} onClose={() => setIsTriggerFormOpen(false)} deviceId={deviceId} onTriggerAdded={fetchDevice} /> */}

@@ -16,7 +16,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 
-const LoginForm = ({ open, onClose}) => {
+const LoginForm = ({ open, onClose, onLoginSuccess}) => {
   const { loginRequest, loading, error } = useRegistrationService();
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
@@ -37,11 +37,33 @@ const LoginForm = ({ open, onClose}) => {
       localStorageService.setItem(JWT_TOKEN, response.token);
       localStorageService.setItem(USER_ID, response.userId);
       setMessage(response.message);
-      onClose();
+  
+      if (onLoginSuccess) {
+        onLoginSuccess({ id: response.userId, token: response.token });
+      }
+      handleClose();
     } catch (error) {
       localStorageService.clear();
       console.error(t('errors.form.login_error', {error: error.message}));
       setMessage(t('errors.form.login_error', {error: error.message}));
+    }
+  };
+
+  const handleClose = () => {
+    setLoginForm({ email: '', password: '' });
+    setMessage('');
+    onClose();
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit(event);
+    }
+  };
+
+  const handleEscapeKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      handleClose();
     }
   };
 
@@ -69,6 +91,7 @@ const LoginForm = ({ open, onClose}) => {
                       name="password"
                       value={loginForm.password}
                       onChange={handleChange}
+                      onKeyDown={handleKeyPress}
                     />
                     <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
                       {message}
@@ -85,16 +108,15 @@ const LoginForm = ({ open, onClose}) => {
   const spinner = loading ? <Spinner /> : null;
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} disableRestoreFocus={true} onKeyDown={handleEscapeKeyDown}>
       <IconButton
         aria-label="close"
-        onClick={() => onClose(onClose)}
-                  sx={{
-                  position: 'absolute',
-                  right: 8,
-                  top: 8,
-                  color: (theme) => theme.palette.grey[500],
-                }}
+        onClick={handleClose}
+        sx={{ position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
         >
         <CloseIcon />
       </IconButton>
