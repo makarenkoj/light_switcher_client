@@ -40,13 +40,31 @@ const SignUpForm = ({ open, onClose, onSignUpSuccess }) => {
         onSignUpSuccess({ id: response.userId, token: response.token });
       }
 
-      onClose();
+      handleClose();
     }catch (error) {
       localStorageService.clear();
       console.error(t('errors.form.sign_up', {error: error.message}));
       setMessage(t('errors.form.sign_up', {error: error.message}));
     }
   };
+
+  const handleClose = () => {
+    setForm({ email: '', password: '', phoneNumber: '' });
+    setMessage('');
+    onClose();
+  }
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit(event);
+    }
+  }
+
+  const handleEscapeKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      handleClose();
+    }
+  }
 
   const content =  <>
                   <DialogTitle>{t('form.register')}</DialogTitle>
@@ -81,6 +99,7 @@ const SignUpForm = ({ open, onClose, onSignUpSuccess }) => {
                       name="phoneNumber"
                       value={form.phoneNumber}
                       onChange={handleChange}
+                      onKeyDown={handleKeyPress}
                     />
                   </DialogContent>
                   <DialogActions>
@@ -97,10 +116,10 @@ const SignUpForm = ({ open, onClose, onSignUpSuccess }) => {
   const spinner = loading ? <Spinner /> : null;
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} disableRestoreFocus={true} onKeyDown={handleEscapeKeyDown}>
       <IconButton
         aria-label="close"
-        onClick={onClose}
+        onClick={handleClose}
         sx={{ position: 'absolute',
               right: 8,
               top: 8,

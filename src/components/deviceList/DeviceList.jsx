@@ -100,8 +100,8 @@ const DeviceList = ({onDeviceAdded}) => {
           <>
             <Grid container spacing={4} mt={2}>
               {devices.map((device) => (
-                <Grid size={{xs: 122, sm: 6, md: 4}} key={device._id}>
-                  <Card>
+                <Grid size={{xs: 8, sm: 6, md: 4}} key={device._id}>
+                  <Card sx={{ height: '100%', minHeight: '100px', display: 'flex', flexDirection: 'column' }}>
                     <CardContent>
                       <Typography component="div">
                         <Tooltip title={t('device.open_device')} >

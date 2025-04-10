@@ -41,11 +41,29 @@ const LoginForm = ({ open, onClose, onLoginSuccess}) => {
       if (onLoginSuccess) {
         onLoginSuccess({ id: response.userId, token: response.token });
       }
-      onClose();
+      handleClose();
     } catch (error) {
       localStorageService.clear();
       console.error(t('errors.form.login_error', {error: error.message}));
       setMessage(t('errors.form.login_error', {error: error.message}));
+    }
+  };
+
+  const handleClose = () => {
+    setLoginForm({ email: '', password: '' });
+    setMessage('');
+    onClose();
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit(event);
+    }
+  };
+
+  const handleEscapeKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      handleClose();
     }
   };
 
@@ -73,6 +91,7 @@ const LoginForm = ({ open, onClose, onLoginSuccess}) => {
                       name="password"
                       value={loginForm.password}
                       onChange={handleChange}
+                      onKeyDown={handleKeyPress}
                     />
                     <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
                       {message}
@@ -89,10 +108,10 @@ const LoginForm = ({ open, onClose, onLoginSuccess}) => {
   const spinner = loading ? <Spinner /> : null;
 
   return (
-    <Dialog open={open} onClose={onClose} disableRestoreFocus={true}>
+    <Dialog open={open} onClose={onClose} disableRestoreFocus={true} onKeyDown={handleEscapeKeyDown}>
       <IconButton
         aria-label="close"
-        onClick={onClose}
+        onClick={handleClose}
         sx={{ position: 'absolute',
               right: 8,
               top: 8,
