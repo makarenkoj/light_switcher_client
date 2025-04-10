@@ -101,7 +101,8 @@
     "secret_key": "Секретний ключ:",
     "not_found": "Пристрої не знайдено",
     "your_devices": "Ваші пристрої",
-    "open_device": "Відкрити пристрій"
+    "open_device": "Відкрити пристрій",
+    "dont_have_devices": "У вас ще немає пристроїв."
   },
   "form":{
     "name": "Назва пристрою",
@@ -189,6 +190,10 @@
     "password": "Це поле має містити принаймні 6 символів",
     "password_confirmation": "Це поле має відповідати паролю",
     "unique": "Це поле має бути унікальним",
-    "confirmed": "Це поле має бути підтверджено"
+    "confirmed": "Це поле має бути підтверджено",
+    "context": "useAuth має використовуватися в AuthProvider",
+    "token_expired": "Термін дії токена минув",
+    "invalid_token": "AuthProvider: недійсний формат токена. {{error}}",
+    "token_found": "AuthProvider: токен не знайдено."
     }
 }

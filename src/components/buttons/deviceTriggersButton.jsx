@@ -191,23 +191,20 @@ const DeviceTriggersButton = ({ deviceId, triggersCount, deviceName }) => {
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
         {selectedTrigger && [
-          <>
-            <MenuItem onClick={() => { 
-              handleMenuClose();
-              setTriggers((prev) => 
-                prev.map((t) => (t._id === selectedTrigger._id ? { ...t, status: !t.status } : t))
-              );
-            }}>            
-              <DisconnectTriggerButton trigger={selectedTrigger} deviceId={deviceId} onTriggerDisconnected={handleTriggerDisconnected} />
-            </MenuItem>
-            <MenuItem >
-              <UpdateTriggerButton trigger={selectedTrigger} onTriggerUpdated={() => {fetchTriggers(0, rowsPerPage, true); handleMenuClose();}} />
-            </MenuItem>
-            <MenuItem >
-              <DeleteTriggerButton trigger={selectedTrigger} onTriggerDeleted={() => {fetchTriggers(0, rowsPerPage, true); handleMenuClose();}} />
-            </MenuItem>
-          </>
-        ]}
+                              <MenuItem key='disconnect' onClick={() => { handleMenuClose();
+                                                                          setTriggers((prev) => 
+                                                                            prev.map((t) => (t._id === selectedTrigger._id ? { ...t, status: !t.status } : t))
+                                                                          );
+                                                                        }}>
+                                <DisconnectTriggerButton trigger={selectedTrigger} deviceId={deviceId} onTriggerDisconnected={handleTriggerDisconnected} />
+                              </MenuItem>,
+                              <MenuItem key='update'>
+                                <UpdateTriggerButton trigger={selectedTrigger} onTriggerUpdated={() => {fetchTriggers(0, rowsPerPage, true); handleMenuClose();}} />
+                              </MenuItem>,
+                              <MenuItem  key='delete'>
+                                <DeleteTriggerButton trigger={selectedTrigger} onTriggerDeleted={() => {fetchTriggers(0, rowsPerPage, true); handleMenuClose();}} />
+                              </MenuItem>
+                            ]}
       </Menu>
     </>
   );
