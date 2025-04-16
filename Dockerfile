@@ -1,9 +1,9 @@
 FROM node:lts as builder
 
 WORKDIR /app
-COPY ./client/package*.json ./
-RUN npm install
-COPY ./client ./
+COPY package*.json ./
+RUN npm install # Або залиште install, якщо ci не працює
+COPY . .
 RUN npm run build
 
 FROM nginx:alpine
