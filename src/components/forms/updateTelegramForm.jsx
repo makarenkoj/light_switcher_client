@@ -69,7 +69,7 @@ const UpdateTelegramForm = ({ telegramData, open, onClose, onUpdate }) => {
           <TextField label={t('api_hash')} name="apiHash" value={formData.apiHash} onChange={handleChange} placeholder={telegramData.apiHash}/>
           <TextField label={t('channel')} name="channel" value={formData.channel} onChange={handleChange} placeholder={telegramData.channel}/>
           <Button type="submit" variant="contained" color="primary" disabled={loading}>
-            {loading ? 'Updating...' : 'Update'}
+            {loading ? t('updating') : t('update')}
           </Button>
         </Box>
       </DialogContent>

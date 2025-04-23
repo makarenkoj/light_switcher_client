@@ -13,7 +13,6 @@ import {
   Typography,
   Select,
   MenuItem,
-  Stack,
   IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -32,38 +31,12 @@ const Card = styled(MuiCard)(({ theme }) => ({
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: 'auto',
-  [theme.breakpoints.up('sm')]: {
-    maxWidth: '450px',
-  },
   boxShadow:
     'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
   ...theme.applyStyles('dark', {
     boxShadow:
       'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
   }),
-}));
-
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
 }));
 
 const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
@@ -84,6 +57,20 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleOnClose = () => {
+    onClose();
+    setMessage('');
+    setNameError(false);
+    setNameErrorMessage('');
+    setTriggerOnError(false);
+    setTriggerOnErrorMessage('');
+    setTriggerOffError(false);
+    setTriggerOffErrorMessage('');
+    setChanelNameError(false);
+    setChanelNameErrorMessage('');
+    setForm({ name: '', triggerOn: '', triggerOff: '', chanelName: '', status: false });
   };
 
   const handleSubmit = async (event) => {
@@ -156,137 +143,148 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
   };
 
   const content = <>
-                    <SignInContainer direction="column" justifyContent="space-between">
-                      <Card variant="outlined">
-                        <SitemarkIcon />
-                        <Typography
-                          component="h1"
-                          variant="h4"
-                          sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+                    <Card variant="outlined">
+                      <SitemarkIcon />
+                      <Typography
+                        component="h1"
+                        variant="h4"
+                        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+                      >
+                        {t('trigger.new_trigger')}
+                      </Typography>
+                      <Box
+                        component="form"
+                        onSubmit={handleSubmit}
+                        noValidate
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          width: '100%',
+                          gap: 2,
+                        }}
                         >
-                          {t('trigger.new_trigger')}
-                        </Typography>
-                        <Box
-                          component="form"
-                          onSubmit={handleSubmit}
-                          noValidate
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: '100%',
-                            gap: 2,
-                          }}
-                        >
-                          <FormControl>
-                            <FormLabel htmlFor="name">{t('form.trigger_name')}</FormLabel>
-                            <TextField
-                              error={nameError}
-                              helperText={nameErrorMessage}
-                              id="name"
-                              type="name"
-                              name="name"
-                              placeholder={t('form.trigger_name_placeholder')}
-                              autoComplete="name"
-                              autoFocus
-                              required
-                              fullWidth
-                              variant="outlined"
-                              onChange={handleChange}
-                              color={setNameError ? 'error' : 'primary'}
-                            />
-                          </FormControl>
-                          <FormControl>
-                            <FormLabel htmlFor="chanelName">{t('form.channel_name')}</FormLabel>
-                            <TextField
-                              error={chanelNameError}
-                              helperText={chanelNameErrorMessage}
-                              name="chanelName"
-                              placeholder={t('form.channel_name_placeholder')}
-                              type="chanelName"
-                              id="chanelName"
-                              autoComplete="current-chanelName"
-                              autoFocus
-                              required
-                              fullWidth
-                              variant="outlined"
-                              onChange={handleChange}
-                              color={chanelNameError ? 'error' : 'primary'}
-                            />
-                          </FormControl>
-                          <FormControl>
-                            <FormLabel htmlFor="triggerOn">{t('form.trigger_on')}</FormLabel>
-                            <TextField
-                              error={triggerOnError}
-                              helperText={triggerOnErrorMessage}
-                              name="triggerOn"
-                              placeholder={t('form.trigger_on_placeholder')}
-                              type="triggerOn"
-                              id="triggerOn"
-                              autoFocus
-                              required
-                              fullWidth
-                              variant="outlined"
-                              onChange={handleChange}
-                              color={triggerOnError ? 'error' : 'primary'}
-                            />
-                          </FormControl>
-                          <FormControl>
-                            <FormLabel htmlFor="triggerOff">{t('form.trigger_off')}</FormLabel>
-                            <TextField
-                              error={triggerOffError}
-                              helperText={triggerOffErrorMessage}
-                              name="triggerOff"
-                              placeholder={t('form.trigger_off_placeholder')}
-                              type="triggerOff"
-                              id="triggerOff"
-                              autoComplete="current-triggerOff"
-                              autoFocus
-                              required
-                              fullWidth
-                              variant="outlined"
-                              onChange={handleChange}
-                              color={triggerOffError ? 'error' : 'primary'}
-                            />
-                          </FormControl>
-                          <FormControl>
-                            <FormLabel htmlFor="chanelName">{t('status')}</FormLabel>
-                            <Select
-                              name="status"
-                              placeholder="true"
-                              type="status"
-                              id="status"
-                              value={form.status}
-                              onChange={handleChange}
-                            >
-                              <MenuItem value="false">{t('off')}</MenuItem>
-                              <MenuItem value="true">{t('on')}</MenuItem>
-                            </Select>
-                          </FormControl>
-                          <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
-                            {message}
-                          </DialogContentText>
-                          <Button
-                            type="submit"
+                        <FormControl>
+                          <FormLabel htmlFor="name">{t('form.trigger_name')}</FormLabel>
+                          <TextField
+                            error={nameError}
+                            helperText={nameErrorMessage}
+                            id="name"
+                            type="name"
+                            name="name"
+                            placeholder={t('form.trigger_name_placeholder')}
+                            autoComplete="name"
+                            autoFocus
+                            required
                             fullWidth
-                            variant="contained"
-                            onClick={validateInputs}
+                            variant="outlined"
+                            onChange={handleChange}
+                            color={setNameError ? 'error' : 'primary'}
+                            />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel htmlFor="chanelName">{t('form.channel_name')}</FormLabel>
+                          <TextField
+                            error={chanelNameError}
+                            helperText={chanelNameErrorMessage}
+                            name="chanelName"
+                            placeholder={t('form.channel_name_placeholder')}
+                            type="chanelName"
+                            id="chanelName"
+                            autoComplete="current-chanelName"
+                            autoFocus
+                            required
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            color={chanelNameError ? 'error' : 'primary'}
+                            />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel htmlFor="triggerOn">{t('form.trigger_on')}</FormLabel>
+                          <TextField
+                            error={triggerOnError}
+                            helperText={triggerOnErrorMessage}
+                            name="triggerOn"
+                            placeholder={t('form.trigger_on_placeholder')}
+                            type="triggerOn"
+                            id="triggerOn"
+                            autoFocus
+                            required
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            color={triggerOnError ? 'error' : 'primary'}
+                            />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel htmlFor="triggerOff">{t('form.trigger_off')}</FormLabel>
+                          <TextField
+                            error={triggerOffError}
+                            helperText={triggerOffErrorMessage}
+                            name="triggerOff"
+                            placeholder={t('form.trigger_off_placeholder')}
+                            type="triggerOff"
+                            id="triggerOff"
+                            autoComplete="current-triggerOff"
+                            autoFocus
+                            required
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            color={triggerOffError ? 'error' : 'primary'}
+                            />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel htmlFor="chanelName">{t('status')}</FormLabel>
+                          <Select
+                            name="status"
+                            placeholder="true"
+                            type="status"
+                            id="status"
+                            value={form.status}
+                            onChange={handleChange}
+                            >
+                            <MenuItem value="false">{t('off')}</MenuItem>
+                            <MenuItem value="true">{t('on')}</MenuItem>
+                          </Select>
+                        </FormControl>
+                        <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
+                          {message}
+                        </DialogContentText>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          onClick={validateInputs}
                           >
-                            {t('trigger.create_trigger')}
-                          </Button>
-                        </Box>
-                      </Card>
-                    </SignInContainer>
+                          {t('trigger.create_trigger')}
+                        </Button>
+                      </Box>
+                    </Card>
                   </>
-
 
   const errorMessage = error ? <ErrorMessage /> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog open={open} 
+            onClose={onClose} 
+            fullWidth maxWidth="sm" 
+            slotProps={{
+              paper: {
+                sx: {
+                  m: 0,
+                  height: 'auto',
+                  maxHeight: '95dvh',
+                  borderRadius: 2,
+                  width: '100%',
+                  maxWidth: 400,
+                },
+              },
+            }}>
       <IconButton
           aria-label="close"
-          onClick={() => onClose(onClose)}
+          onClick={handleOnClose}
           sx={{
             position: 'absolute',
             right: 8,

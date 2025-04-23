@@ -31,6 +31,8 @@
   "code_confirmation": "Code confirmation",
   "code_confirmation_text": "Enter the code you received in the telegram",
   "create": "Create",
+  "update": "Update",
+  "updating": "Updating...",
   "tab": {
     "general": "General",
     "user_info": "User info",

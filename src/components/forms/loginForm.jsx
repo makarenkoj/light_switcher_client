@@ -12,14 +12,22 @@ import {
   TextField,
   Button,
   IconButton,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const LoginForm = ({ open, onClose, onLoginSuccess}) => {
   const { loginRequest, loading, error } = useRegistrationService();
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const localStorageService = new LocalStorageService();
   const { t } = useTranslation();
 
@@ -78,21 +86,35 @@ const LoginForm = ({ open, onClose, onLoginSuccess}) => {
                       margin="dense"
                       label={t('form.email')}
                       type="email"
+                      placeholder={'mail@email.com'}
                       fullWidth
                       name="email"
                       value={loginForm.email}
                       onChange={handleChange}
                     />
-                    <TextField
-                      margin="dense"
-                      label={t('form.password')}
-                      type="password"
-                      fullWidth
-                      name="password"
-                      value={loginForm.password}
-                      onChange={handleChange}
-                      onKeyDown={handleKeyPress}
-                    />
+                    <FormControl fullWidth margin="dense" variant="outlined">
+                      <InputLabel htmlFor="password">{t('password')}</InputLabel>
+                      <OutlinedInput
+                        id="password"
+                        name="password"
+                        type={showPassword ? 'text' : 'password'}
+                        value={loginForm.password}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyPress}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={togglePasswordVisibility}
+                              edge="end"
+                              aria-label={showPassword ? t('hide_password') : t('show_password')}
+                              >
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                          }
+                        label={t('password')}
+                        />
+                      </FormControl>
                     <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
                       {message}
                     </DialogContentText>

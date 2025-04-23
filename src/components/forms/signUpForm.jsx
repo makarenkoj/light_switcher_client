@@ -12,14 +12,22 @@ import {
   TextField,
   Button,
   IconButton,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const SignUpForm = ({ open, onClose, onSignUpSuccess }) => {
   const { registrationRequest, loading, error } = useRegistrationService();
   const [form, setForm] = useState({ email: '', password: '', phoneNumber: '' });
   const [message, setMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const localStorageService = new LocalStorageService();
   const { t } = useTranslation();
 
@@ -77,6 +85,7 @@ const SignUpForm = ({ open, onClose, onSignUpSuccess }) => {
                       margin="dense"
                       label={t('email')}
                       type="email"
+                      placeholder={'mail@email.com'}
                       fullWidth
                       name="email"
                       value={form.email}
@@ -84,23 +93,38 @@ const SignUpForm = ({ open, onClose, onSignUpSuccess }) => {
                     />
                     <TextField
                       margin="dense"
-                      label={t('password')}
-                      type="password"
-                      fullWidth
-                      name="password"
-                      value={form.password}
-                      onChange={handleChange}
-                    />
-                    <TextField
-                      margin="dense"
                       label={t('phone_number')}
                       type="tel"
+                      placeholder={'+380XX-XXX-XX-XX'}
                       fullWidth
                       name="phoneNumber"
                       value={form.phoneNumber}
                       onChange={handleChange}
                       onKeyDown={handleKeyPress}
                     />
+                    <FormControl fullWidth margin="dense" variant="outlined">
+                      <InputLabel htmlFor="password">{t('password')}</InputLabel>
+                      <OutlinedInput
+                        id="password"
+                        name="password"
+                        type={showPassword ? 'text' : 'password'}
+                        value={form.password}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyPress}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={togglePasswordVisibility}
+                              edge="end"
+                              aria-label={showPassword ? t('hide_password') : t('show_password')}
+                            >
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        label={t('password')}
+                      />
+                    </FormControl>
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleSubmit}>{t('register')}</Button>
