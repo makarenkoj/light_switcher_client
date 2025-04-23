@@ -10,7 +10,6 @@ import {
   FormLabel,
   FormControl,
   Typography,
-  // Stack,
   IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,9 +29,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: 'auto',
-  // [theme.breakpoints.up('sm')]: {
-  //   maxWidth: '450px',
-  // },
   boxShadow:
     'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
   ...theme.applyStyles('dark', {
@@ -40,29 +36,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
       'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
   }),
 }));
-
-// const SignInContainer = styled(Stack)(({ theme }) => ({
-//   height: 'calc((1 - var(--template-frame-height, 0)) * 75dvh)',
-//   minHeight: '100%',
-//   padding: theme.spacing(2),
-//   [theme.breakpoints.up('sm')]: {
-//     padding: theme.spacing(4),
-//   },
-//   '&::before': {
-//     content: '""',
-//     display: 'block',
-//     position: 'absolute',
-//     zIndex: -1,
-//     inset: 0,
-//     backgroundImage:
-//       'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-//     backgroundRepeat: 'no-repeat',
-//     ...theme.applyStyles('dark', {
-//       backgroundImage:
-//         'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-//     }),
-//   },
-// }));
 
 const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
   const { createDeviceRequest, error, loading } = useDeviceService();
@@ -168,119 +141,131 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
   };
 
   const content = <>
-                    {/* <SignInContainer direction="column" justifyContent="space-between"> */}
-                      <Card variant="outlined">
-                        <SitemarkIcon />
-                        <Typography
-                          component="h1"
-                          variant="h4"
-                          sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+                    <Card variant="outlined">
+                      <SitemarkIcon />
+                      <Typography
+                        component="h1"
+                        variant="h4"
+                        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
                         >
-                          {t('device.add_device')}
-                        </Typography>
-                        <Box
-                          component="form"
-                          onSubmit={handleSubmit}
-                          noValidate
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: '100%',
-                            gap: 2,
+                        {t('device.add_device')}
+                      </Typography>
+                      <Box
+                        component="form"
+                        onSubmit={handleSubmit}
+                        noValidate
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          width: '100%',
+                          gap: 2,
                           }}
                         >
-                          <FormControl>
-                            <FormLabel htmlFor="name">{t('form.name')}</FormLabel>
-                            <TextField
-                              error={nameError}
-                              helperText={nameErrorMessage}
-                              id="name"
-                              type="name"
-                              name="name"
-                              placeholder="your@name.com"
-                              autoComplete="name"
-                              autoFocus
-                              required
-                              fullWidth
-                              variant="outlined"
-                              onChange={handleChange}
-                              color={setNameError ? 'error' : 'primary'}
-                            />
-                          </FormControl>
-                          <FormControl>
-                            <FormLabel htmlFor="deviceId">{t('form.device_id')}</FormLabel>
-                            <TextField
-                              error={deviceIdError}
-                              helperText={deviceIdErrorMessage}
-                              name="deviceId"
-                              placeholder="0w12z••••••"
-                              type="deviceId"
-                              id="deviceId"
-                              autoFocus
-                              required
-                              fullWidth
-                              variant="outlined"
-                              onChange={handleChange}
-                              color={deviceIdError ? 'error' : 'primary'}
-                            />
-                          </FormControl>
-                          <FormControl>
-                            <FormLabel htmlFor="accessId">{t('form.access_id')}</FormLabel>
-                            <TextField
-                              error={accessIdError}
-                              helperText={accessIdErrorMessage}
-                              name="accessId"
-                              placeholder="mds8nr••••••"
-                              type="accessId"
-                              id="accessId"
-                              autoComplete="current-accessId"
-                              autoFocus
-                              required
-                              fullWidth
-                              variant="outlined"
-                              onChange={handleChange}
-                              color={accessIdError ? 'error' : 'primary'}
-                            />
-                          </FormControl>
-                          <FormControl>
-                            <FormLabel htmlFor="secretKey">{t('form.secret_key')}</FormLabel>
-                            <TextField
-                              error={secretKeyError}
-                              helperText={secretKeyErrorMessage}
-                              name="secretKey"
-                              placeholder="d94kmn••••••"
-                              type="secretKey"
-                              id="secretKey"
-                              autoComplete="current-secretKey"
-                              autoFocus
-                              required
-                              fullWidth
-                              variant="outlined"
-                              onChange={handleChange}
-                              color={secretKeyError ? 'error' : 'primary'}
-                            />
-                          </FormControl>
-                          <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
-                            {message}
-                          </DialogContentText>
-                          <Button
-                            type="submit"
+                        <FormControl>
+                          <FormLabel htmlFor="name">{t('form.name')}</FormLabel>
+                          <TextField
+                            error={nameError}
+                            helperText={nameErrorMessage}
+                            id="name"
+                            type="name"
+                            name="name"
+                            placeholder="your@name.com"
+                            autoComplete="name"
+                            autoFocus
+                            required
                             fullWidth
-                            variant="contained"
-                            onClick={validateInputs}
+                            variant="outlined"
+                            onChange={handleChange}
+                            color={setNameError ? 'error' : 'primary'}
+                            />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel htmlFor="deviceId">{t('form.device_id')}</FormLabel>
+                          <TextField
+                            error={deviceIdError}
+                            helperText={deviceIdErrorMessage}
+                            name="deviceId"
+                            placeholder="0w12z••••••"
+                            type="deviceId"
+                            id="deviceId"
+                            autoFocus
+                            required
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            color={deviceIdError ? 'error' : 'primary'}
+                            />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel htmlFor="accessId">{t('form.access_id')}</FormLabel>
+                          <TextField
+                            error={accessIdError}
+                            helperText={accessIdErrorMessage}
+                            name="accessId"
+                            placeholder="mds8nr••••••"
+                            type="accessId"
+                            id="accessId"
+                            autoComplete="current-accessId"
+                            autoFocus
+                            required
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            color={accessIdError ? 'error' : 'primary'}
+                            />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel htmlFor="secretKey">{t('form.secret_key')}</FormLabel>
+                          <TextField
+                            error={secretKeyError}
+                            helperText={secretKeyErrorMessage}
+                            name="secretKey"
+                            placeholder="d94kmn••••••"
+                            type="secretKey"
+                            id="secretKey"
+                            autoComplete="current-secretKey"
+                            autoFocus
+                            required
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            color={secretKeyError ? 'error' : 'primary'}
+                            />
+                        </FormControl>
+                        <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
+                          {message}
+                        </DialogContentText>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          onClick={validateInputs}
                           >
-                            Add Device
-                          </Button>
-                        </Box>
-                      </Card>
-                    {/* </SignInContainer> */}
+                          Add Device
+                        </Button>
+                      </Box>
+                    </Card>
                   </>
 
   const errorMessage = error ? <ErrorMessage /> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog open={open}
+            onClose={onClose}
+            fullWidth maxWidth="sm"
+            slotProps={{
+              paper: {
+                sx: {
+                  m: 0,
+                  height: 'auto',
+                  maxHeight: '95dvh',
+                  borderRadius: 2,
+                  width: '100%',
+                  maxWidth: 400,
+                },
+              },
+            }}>
       <IconButton
           aria-label="close"
           onClick={handleOnClose}
