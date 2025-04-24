@@ -126,17 +126,15 @@ const SignUpForm = ({ open, onClose, onSignUpSuccess }) => {
                       />
                     </FormControl>
                   </DialogContent>
+                  <DialogContentText style={{ color: 'red', marginTop: '10px', padding: '0 24px' }}>
+                    {message}
+                  </DialogContentText>
                   <DialogActions>
                     <Button onClick={handleSubmit}>{t('register')}</Button>
                   </DialogActions>
-                  {message && (
-                    <DialogContentText style={{ color: message.includes('failed') ? 'red' : 'green', marginTop: '10px' }}>
-                      {message}
-                    </DialogContentText>
-                  )}
                 </>;  
 
-  const errorMessage = error ? <ErrorMessage /> : null;
+  const errorMessage = error ? <ErrorMessage message={error}/> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (

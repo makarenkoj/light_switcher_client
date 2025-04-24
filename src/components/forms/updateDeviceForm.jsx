@@ -80,6 +80,11 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
       return;
     };
 
+    if (!form.name && !form.deviceId && !form.accessId && !form.secretKey) {
+      handleOnClose();
+      return;
+    };
+
     const formName = form.name ? form.name : '';
     const formDeviceId = form.deviceId ? form.deviceId : '';
     const formAccessId = form.accessId ? form.accessId : '';
@@ -90,9 +95,9 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
 
       setMessage(response.message);
       onDeviceUpdated();
-      onClose();
+      handleOnClose();
     } catch (error) {
-      setMessage(t('errors.error', {error: error.message}));
+      // setMessage(t('errors.error', {error: error.message}));
       console.log(message);
     }
   };
@@ -236,7 +241,7 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
                             color={secretKeyError ? 'error' : 'primary'}
                             />
                         </FormControl>
-                        <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
+                        <DialogContentText style={{ color: 'red', marginTop: '10px', padding: '0 24px' }}>
                           {message}
                         </DialogContentText>
                         <Button
@@ -251,7 +256,7 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
                     </Card>
                   </>
 
-  const errorMessage = error ? <ErrorMessage /> : null;
+  const errorMessage = error ? <ErrorMessage message={error} /> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (
