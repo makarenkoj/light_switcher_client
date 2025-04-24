@@ -88,10 +88,10 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
       setMessage(response.message);
       onTriggerAdded();
-      onClose();
+      handleOnClose();
     } catch (error) {
       console.log(t('errors.error', {error: error.message}));
-      setMessage(error.message);
+      // setMessage(error.message);
     }
   };
 

@@ -83,8 +83,20 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
       return;
     };
 
+    if (!form.name && !form.triggerOn && !form.triggerOff && !form.chanelName) {
+      handleOnClose();
+      return;
+    };
+
     try{
-      const response = await updateTriggerRequest(trigger._id, token, form.status, form.name, form.triggerOn, form.triggerOff, form.chanelName)
+      const response = await updateTriggerRequest(trigger._id,
+                                                  token,
+                                                  form.status,
+                                                  form.name ? form.name : undefined,
+                                                  form.triggerOn ? form.triggerOn : undefined,
+                                                  form.triggerOff ? form.triggerOff : undefined,
+                                                  form.chanelName ? form.chanelName : undefined
+                                                );
       setMessage(response.message);
       onTriggerUpdated();
       onClose();
@@ -111,7 +123,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
       setNameErrorMessage('');
     }
 
-    if (triggerOn.value.length && triggerOn.value.length > 150) {
+    if (triggerOn.value.length && triggerOn.value.length > 51) {
       setTriggerOnError(true);
       setTriggerOnErrorMessage(t('errors.form.trigger_on'));
       isValid = false;
@@ -120,7 +132,7 @@ const UpdateTriggerForm = ({ trigger, open, onClose, onTriggerUpdated }) => {
       setTriggerOnErrorMessage('');
     }
 
-    if (triggerOff.value.length && triggerOff.value.length > 150) {
+    if (triggerOff.value.length && triggerOff.value.length > 51) {
       setTriggerOffError(true);
       setTriggerOffErrorMessage(t('errors.form.trigger_off'));
       isValid = false;
