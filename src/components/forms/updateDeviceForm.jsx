@@ -236,7 +236,7 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
                             color={secretKeyError ? 'error' : 'primary'}
                             />
                         </FormControl>
-                        <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
+                        <DialogContentText style={{ color: 'red', marginTop: '10px', padding: '0 24px' }}>
                           {message}
                         </DialogContentText>
                         <Button
@@ -251,7 +251,7 @@ const UpdateDeviceForm = ({ device, open, onClose, onDeviceUpdated }) => {
                     </Card>
                   </>
 
-  const errorMessage = error ? <ErrorMessage /> : null;
+  const errorMessage = error ? <ErrorMessage message={error}/> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (

@@ -61,7 +61,7 @@ const TelegramForm = ({ open, onClose }) => {
                       value={telegramForm.code}
                       onChange={handleChange}
                     />
-                    <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
+                    <DialogContentText style={{ color: 'red', marginTop: '10px', padding: '0 24px' }}>
                       {message}
                     </DialogContentText>
                   </DialogContent>
@@ -73,7 +73,7 @@ const TelegramForm = ({ open, onClose }) => {
                   </DialogActions>
                   </>;  
 
-  const errorMessage = error ? <ErrorMessage /> : null;
+  const errorMessage = error ? <ErrorMessage message={error}/> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (
