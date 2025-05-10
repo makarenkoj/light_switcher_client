@@ -81,7 +81,7 @@ const UserInfo = ({handleUserDeleted}) => {
                     )}
 
                     {loading && <Spinner />}
-                    {error && <ErrorMessage />}
+                    {error && <ErrorMessage message={error}/>}
                   </Box>
 
   const tabAdmin = <Box sx={{ width: '100%' }}>
@@ -124,7 +124,7 @@ const UserInfo = ({handleUserDeleted}) => {
                       )}
 
                       {loading && <Spinner />}
-                      {error && <ErrorMessage />}
+                      {error && <ErrorMessage message={error}/>}
                     </Box>
 
   return (

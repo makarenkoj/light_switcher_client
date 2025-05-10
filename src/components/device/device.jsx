@@ -76,7 +76,7 @@ const Device = ({ open, onClose, deviceId, onDeviceUpdated, onDeviceDeleted }) =
         >
           <CloseIcon />
         </IconButton>
-      {error && <ErrorMessage />}
+      {error && <ErrorMessage message={error}/>}
       {loading && <Spinner />}
       {device ? (
         <Paper elevation={4} sx={{ padding: 3, borderRadius: 2 }}>

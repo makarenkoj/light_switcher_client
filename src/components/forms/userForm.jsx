@@ -137,6 +137,9 @@ const UserForm = ({ open, onClose, onUserDeleted, userData }) => {
                     </DialogContent>
 
                     <DialogActions>
+                      <DialogContentText style={{ color: 'red', marginTop: '10px', padding: '0 24px' }}>
+                        {message}
+                      </DialogContentText>
                       <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-start' }} title={error || t('form.delete_account')}>
                         <IconButton aria-label="delete" size="large">
                           <DeleteIcon fontSize="inherit" onClick={handleDelete} />
@@ -146,15 +149,9 @@ const UserForm = ({ open, onClose, onUserDeleted, userData }) => {
                       <Button onClick={handleClose}>{t('cancel')}</Button>
                       <Button onClick={handleSubmit}>{t('form.account_update')}</Button>
                     </DialogActions>
-
-                    {message && (
-                      <DialogContentText style={{ color: message.includes('failed') ? 'red' : 'green', marginTop: '10px' }}>
-                        {message}
-                      </DialogContentText>
-                    )}
                   </>;
 
-  const errorMessage = error ? <ErrorMessage /> : null;
+  const errorMessage = error ? <ErrorMessage message={error}/> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (

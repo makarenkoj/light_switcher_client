@@ -232,7 +232,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
                             color={secretKeyError ? 'error' : 'primary'}
                             />
                         </FormControl>
-                        <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
+                        <DialogContentText style={{ color: 'red', marginTop: '10px', padding: '0 24px' }}>
                           {message}
                         </DialogContentText>
                         <Button
@@ -247,7 +247,7 @@ const CreateDeviceForm = ({ open, onClose, onDeviceAdded }) => {
                     </Card>
                   </>
 
-  const errorMessage = error ? <ErrorMessage /> : null;
+  const errorMessage = error ? <ErrorMessage message={error}/> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (

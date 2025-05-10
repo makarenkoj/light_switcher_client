@@ -106,7 +106,7 @@ const CreateDeviceTriggerForm = ({ open, onClose, deviceId, onTriggerAdded }) =>
       <DialogTitle>{t('trigger.add_to_device')}</DialogTitle>
       <DialogContent>
         {loading && <Spinner />}
-        {error && <ErrorMessage />}
+        {error && <ErrorMessage message={error}/>}
         <FormControl fullWidth sx={{ mt: 2 }}>
           <InputLabel shrink sx={{ transform: 'translateY(-20px)' }}>{t('form.choose_trigger')}</InputLabel>
           <Select

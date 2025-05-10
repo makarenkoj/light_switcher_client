@@ -76,7 +76,7 @@ const CreateTelegramDataForm = ({ open, onClose, onSubmit }) => {
       <DialogTitle>{t('telegram.create_telegram_credentials')}</DialogTitle>
       <DialogContent>
         {error && <ErrorMessage message={error} />}
-        <DialogContentText style={{ color: 'red', marginTop: '10px' }}>
+        <DialogContentText style={{ color: 'red', marginTop: '10px', padding: '0 24px' }}>
           {message}
         </DialogContentText>
         <TextField

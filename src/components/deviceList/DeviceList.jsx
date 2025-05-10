@@ -80,7 +80,7 @@ const DeviceList = ({onDeviceAdded}) => {
     );
   };
 
-  const errorMessage = error ? <ErrorMessage /> : null;
+  const errorMessage = error ? <ErrorMessage message={error}/> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (
