@@ -146,7 +146,8 @@
     "update_account": "Оновити обліковий запис",
     "update_account_title": "Будь ласка, заповніть форму нижче, щоб оновити обліковий запис.",
     "delete_account": "Видалити ваш акаунт?",
-    "account_update": "Оновити"
+    "account_update": "Оновити",
+    "create_indicator_form": "Створити індикатор"
   },
   "indicator": {
     "alarmNotSet": "Сповіщення тривоги не налаштоване",

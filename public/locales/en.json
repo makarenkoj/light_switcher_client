@@ -146,7 +146,8 @@
     "update_account": "Update Account",
     "update_account_title": "Please fill out the form below to a update account.",
     "delete_account": "Delete Your Account?",
-    "account_update": "Update"
+    "account_update": "Update",
+    "create_indicator_form": "Create indicator"
   },
   "indicator": {
     "alarmNotSet": "Alarm not set",

@@ -33,7 +33,7 @@ const useIndicatorService = () => {
 		return res;
 	};
 
-	const updateIndicatorData = async (token, triggerId, status) => {
+	const updateIndicatorData = async (id, token, triggerId, status) => {
 		const res = await request(`${_baseUrl}/api/indicators/${id}`,
 															'PUT',
 															{ triggerId, status },
