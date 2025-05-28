@@ -5,6 +5,8 @@ import LogoutButton from '../buttons/logoutButton';
 import UserInfo from '../user/user';
 import DeviceList from '../deviceList/DeviceList';
 import Triggers from '../triggers/triggers';
+import Indicators from '../indicators/indicators';
+import StatusIndicators from '../indicators/statusIndicators';
 import { useTranslation } from 'react-i18next';
 import '../../i18n';
 
@@ -22,7 +24,7 @@ import {
   Box,
   Tooltip,
 } from '@mui/material';
-import { Brightness4, Brightness7, Warning, Home } from '@mui/icons-material';
+
 import { useTheme } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import io from "socket.io-client";
@@ -149,29 +151,13 @@ const App = () => {
 
         <Container sx={{ mt: 4, minHeight: 'calc(100vh - 200px)' }} >
           {isLoggedIn ? (
-            <>
-            <Box mt={4} display="flex" justifyContent="space-around">
-              <Typography variant="body1" display="flex" alignItems="center">
-                <Home sx={{ mr: 1 }} /> {t('electricity')}: {Math.random() > 0.5 ? 'Available' : 'Not Available'}
-              </Typography>
-              <Typography variant="body1" display="flex" alignItems="center">
-                <Warning sx={{ mr: 1, color: 'red' }} /> {t('alarm')}: {Math.random() > 0.5 ? 'Active' : 'Inactive'}
-              </Typography>
-              <Typography variant="body1" display="flex" alignItems="center">
-                {new Date().getHours() >= 6 && new Date().getHours() <= 18 ? (
-                  <Brightness7 sx={{ mr: 1 }} />
-                ) : (
-                  <Brightness4 sx={{ mr: 1 }} />
-                )}
-                {new Date().getHours() >= 6 && new Date().getHours() <= 18
-                  ? t('daytime')
-                  : t('nighttime')}
-              </Typography>
-            </Box>
+            <>            
+            <StatusIndicators />
 
             <Tabs value={tabIndex} onChange={handleTabChange} centered>
               <Tab label={t('tab.general')} />
               <Tab label={t('tab.user_info')} />
+              <Tab label={t('tab.indicators')} />
             </Tabs>
 
             {tabIndex === 0 && (
@@ -185,7 +171,13 @@ const App = () => {
                 <UserInfo handleUserDeleted={handleUserDeleted}/>
               </Box>
             )}
-            </>) : null}
+            {tabIndex === 2 && (
+              <Box mt={4} p={3} textAlign="center" bgcolor="grey.100"  borderRadius={2}>
+                <Indicators />
+              </Box>
+            )}
+            </>
+          ) : null}
 
         </Container>
         {/* Footer */}
