@@ -151,7 +151,8 @@
   },
   "indicator": {
     "alarmNotSet": "Сповіщення тривоги не налаштоване",
-    "electricityNotSet": "Сповіщення не налаштоване"
+    "electricityNotSet": "Сповіщення не налаштоване",
+    "update": "Оновити індикатор"
   },
   "errors": {
     "error": "Помилка: {{error}}",

@@ -151,7 +151,8 @@
   },
   "indicator": {
     "alarmNotSet": "Alarm not set",
-    "electricityNotSet": "Electricity not set"
+    "electricityNotSet": "Electricity not set",
+    "update": "Update indicator"
   },
   "errors": {
     "error": "Error: {{error}}",
