@@ -20,7 +20,10 @@ import { useTranslation } from 'react-i18next';
 import useUserService from '../../services/userService';
 import useIndicatorService from '../../services/indicatorService';
 
-const UpdateIndicatorForm = ({ open, onClose, indicator, onIndicatorUpdated, onMessage }) => {
+
+const CreateIndicatorForm = ({ open, onClose, onIndicatorCreated, onMessage, initialType }) => {
+  const [type, setType] = useState(initialType || 'alarm');
+  // const [type, setType] = useState('alarm');
   const [selectedTrigger, setSelectedTrigger] = useState('');
   const [triggers, setTriggers] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -29,35 +32,28 @@ const UpdateIndicatorForm = ({ open, onClose, indicator, onIndicatorUpdated, onM
   const observer = useRef(null);
 
   const { getUserTriggersRequest, loading } = useUserService();
+  const { createIndicatorData } = useIndicatorService();
   const localStorageService = new LocalStorageService();
   const token = localStorageService.getItem(JWT_TOKEN);
   const itemsPerPage = 5;
   const { t } = useTranslation();
-  const { updateIndicatorData } = useIndicatorService();
 
   const handleOnClose = () => {
     onClose();
   };
 
   useEffect(() => {
-    if (open && indicator) {
+    if (open) {
       resetForm();
-
-      if (indicator.trigger?._id) {
-        setSelectedTrigger(indicator.trigger._id);
-        setTriggers([indicator.trigger]); 
-      } else {
-        setSelectedTrigger('');
-        setTriggers([]);
-      }
-
       loadTriggers(1);
+      setType(initialType || 'alarm');
     }
-  }, [open, indicator]);
-  
+  }, [open, initialType]);
 
   const resetForm = () => {
+    setType(initialType || 'alarm');
     setTriggers([]);
+    setSelectedTrigger('');
     setPage(1);
     setHasMore(true);
   };
@@ -97,15 +93,21 @@ const UpdateIndicatorForm = ({ open, onClose, indicator, onIndicatorUpdated, onM
     }
   }, [page]);
 
+  useEffect(() => {
+    if (selectedTrigger && !triggers.find((t) => t._id === selectedTrigger)) {
+      setSelectedTrigger('');
+    }
+  }, [triggers, selectedTrigger]);
+
   const handleSubmit = async () => {
     try {
-      const response = await updateIndicatorData(indicator._id, token, selectedTrigger, indicator.status);
-      onMessage(t('indicator.success.update', { message: response.message }), 'success');
-      onIndicatorUpdated?.();
-      handleOnClose();
+      await createIndicatorData(token, selectedTrigger, type);
+      onIndicatorCreated?.();
+      onMessage(t('indicator.success.create'), 'success');
+      onClose();
     } catch (err) {
-      onMessage(t('indicator.errors.update', { error: err.message || err.toString() }), 'error');
-      console.error(t('indicator.errors.update', { error: err.message || err.toString() }));
+      onMessage(t('errors.indicator.create', { error: err.message || err.toString() }), 'error');
+      console.error(t('errors.indicator.create', { error: err }));
     }
   };
 
@@ -123,7 +125,7 @@ const UpdateIndicatorForm = ({ open, onClose, indicator, onIndicatorUpdated, onM
         >
         <CloseIcon />
       </IconButton>
-      <DialogTitle>{t('indicator.update')}</DialogTitle>
+      <DialogTitle>{t('indicator.create')}</DialogTitle>
       <DialogContent>
         {loading && <Spinner />}
         <FormControl fullWidth sx={{ mt: 2 }}>
@@ -155,19 +157,20 @@ const UpdateIndicatorForm = ({ open, onClose, indicator, onIndicatorUpdated, onM
             )}
           </Select>
         </FormControl>
+
       </DialogContent>
       <DialogActions>
         <Button
           onClick={handleSubmit}
           variant="contained"
           color="primary"
-          disabled={!selectedTrigger || loadingMore || loading}
+          disabled={!selectedTrigger || !type}
         >
-          {t('update')}
+          {t('create')}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default UpdateIndicatorForm;
+export default CreateIndicatorForm;

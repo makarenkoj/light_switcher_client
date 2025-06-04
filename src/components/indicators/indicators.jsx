@@ -7,7 +7,7 @@ import CreateIndicatorForm from '../forms/createIndicatorForm';
 import UpdateIndicatorForm from '../forms/updateIndicatorForm';
 import { useTranslation } from 'react-i18next';
 
-const Indicators = ({handleIndicatorDeleted, handleAlarmStatus}) => {
+const Indicators = ({handleIndicatorDeleted, handleAlarmStatus, onMessage}) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [alarmIndicator, setAlarmIndicator] = useState(null);
   const [powerIndicator, setPowerIndicator] = useState(null);
@@ -20,11 +20,16 @@ const Indicators = ({handleIndicatorDeleted, handleAlarmStatus}) => {
   const token = useMemo(() => localStorageService.getItem(JWT_TOKEN), [localStorageService]);
   const { t } = useTranslation();
 
+  const currentIndicatorType = useMemo(() => {
+    return tabIndex === 0 ? 'alarm' : 'power';
+  }, [tabIndex]);
+
   const fetchIndicatorsData = async () => {
     try {
       const response = await getIndicatorsData(token);
+      setAlarmIndicator(null);
+      setPowerIndicator(null);
       response.indicators.map((indicator ) => {
-        console.log(indicator);
         if (indicator.type === 'alarm') {
           setAlarmIndicator(indicator);
         } else if (indicator.type === 'power') {
@@ -33,6 +38,7 @@ const Indicators = ({handleIndicatorDeleted, handleAlarmStatus}) => {
       });
     } catch (error) {
       console.error(t('errors.indicator.fetch', {error: error}));
+      onMessage(t('errors.indicator.fetch', {error: error.message || error.toString()}), 'error');
     }
   };
 
@@ -43,11 +49,14 @@ const Indicators = ({handleIndicatorDeleted, handleAlarmStatus}) => {
       const response = await updateIndicatorData(indicator._id, token, triggerId, status);
       if (response.indicator.type === 'alarm') {
         setAlarmIndicator(response.indicator);
+        // handleAlarmStatus(response.indicator.status);
       } else if (response.indicator.type === 'power') {
         setPowerIndicator(response.indicator);
       }
+      onMessage(t('indicator.success.update'), 'success');
     } catch (error) {
-      console.error(t('errors.indicator.change_status', {error: error}));
+      console.error(t('errors.indicator.status', {error: error}));
+      onMessage(t('errors.indicator.status', {error: error.message || error.toString()}), 'error');
     }
   };
 
@@ -117,6 +126,8 @@ const Indicators = ({handleIndicatorDeleted, handleAlarmStatus}) => {
           setOpenCreate(false);
           fetchIndicatorsData();
         }}
+        onMessage={onMessage}
+        initialType={currentIndicatorType}
       />
 
       <UpdateIndicatorForm
@@ -131,6 +142,7 @@ const Indicators = ({handleIndicatorDeleted, handleAlarmStatus}) => {
           setEditIndicator(null);
           fetchIndicatorsData();
         }}
+        onMessage={onMessage}
       />
     </>
   );
