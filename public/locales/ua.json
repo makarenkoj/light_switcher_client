@@ -37,6 +37,10 @@
     "active": "Активна",
     "inactive": "Неактивна"
   },
+  "connection": {
+    "lost": "З'єднання втрачено",
+    "established": "З'єднання встановлено"
+  },
   "power_status": {
     "active": "Увімкнена",
     "inactive": "Вимкнена"

@@ -37,6 +37,10 @@
     "active": "Active",
     "inactive": "Inactive"
   },
+  "connection": {
+    "lost": "Connection lost",
+    "established": "Connection established"
+  },
   "power_status": {
     "active": "Active",
     "inactive": "Inactive"
