@@ -4,6 +4,9 @@ import useIndicatorService from '../../services/indicatorService';
 import LocalStorageService, { JWT_TOKEN } from '../../services/LocalStorageService';
 import { Brightness4, Brightness7, Warning, Home } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import io from "socket.io-client";
+
+const socket = io(import.meta.env.VITE_API_URL);
 
 const StatusIndicators = () => {
   const { t } = useTranslation();
@@ -16,7 +19,7 @@ const StatusIndicators = () => {
   const fatchingIndicators = async () => {
     try {
       const response = await getIndicatorsData(token);
-      response.indicators.map((indicator) => {
+      response.indicators.forEach((indicator) => {
         if (indicator.type === 'alarm') {
           indicator.status ? setAlarmIndicator(t('alarm_status.active')) : setAlarmIndicator(t('alarm_status.inactive'));
         } else if (indicator.type === 'power') {
@@ -30,9 +33,19 @@ const StatusIndicators = () => {
 
   useEffect(() => {
     fatchingIndicators();
-    // eslint-disable-next-line
-  }
-  , []);
+
+    socket.on('indicatorNotification', ({ indicator }) => {
+      if (indicator.type === 'alarm') {
+        indicator.status ? setAlarmIndicator(t('alarm_status.inactive')) : setAlarmIndicator(t('alarm_status.active'));
+      } else if (indicator.type === 'power') {
+        indicator.status ? setPowerIndicator(t('power_status.inactive')) : setPowerIndicator(t('power_status.active'));
+      }
+    });
+
+    return () => {
+      socket.off('indicatorNotification');
+    };
+  }, []);
   
   return (
     <Box mt={4} display="flex" justifyContent="space-around">
