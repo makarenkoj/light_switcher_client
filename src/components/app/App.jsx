@@ -5,6 +5,8 @@ import LogoutButton from '../buttons/logoutButton';
 import UserInfo from '../user/user';
 import DeviceList from '../deviceList/DeviceList';
 import Triggers from '../triggers/triggers';
+import Indicators from '../indicators/indicators';
+import StatusIndicators from '../indicators/statusIndicators';
 import { useTranslation } from 'react-i18next';
 import '../../i18n';
 
@@ -21,8 +23,10 @@ import {
   Container,
   Box,
   Tooltip,
+  Snackbar,
+  Alert,
 } from '@mui/material';
-import { Brightness4, Brightness7, Warning, Home } from '@mui/icons-material';
+
 import { useTheme } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import io from "socket.io-client";
@@ -38,6 +42,12 @@ const App = () => {
   const [reconnectTimer, setReconnectTimer] = useState(null);
   const theme = useTheme();
   const { t, i18n } = useTranslation();
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success', // 'error', 'warning', 'info', 'success'
+  });
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
@@ -66,13 +76,27 @@ const App = () => {
     }
   };
 
+  const showSnackbar = (message, severity = 'success') => {
+    setSnackbar({ open: true, message, severity });
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
+
   useEffect(() => {
     socket.on('connect', () => {
       clearTimeout(reconnectTimer);
       setReconnectTimer(null);
+      showSnackbar(t('connection.established'), 'success'); 
     });
 
     socket.on('disconnect', () => {
+      showSnackbar(t('connection.lost'), 'error');
+
       if (!reconnectTimer) {
           const timer = setTimeout(() => {
               window.location.reload();
@@ -82,7 +106,8 @@ const App = () => {
     });
 
     socket.on('serverStarted', ({ message }) => {
-        window.location.reload();
+      showSnackbar(message, 'info'); 
+      window.location.reload();
     });
 
     return () => {
@@ -149,29 +174,13 @@ const App = () => {
 
         <Container sx={{ mt: 4, minHeight: 'calc(100vh - 200px)' }} >
           {isLoggedIn ? (
-            <>
-            <Box mt={4} display="flex" justifyContent="space-around">
-              <Typography variant="body1" display="flex" alignItems="center">
-                <Home sx={{ mr: 1 }} /> {t('electricity')}: {Math.random() > 0.5 ? 'Available' : 'Not Available'}
-              </Typography>
-              <Typography variant="body1" display="flex" alignItems="center">
-                <Warning sx={{ mr: 1, color: 'red' }} /> {t('alarm')}: {Math.random() > 0.5 ? 'Active' : 'Inactive'}
-              </Typography>
-              <Typography variant="body1" display="flex" alignItems="center">
-                {new Date().getHours() >= 6 && new Date().getHours() <= 18 ? (
-                  <Brightness7 sx={{ mr: 1 }} />
-                ) : (
-                  <Brightness4 sx={{ mr: 1 }} />
-                )}
-                {new Date().getHours() >= 6 && new Date().getHours() <= 18
-                  ? t('daytime')
-                  : t('nighttime')}
-              </Typography>
-            </Box>
+            <>            
+            <StatusIndicators />
 
             <Tabs value={tabIndex} onChange={handleTabChange} centered>
               <Tab label={t('tab.general')} />
               <Tab label={t('tab.user_info')} />
+              <Tab label={t('tab.indicators')} />
             </Tabs>
 
             {tabIndex === 0 && (
@@ -185,7 +194,13 @@ const App = () => {
                 <UserInfo handleUserDeleted={handleUserDeleted}/>
               </Box>
             )}
-            </>) : null}
+            {tabIndex === 2 && (
+              <Box mt={4} p={3} textAlign="center" bgcolor="grey.100"  borderRadius={2}>
+                <Indicators onMessage={showSnackbar}/>
+              </Box>
+            )}
+            </>
+          ) : null}
 
         </Container>
         {/* Footer */}
@@ -211,6 +226,17 @@ const App = () => {
 
       <LoginForm open={isLoginOpen} onClose={handleLoginClose} onLoginSuccess={handleLoginSuccess} />
       <SignUpForm open={isRegisterOpen} onClose={handleRegisterClose} onSignUpSuccess={handleLoginSuccess}/>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={15000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

@@ -33,11 +33,26 @@
   "create": "Create",
   "update": "Update",
   "updating": "Updating...",
+  "alarm_status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "connection": {
+    "lost": "Connection lost",
+    "established": "Connection established"
+  },
+  "power_status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
   "tab": {
     "general": "General",
     "user_info": "User info",
     "user_general_info": "User general info",
-    "telegram_credentials": "Telegram credentials"
+    "telegram_credentials": "Telegram credentials",
+    "indicators": "Indicators",
+    "alarm": "Alarm",
+    "power": "Electricity"
   },
   "user": {
     "users": "Users",
@@ -135,7 +150,24 @@
     "update_account": "Update Account",
     "update_account_title": "Please fill out the form below to a update account.",
     "delete_account": "Delete Your Account?",
-    "account_update": "Update"
+    "account_update": "Update",
+    "create_indicator_form": "Create indicator",
+    "type": "Choose type"
+  },
+  "indicator": {
+    "alarmNotSet": "Alarm not set",
+    "electricityNotSet": "Electricity not set",
+    "update": "Update indicator",
+    "create": "Create indicator",
+    "type": {
+      "alarm": "Alarm",
+      "electricity": "Power"
+    },
+    "success": {
+      "create": "Indicator created successfully",
+      "update": "Indicator updated successfully",
+      "delete": "Indicator deleted successfully"
+    }
   },
   "errors": {
     "error": "Error: {{error}}",
@@ -181,6 +213,11 @@
       "telegram_credentials": "Error fetching Telegram credentials: {{error}}",
       "update_credentials": "Error updating Telegram credentials: {{error}}",
       "telegram_create": "Error creating Telegram Data: {{error}}"
+    },
+    "indicator": {
+      "fetch": "Error fetching indicator: {{error}}",
+      "create": "Failed to create indicator: {{error}}",
+      "status": "Error fetching indicator status: {{error}}"
     },
     "status":"Status error: {{status}}",
     "login": "Error logging in: {{error}}",

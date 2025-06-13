@@ -33,11 +33,26 @@
   "create": "Створити",
   "update": "Оновити",
   "updating": "Оновлення...",
+  "alarm_status": {
+    "active": "Активна",
+    "inactive": "Неактивна"
+  },
+  "connection": {
+    "lost": "З'єднання втрачено",
+    "established": "З'єднання встановлено"
+  },
+  "power_status": {
+    "active": "Увімкнена",
+    "inactive": "Вимкнена"
+  },
   "tab": {
     "general": "Загальнa",
     "user_info": "Інформація про користувача",
     "user_general_info": "Загальнa iнформація про користувача",
-    "telegram_credentials": "Облікові дані Telegram"
+    "telegram_credentials": "Облікові дані Telegram",
+    "indicators": "Індикатори",
+    "alarm": "Повітряна тривога",
+    "power": "Електрика"
   },
   "user": {
     "users": "Користувачі",
@@ -135,7 +150,24 @@
     "update_account": "Оновити обліковий запис",
     "update_account_title": "Будь ласка, заповніть форму нижче, щоб оновити обліковий запис.",
     "delete_account": "Видалити ваш акаунт?",
-    "account_update": "Оновити"
+    "account_update": "Оновити",
+    "create_indicator_form": "Створити індикатор",
+    "type": "Оберить тип"
+  },
+  "indicator": {
+    "alarmNotSet": "Сповіщення тривоги не налаштоване",
+    "electricityNotSet": "Сповіщення не налаштоване",
+    "update": "Оновити індикатор",
+    "create": "Створити індикатор",
+    "type": {
+      "alarm": "Повітряна тривога",
+      "electricity": "Електрика"
+    },
+    "success": {
+      "create": "Індикатор успішно створено",
+      "update": "Індикатор успішно оновлено",
+      "delete": "Індикатор успішно видалено"
+    }
   },
   "errors": {
     "error": "Помилка: {{error}}",
@@ -181,6 +213,11 @@
       "update_credentials": "Помилка оновлення облікових даних телеграмa: {{error}}",
       "telegram_create": "Помилка створення даних Telegram: {{error}}"
     },
+    "indicator": {
+      "fetch": "Помилка отримання індикатора: {{error}}",
+      "create": "Не вдалося створити індикатор: {{error}}",
+      "status": "Помилка отримання статусу індикатора: {{error}}"
+    },
     "status":"Статус помилка: {{status}}",
     "login": "Помилка входу: {{error}}",
     "logout": "Помилка виходу: {{error}}",
@@ -197,5 +234,5 @@
     "token_expired": "Термін дії токена минув",
     "invalid_token": "AuthProvider: недійсний формат токена. {{error}}",
     "token_found": "AuthProvider: токен не знайдено."
-    }
+  }
 }

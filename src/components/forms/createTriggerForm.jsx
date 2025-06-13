@@ -88,10 +88,10 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
 
       setMessage(response.message);
       onTriggerAdded();
-      onClose();
+      handleOnClose();
     } catch (error) {
       console.log(t('errors.error', {error: error.message}));
-      setMessage(error.message);
+      // setMessage(error.message);
     }
   };
 
@@ -263,13 +263,13 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
                     </Card>
                   </>
 
-  const errorMessage = error ? <ErrorMessage /> : null;
+  const errorMessage = error ? <ErrorMessage message={error}/> : null;
   const spinner = loading ? <Spinner /> : null;
 
   return (
-    <Dialog open={open} 
-            onClose={onClose} 
-            fullWidth maxWidth="sm" 
+    <Dialog open={open}
+            onClose={onClose}
+            fullWidth maxWidth="sm"
             slotProps={{
               paper: {
                 sx: {
@@ -297,8 +297,8 @@ const CreateTriggerForm = ({ open, onClose, onTriggerAdded }) => {
       <CssBaseline enableColorScheme />
       {errorMessage}
       {spinner}
-      {content}      
-    </Dialog>    
+      {content}
+    </Dialog>
   );
 }
 

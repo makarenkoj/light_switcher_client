@@ -1,21 +1,33 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import UserInfo from './user';
-import useUserService from '../../services/userService';
-import useTelegramService from '../../services/telegramService';
-import LocalStorageService, { JWT_TOKEN, USER_ID } from '../../services/LocalStorageService';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import UserInfo from './user'; // Перевірте шлях
+import { vi } from 'vitest';
 
-jest.mock('../../services/userService');
-jest.mock('../../services/telegramService');
-jest.mock('../../services/LocalStorageService');
+vi.mock('../../services/userService', () => ({
+  default: () => ({
+      getUserInfoRequest: vi.fn().mockResolvedValue({ /* дані користувача */ name: 'Test User', email: 'test@example.com' }),
+      updateUserRequest: vi.fn().mockResolvedValue({ message: 'Updated' }),
+      deleteUserRequest: vi.fn().mockResolvedValue({ message: 'Deleted' })
+  })
+}));
+// Приклад моку для useAuth (якщо UserInfo його використовує напряму)
+vi.mock('../../context/AuthContext', () => ({
+   useAuth: () => ({
+       user: { id: 'mockUserId' }, // Provide necessary user data
+       token: 'mockToken'
+   })
+}));
 
 describe('UserInfo Component', () => {
-  const mockGetUserRequest = jest.fn();
-  const mockGetTelegramData = jest.fn();
-  const mockLocalStorageService = {
-    getItem: jest.fn()
-  };
+  test('renders user info after loading', async () => {
+     // Замініть jest.fn() на vi.fn()
+     render(<UserInfo handleUserDeleted={vi.fn()} />);
+
+     // Перевірте, чи дані користувача відображаються після завантаження
+     expect(await screen.findByText(/Test User/i)).toBeInTheDocument();
+     expect(await screen.findByText(/test@example.com/i)).toBeInTheDocument();
+  });
 
   beforeEach(() => {
     useUserService.mockReturnValue({
@@ -46,7 +58,7 @@ describe('UserInfo Component', () => {
       telegram: { apiId: '123456', apiHash: 'abcdef', channel: 'testChannel' }
     });
 
-    render(<UserInfo handleUserDeleted={jest.fn()} />);
+    render(<UserInfo handleUserDeleted={vi.fn()} />);
 
     await waitFor(() => {
       expect(mockGetUserRequest).toHaveBeenCalledWith('mockToken', 'mockUserId');
@@ -72,7 +84,7 @@ describe('UserInfo Component', () => {
       telegram: { apiId: '123456', apiHash: 'abcdef', channel: 'testChannel' }
     });
 
-    render(<UserInfo handleUserDeleted={jest.fn()} />);
+    render(<UserInfo handleUserDeleted={vi.fn()} />);
 
     await waitFor(() => {
       expect(screen.getByText((content, element) => content.startsWith('Email:') && element.tagName.toLowerCase() === 'p')).toBeInTheDocument();
