@@ -33,13 +33,23 @@ const useUserService = () => {
     return res;
   };
 
+  const getUserTriggersRequest = async (token, page = 1, limit = 9) => {
+    const res = await request(`${_baseUrl}/api/users/triggers?page=${page}&limit=${limit}`,
+                              "GET",
+                              null,
+                              { "Accept-Language": lang, "Content-Type": "application/json", 'Authorization': `Bearer ${token}` });
+
+    return res;
+  };
+
   return {
 		loading,
 		error,
 		clearError,
 		getUserRequest,
     updateUserRequest,
-    deleteUserRequest
+    deleteUserRequest,
+    getUserTriggersRequest
 	};
 }
 

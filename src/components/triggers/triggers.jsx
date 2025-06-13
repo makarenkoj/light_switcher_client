@@ -28,19 +28,19 @@ const Triggers = () => {
   const { showTriggersRequest } = useTriggerService();
   const { t } = useTranslation();
 
-    useEffect(() => {
-      socket.on("triggerStatusUpdate", ({ triggerId, status }) => {
-        setTriggers((prevTriggers) =>
-          prevTriggers.map((trigger) =>
-            trigger._id === triggerId ? { ...trigger, status } : trigger
-          )
-        );
-      });
-  
-      return () => {
-        socket.off("triggerStatusUpdate");
-      };
-    }, []);
+  useEffect(() => {
+    socket.on("triggerStatusUpdate", ({ triggerId, status }) => {
+      setTriggers((prevTriggers) =>
+        prevTriggers.map((trigger) =>
+          trigger._id === triggerId ? { ...trigger, status } : trigger
+        )
+      );
+    });
+
+    return () => {
+      socket.off("triggerStatusUpdate");
+    };
+  }, []);
 
   useEffect(() => {
     setLimit(10);
